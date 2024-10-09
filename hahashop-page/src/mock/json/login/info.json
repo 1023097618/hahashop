@@ -1,0 +1,7 @@
+{
+    "code": 400,
+    "data": {
+        "username": "string"
+    },
+    "msg": "string"
+}

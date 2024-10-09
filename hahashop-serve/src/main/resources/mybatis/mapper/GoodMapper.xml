@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.mall.dao.GoodDao">
+    <!--获取所有商品-->
+    <select id="goodList" resultType="com.mall.entity.Good">
+        SELECT goodId,goodName,goodPrice,goodImage,goodState,buyerNum FROM Good
+        LIMIT #{pageSize} OFFSET #{pageSize} * (#{pageNum} - 1)
+    </select>
+
+    <!--根据商品ID获取单个商品-->
+    <select id="getGoodById" parameterType="Integer" resultType="com.mall.entity.Good">
+        SELECT goodId,goodName,goodPrice,goodImage,goodState,buyerNum
+        FROM Good
+        WHERE goodId = #{goodId}
+    </select>
+
+    <!--根据商品ID获取详细描述-->
+    <select id="getDetail" parameterType="Integer" resultType="String">
+        SELECT goodDesc FROM Good
+        WHERE goodId = #{goodId}
+    </select>
+
+    <!--更新订单数-->
+    <update id="buyerNumUpdate" parameterType="Integer">
+        UPDATE Good
+        SET buyerNum = buyerNum + 1
+        WHERE goodid = #{goodId}
+    </update>
+
+    <!-- 增加商品 -->
+    <insert id="addGood" parameterType="com.mall.entity.Good" useGeneratedKeys="true" keyProperty="goodId">
+        INSERT INTO Good (goodName, goodPrice, goodDesc, goodImage, buyerNum, goodState)
+        VALUES (#{goodName}, #{goodPrice}, #{goodDesc}, #{goodImage}, #{buyerNum}, #{goodState})
+    </insert>
+
+    <!-- 更新商品 -->
+    <update id="updateGood" parameterType="com.mall.entity.Good">
+        UPDATE Good
+        SET goodName = #{goodName}, goodPrice = #{goodPrice}, goodDesc = #{goodDesc},
+            buyerNum = #{buyerNum}, goodState = #{goodState}, goodImage = #{goodImage}
+        WHERE goodId = #{goodId}
+    </update>
+
+    <!-- 删除商品 -->
+    <delete id="deleteGood" parameterType="Integer">
+        DELETE FROM Good WHERE goodId = #{goodId}
+    </delete>
+
+    <!-- 更改商品状态 -->
+    <update id="stateChange" parameterType="Integer">
+        UPDATE Good SET goodState = #{goodState} WHERE goodId = #{goodId}
+    </update>
+
+    <!-- 统计商品种数 -->
+    <select id="countGoods" resultType="Integer">
+        SELECT COUNT(*) FROM Good
+    </select>
+</mapper>
