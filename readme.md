@@ -1,3 +1,6 @@
+如果想要参考这份项目，请点一颗免费的star
+
+
 hahashop-page是前端页面
 
 打开hahashop-page使用如下命令来运行

@@ -1,8 +1,3 @@
-#to prevent code from copying by others,some of the code is not uploaded
-src/components/
-src/views/
-
-
 .DS_Store
 node_modules
 
