@@ -11,8 +11,9 @@ export const constantRoutes = [
 
 export const asyncRoutes=[
    {path:'/dashboard',name:'DashboardView',component:()=>import('@/views/dashboard/DashboardView.vue'),hidden:false,children:[{
-    path:'/dashboard/good',name:'GoodView',component:()=>import('@/views/goods/GoodsView.vue'),hiiden:false},
-    {path:'/dashboard*',redirect:'/dashboard/good'}]
+    path:'/dashboard/good',name:'GoodView',component:()=>import('@/views/goods/GoodsView.vue'),hidden:false},
+    {path:'/dashboard/changePassword',name:'ChangePasswordView',component:()=>import('@/views/login/ChangePasswordView.vue'),hidden:false},
+    {path:'/dashboard*',redirect:'/dashboard/good',hidden:true}]
   }
 ]
 

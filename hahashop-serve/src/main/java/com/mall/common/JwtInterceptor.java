@@ -26,10 +26,8 @@ public class JwtInterceptor implements HandlerInterceptor {
 
         // 如果token存在并且解码成功
         if (token != null && JwtTokenUtil.decodeToken(token)!=null) {
-            request.setAttribute("isTokenValid", true); // 设置解码结果为true
             return true; // 继续请求处理
         } else {
-            request.setAttribute("isTokenValid", false); // 设置解码结果为false
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.setContentType("application/json;charset=UTF-8");
             String json = JSONObject.toJSONString(ResultUtil.error(ResultEnum.ILLEGAL_TOKEN));

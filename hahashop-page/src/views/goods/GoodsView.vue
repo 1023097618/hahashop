@@ -1,6 +1,7 @@
 <template>
   <div>
-  <el-table :data="goods" style="width: 100%" max-height="250">
+  <el-skeleton :rows="3" animated :loading="isload"/>
+  <el-table :data="goods" style="width: 100;" :height="tableConfig.height" :row-class-name="tableRowClassName" >
     <el-table-column label="商品图片" width="120" fixed>
       <template slot-scope="scope">
         <img :src="scope.row.goodImage"
@@ -30,15 +31,18 @@
         <div style="display: flex; justify-content: center;">
           <el-button @click.native.prevent="EditGoods(scope.row)" type="primary" icon="el-icon-edit" size="mini">
           </el-button>
-        <el-button @click.native.prevent="DeleteGoods(scope.row.goodId)" type="danger" icon="el-icon-delete" size="mini">
+        <el-button @click.native.prevent="DeleteGoods(scope.row.goodId)" type="danger" icon="el-icon-delete" size="mini" v-if="scope.row.goodState==0">
         </el-button>
       </div>
       </template>
     </el-table-column>
   </el-table>
-  <GoodsEdit :visible.sync="GoodsEditVisible" ref="GoodsEdit"/>
-  <GoodsAdd :visible.sync="GoodsAddVisible" ref="GoodsAdd"/>
-  <BuyerView :visible.sync="BuyerViewVisible" ref="BuyerView"/>
+  <el-pagination :current-page="currentPage" :page-size="pageSize" layout="prev, pager, next"
+  :total="totalProducts" @current-change="handlePageChange" v-if="totalProducts > pageSize">
+</el-pagination>
+  <GoodsEdit :visible.sync="GoodsEditVisible" @updateGoods="GetGoods" ref="GoodsEdit"/>
+  <GoodsAdd :visible.sync="GoodsAddVisible" @updateGoods="GetGoods" ref="GoodsAdd"/>
+  <BuyerView :visible.sync="BuyerViewVisible" @updateGoods="GetGoods" ref="BuyerView"/>
 </div>
 </template>
 
@@ -50,10 +54,15 @@
   export default {
     name:'GoodsView',
     methods: {
+      handlePageChange(page){
+        this.currentPage=page
+        this.GetGoods()
+      },
       deleteGood(goodId) {
         console.log(goodId)
       },
       GetGoods() {
+        this.isload=true
         getGoods(
           {
             pageNum: this.currentPage,
@@ -61,6 +70,8 @@
           }
         ).then(res => {
           this.goods = res.data.data.goods
+          this.totalProducts=res.data.data.totalGoods
+          this.isload=false
         }).catch(err => {
           console.log(err)
         })
@@ -71,6 +82,7 @@
       DeleteGoods(id){
         deleteGood(id).then(
           res=>{
+            this.GetGoods()
             console.log(res)
           }
         ).catch(err=>{
@@ -82,6 +94,16 @@
       },
       ViewBuyers(good){
         this.$refs.BuyerView.openDialog(good)
+      },
+      //自适应表格高度  8+60+32
+      getHeight () {
+        this.tableConfig.height = window.innerHeight - 100
+      },
+      tableRowClassName({row}){
+        if(row.goodState==1){
+          return 'warning-row'
+        }
+        return ''
       }
     },
     components:{
@@ -92,28 +114,35 @@
     ,
     data() {
       return {
-        goods: [{
-          "goodName": "比亚迪跑车",
-          "goodPrice": "100 ￥",
-          "goodId": 10086,
-          "goodImage": "https://img.alicdn.com/imgextra/i2/O1CN01kcwuQk1LzVafnz3rv_!!6000000001370-0-tps-480-672.jpg",
-          "buyerNum": 10
-        }],
+        goods: [],
         GoodsEditVisible:false,
         GoodsAddVisible:false,
         BuyerViewVisible:false,
         currentPage:1,
-        pageSize:8
+        pageSize:8,
+        totalProducts:0,
+        tableConfig:{
+          height: 200
+        },
+        isload:true
       }
     },
     created() {
       this.GetGoods()
+      this.getHeight()
+      window.addEventListener('resize', this.getHeight)
+    },
+    destroyed () {
+      window.removeEventListener('resize', this.getHeight)
     }
   }
 </script>
 
-<style scoped>
+<style >
   .el-table .el-table__cell {
     padding: 10px;
+  }
+  .el-table .warning-row{
+    background: #f0f9eb;
   }
 </style>

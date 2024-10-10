@@ -46,19 +46,12 @@
       return {
         good: {
           goodId: 1,
-          goodName: '比亚迪跑车',
-          goodPrice: '100 ￥',
+          goodName: 'loading...',
+          goodPrice: 'loading...',
           goodImage: '',
           goodState: 0
         },
-        buyers: [{
-          buyerPhone: '110',
-          buyerAddress: '商专',
-          buyerDesc: '必须选我',
-          buyerName: 'zhangsan',
-          orderId:1,
-          isConfirmed: true
-        }]
+        buyers: []
       };
     },
 
@@ -72,17 +65,22 @@
       openDialog(good) {
         Object.assign(this.good, good)
         this.$emit('update:visible', true)
+        this.GetOrders()
+      },
+      GetOrders(){
         getOrders(this.good.goodId).then(res => {
           this.buyers = res.data.data.orders
           this.good.goodState = res.data.data.goodState
         }).catch(err => {
           console.log(err)
         })
-      },
+      }
+      ,
       closeDialog() {
         this.$emit('update:visible', false)
       },
       sureDialog() {
+        this.$emit('updateGoods')
         this.$emit('update:visible', false)
       },
       confirmedHeightlight({ row }) {
@@ -95,6 +93,7 @@
         const goodId=this.good.goodId
         sellGood({orderId,goodId}).then(
           res=>{
+            this.GetOrders()
             console.log(res)
           }
         ).catch(err=>{
@@ -105,6 +104,7 @@
         const goodId=this.good.goodId
         cancelSellGood({orderId,goodId}).then(
           res=>{
+            this.GetOrders()
             console.log(res)
           }
         ).catch(err=>{

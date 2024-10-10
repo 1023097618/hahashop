@@ -17,3 +17,11 @@ export function GetUserInfo(token){
         method:'get'
     })
 }
+
+export function changePassword(data){
+    return request({
+        url:'/auth/changePassword',
+        data,
+        method:'post'
+    })
+}

@@ -71,6 +71,7 @@
                 goodDesc:this.good.goodDesc,
                 goodId:this.good.goodId
               }).then(res=>{
+                this.$emit('updateGoods')
                 console.log(res)
               }).catch(err=>{
                 console.log(err)

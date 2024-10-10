@@ -29,12 +29,8 @@ public class GoodController {
         Integer totalGoods = goodService.countGoods();
 
         Map<String, Object> data = new HashMap<>();
-        // 遍历 Cookie，找到 X-Hahashop-Token
-        Boolean isTokenValid = (Boolean) request.getAttribute("isTokenValid");
-        if (isTokenValid != null && !isTokenValid) {
-            for (Good good : goodList) {
-                good.setBuyerNum(0);
-            }
+        for (Good good : goodList) {
+            good.setBuyerNum(0);
         }
         data.put("goods", goodList);
         data.put("totalGoods", totalGoods);
@@ -61,31 +57,21 @@ public class GoodController {
 
     @RequestMapping("/update")
     public Result<Object> goodUpdate(HttpServletRequest request, @RequestBody Good good) {
-        Boolean isTokenValid = (Boolean) request.getAttribute("isTokenValid");
-        if (isTokenValid != null && isTokenValid) {
-            if (goodService.getGoodById(good.getGoodId()) == null) {
-                return ResultUtil.error(GOOD_NOT_EXIST);
-            } else if (goodService.updateGood(good)) {
-                return ResultUtil.success(SUCCESS, null);
-            } else {
-                return ResultUtil.error(UNKNOWN_ERROR);
-            }
+        if (goodService.getGoodById(good.getGoodId()) == null) {
+            return ResultUtil.error(GOOD_NOT_EXIST);
+        } else if (goodService.updateGood(good)) {
+            return ResultUtil.success(SUCCESS, null);
         } else {
-            return ResultUtil.error(ILLEGAL_TOKEN);
+            return ResultUtil.error(UNKNOWN_ERROR);
         }
     }
 
     @RequestMapping("/add")
     public Result<Object> goodAdd(HttpServletRequest request, @RequestBody Good good) {
-        Boolean isTokenValid = (Boolean) request.getAttribute("isTokenValid");
-        if (isTokenValid != null && isTokenValid) {
-            if (goodService.addGood(good)) {
-                return ResultUtil.success(SUCCESS, null);
-            } else {
-                return ResultUtil.error(UNKNOWN_ERROR);
-            }
+        if (goodService.addGood(good)) {
+            return ResultUtil.success(SUCCESS, null);
         } else {
-            return ResultUtil.error(ILLEGAL_TOKEN);
+            return ResultUtil.error(UNKNOWN_ERROR);
         }
     }
 

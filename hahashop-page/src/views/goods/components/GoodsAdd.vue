@@ -62,6 +62,7 @@
                 goodImage:this.good.goodImage,
                 goodDesc:this.good.goodDesc
               }).then(res=>{
+                this.$emit('updateGoods')
                 console.log(res)
               }).catch(err=>{
                 console.log(err)

@@ -1,12 +1,13 @@
 import { Login,GetUserInfo } from "@/api/auth/login";
-import {SetCookie} from "@/utils/auth";
+import {SetCookie,RemoveCookie} from "@/utils/auth";
 import {asyncRoutes} from "@/router";
 import router,{resetRouter} from "@/router";
 export default {
     state:{
         token:'',
         username:'',
-        permitted:false
+        permitted:false,
+        permittedroutes:[]
     },
     mutations:{
         SET_TOKEN(state,token){
@@ -14,6 +15,7 @@ export default {
         },
         ADD_PERMS(state){
             if(!state.permitted){
+            state.permittedroutes=asyncRoutes
             console.log(asyncRoutes)
             state.permitted=true
             asyncRoutes.forEach(route=>{
@@ -29,7 +31,8 @@ export default {
             state.token=''
         },
         REMOVE_PERMS(state){
-            state.permitted=false
+            state.permitted=false,
+            state.permittedroutes=[]
             resetRouter()
         }
     },
@@ -63,6 +66,11 @@ export default {
                         }
                     )
             })
+        },
+        UserLogout({commit}){
+            RemoveCookie()
+            commit('REMOVE_PERMS')
+            commit('REMOVE_TOKEN')
         }
     }
 }
