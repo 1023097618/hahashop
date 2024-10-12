@@ -1,0 +1,18 @@
+{
+    "code": 400,
+    "data": {
+        "histories": [
+            {
+                "historyId": 0,
+                "operationTime": "2024-01-01 00:00:00",
+                "goodName": "比亚迪跑车",
+                "goodPrice": "100 ￥",
+                "goodId": 0,
+                "goodImage": "https://img.alicdn.com/imgextra/i2/O1CN01kcwuQk1LzVafnz3rv_!!6000000001370-0-tps-480-672.jpg",
+                "goodDesc": "非常好非常好非常好非常好非常好非常好非常好非常好非常好非常好非常好非常好非常好非常好非常好非常好非常好非常好非常好非常好非常好非常好"
+            }
+        ],
+        "totalHistories": 100
+    },
+    "msg": "查询商品成功"
+}

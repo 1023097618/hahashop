@@ -10,13 +10,14 @@ router.beforeEach((to,from,next)=>{
         if(to.path === '/'){
             next()
         }else{
+            console.log(store.getters.permmited)
             if(!store.getters.permmited){
                 store.dispatch("GetUserInfoAction", token).then(() => {
                     //授权为真
                     if(to.path !== '/login'){
                         next(to.path)
                     }else{
-                        next('/dashboard/good')
+                        next('/dashboard/good/manager')
                     }
                 }).catch((err) => {
                     //授权为假

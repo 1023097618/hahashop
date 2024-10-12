@@ -43,7 +43,6 @@ export default {
                     const token=res.data.data.token
                     commit('SET_TOKEN',token)
                     SetCookie(token)
-                    commit('ADD_PERMS')
                     resolve()
                 }).catch(err=>{
                     reject(err)
@@ -57,7 +56,6 @@ export default {
                         const username=res.data.data.username
                         commit('SET_USERNAME',username)
                         commit('SET_TOKEN',token)
-                        SetCookie(token)
                         commit('ADD_PERMS')
                         resolve()
                     }).catch(

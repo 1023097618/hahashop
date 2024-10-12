@@ -4,6 +4,7 @@ module.exports = {
   assetsDir: '', // 静态资源目录
   indexPath: 'index.html', // 指定生成的 index.html 的输出路径
   transpileDependencies: true,
+  runtimeCompiler: true,  //动态template有用
   devServer:{
     port: process.env.VUE_APP_startPort,
     proxy:{

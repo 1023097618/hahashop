@@ -2,7 +2,10 @@
   <el-container>
     <el-header style="height: 60px;">
       <el-row type="flex" class="row-bg" justify="space-around" style="align-items: center; height: 100%;">
-        <el-col :span="6"></el-col>
+        <el-col :span="6">
+          <el-page-header @back="goBack" content="详情页面" style="line-height: 60px;">
+          </el-page-header>
+        </el-col>
         <el-col :span="8" style="text-align: center;">
           <h1>hahashop</h1>
         </el-col>
@@ -47,13 +50,16 @@ export default {
   methods:{
     SendLogin(){
       this.$store.dispatch('LoginByUserName',this.form).then(()=>{
-        this.$router.push('/dashboard').catch(err=>{
+        this.$router.push('/dashboard/good/manager').catch(err=>{
           console.log(err)
         })
         console.log('success')
       }).catch(err=>{
         console.log(err)
       })
+    },
+    goBack(){
+      this.$router.push('/')
     }
   }
 }

@@ -35,18 +35,21 @@ service.interceptors.response.use(
                 Message.error('商品不存在')
             } else if (data.code === 304) {
                 Message.error('商品已经被冻结')
-            } else if(data.code===305){
+            } else if (data.code === 305) {
                 Message.error('填入的信息不合法')
-            } else if(data.code===307){
+            } else if (data.code === 307) {
                 Message.error('重复填入了信息')
-            }else if(data.code===308){
+            } else if (data.code === 308) {
                 Message.error("商品未被冻结")
-            }else{
+            } else if (data.code === 309) {
+                Message.error('历史记录不存在')
+            }
+            else {
                 Message.error("未知错误码")
             }
             return Promise.reject('err')
         }
-        if(!data.code){
+        if (!data.code) {
             Message.error('后台服务器返回了意料外的结果')
             return Promise.reject('err')
         }

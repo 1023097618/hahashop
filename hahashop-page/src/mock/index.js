@@ -11,3 +11,4 @@ Mock.mock(baseurl+"/auth/login", 'post', require('./json/login/login.json'));
 Mock.mock(baseurl+"/auth/info?token=string", 'get', require('./json/login/info.json'));
 Mock.mock(baseurl+"/order/list?goodId=10086", 'get', require('./json/shop/orders1.json'));
 Mock.mock(baseurl+"/order/list?goodId=10087", 'get', require('./json/shop/orders2.json'));
+Mock.mock(baseurl+"/history/list?pageNum=1&pageSize=8", 'get', require('./json/shop/histories.json'));

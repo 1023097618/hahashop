@@ -13,15 +13,18 @@
         </el-row>
       </el-header>
       <el-main>
-        <el-skeleton :rows="3" animated :loading="isload"/>
-        <el-row :gutter="20" v-for="(row,rowindex) in productRows" :key="rowindex">
-          <el-col :span="6" v-for="good in row" :key="good.goodId">
-            <ProductCard :product="good" @click.native="buy(good)" />
-          </el-col>
-        </el-row>
-        <el-pagination :current-page="currentPage" :page-size="pageSize" layout="prev, pager, next"
-          :total="totalProducts" @current-change="handlePageChange" v-if="totalProducts > pageSize">
-        </el-pagination>
+        <el-skeleton :rows="3" animated :loading="isload" />
+        <webErrorResult :error="weberror"></webErrorResult>
+        <div v-if="!isload && !weberror">
+          <el-row :gutter="20" v-for="(row,rowindex) in productRows" :key="rowindex">
+            <el-col :span="6" v-for="good in row" :key="good.goodId">
+              <ProductCard :product="good" @click.native="buy(good)" />
+            </el-col>
+          </el-row>
+          <el-pagination :current-page="currentPage" :page-size="pageSize" layout="prev, pager, next"
+            :total="totalProducts" @current-change="handlePageChange" v-if="totalProducts > pageSize">
+          </el-pagination>
+        </div>
       </el-main>
     </el-container>
     <PurchaseDialog :visible.sync="dialogVisible" ref="purchaseDialog" />
@@ -33,12 +36,14 @@
   import ProductCard from '@/components/ProductCard';
   import PurchaseDialog from '@/components/PurchaseDialog'
   import { getGoods } from '@/api/shop/goods.js'
+  import webErrorResult from '@/components/webErrorResult.vue'
   // getGoods
 
   export default {
     components: {
       ProductCard,
-      PurchaseDialog
+      PurchaseDialog,
+      webErrorResult
     },
     data() {
       return {
@@ -47,23 +52,28 @@
         currentPage: 1,
         pageSize: 8,
         dialogVisible: false,
-        isload:true
+        isload: true,
+        weberror: false
       };
     },
     methods: {
       fetchProducts() {
-        this.isload=true
-        getGoods({
-          pageNum: this.currentPage,
-          pageSize: this.pageSize
-        }).then(response => {
-          console.log(response)
-          this.products = response.data.data.goods;
-          this.totalProducts = response.data.data.totalGoods;
-          this.isload=false
-        }).catch(error => {
-          console.error('Error fetching products:', error);
-        });
+        this.isload = true,
+
+          getGoods({
+            pageNum: this.currentPage,
+            pageSize: this.pageSize
+          }).then(response => {
+            console.log(response)
+            this.products = response.data.data.goods;
+            this.totalProducts = response.data.data.totalGoods;
+            this.isload = false
+            this.weberror = false
+          }).catch(error => {
+            this.isload = false
+            this.weberror = true
+            console.error('Error fetching products:', error);
+          });
       }
       ,
       handlePageChange(page) {
@@ -74,7 +84,7 @@
         this.$router.push('/login')
       },
       buy(product) {
-        if(product.goodState===0){
+        if (product.goodState === 0) {
           this.$refs.purchaseDialog.openDialog(product)
         }
       }
