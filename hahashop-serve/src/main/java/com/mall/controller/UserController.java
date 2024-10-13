@@ -63,7 +63,9 @@ public class UserController {
         if (authentication != null) {
             User u = (User) authentication.getPrincipal();  // 强制类型转换
             u = userService.login(u.getUsername());
-
+            if(u==null){
+                return ResultUtil.error(ResultEnum.ILLEGAL_TOKEN);
+            }
             if(map.get("oldPassword").equals(u.getPassword())){//老密码是否相同
                 userService.renewPassword(u.getUsername(), map.get("newPassword"));
                 return ResultUtil.success(ResultEnum.SUCCESS,null);

@@ -34,12 +34,7 @@ public class GoodController {
         }
         data.put("goods", goodList);
         data.put("totalGoods", totalGoods);
-
-        if (!goodList.isEmpty()) {
-            return ResultUtil.success(SUCCESS, data);
-        } else {
-            return ResultUtil.error(GOOD_NOT_EXIST);
-        }
+        return ResultUtil.success(SUCCESS, data);
     }
 
     @RequestMapping("/detail")

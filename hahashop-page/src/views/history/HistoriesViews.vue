@@ -3,7 +3,7 @@
         <el-skeleton :rows="3" animated :loading="isload" />
         <webErrorResult :error="weberror"></webErrorResult>
         <el-table :data="histories" style="width: 100;" :height="tableConfig.height" v-if="!isload&&!weberror">
-            <el-table-column prop="goodId" label="商品id" width="120" fixed>0
+            <el-table-column prop="goodId" label="商品id" width="120" fixed>
             </el-table-column>
             <el-table-column label="商品图片" width="120">
                 <template slot-scope="scope">
@@ -48,7 +48,7 @@
             DeleteHistories(id) {
                 deleteHistory(id).then(
                     res => {
-                        this.GetGoods()
+                        this.GetHistories()
                         console.log(res)
                     }
                 ).catch(err => {
