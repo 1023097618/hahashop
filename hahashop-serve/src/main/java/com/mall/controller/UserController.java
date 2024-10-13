@@ -66,9 +66,9 @@ public class UserController {
 
             if(map.get("oldPassword").equals(u.getPassword())){//老密码是否相同
                 userService.renewPassword(u.getUsername(), map.get("newPassword"));
-                ResultUtil.success(ResultEnum.SUCCESS,null);
+                return ResultUtil.success(ResultEnum.SUCCESS,null);
             }else{
-                ResultUtil.error(ResultEnum.WRONG_PASSWORD);
+                return ResultUtil.error(ResultEnum.WRONG_PASSWORD);
             }
         }
         return ResultUtil.error(ResultEnum.UNKNOWN_ERROR);
