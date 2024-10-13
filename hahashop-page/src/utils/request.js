@@ -1,7 +1,6 @@
 import store from "@/store";
 import axios from "axios";
 import { Message } from "element-ui";
-import { RemoveCookie } from "./auth";
 const baseurl = process.env.VUE_APP_baseurl
 const tokenName = process.env.VUE_APP_tokenName
 const service = axios.create(
@@ -26,7 +25,12 @@ service.interceptors.response.use(
                 Message.error({
                     message: 'token验证失败'
                 })
-                RemoveCookie()
+                this.$store.dispatch('UserLogout')
+                this.$router.push('/login').catch(
+                  err=>{
+                    console.log(err)
+                  }
+                )
             } else if (data.code === 301) {
                 Message.error('用户不存在')
             } else if (data.code === 302) {
