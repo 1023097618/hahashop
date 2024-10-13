@@ -5,5 +5,5 @@ import com.mall.entity.User;
 
 public interface UserService {
     User login(String username);//数据库获取User信息
-
+    Boolean renewPassword(String username, String password);
 }

@@ -96,7 +96,7 @@ public class OrderController {
             if (goodService.stateChange(goodId, goodState)) {
                 return ResultUtil.success(SUCCESS, null);
             } else {
-                return ResultUtil.error(UNKNOWN_ERROR);
+                return ResultUtil.error(GOOD_IS_ACTIVE);
             }
         }
         return ResultUtil.error(UNKNOWN_ERROR);

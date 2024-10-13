@@ -6,11 +6,11 @@ import com.mall.common.ResultEnum;
 import com.mall.common.ResultUtil;
 import com.mall.entity.User;
 import com.mall.service.UserService;
-import io.jsonwebtoken.Claims;
 import jakarta.annotation.Resource;
-import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import com.mall.common.JwtTokenUtil;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -54,4 +54,24 @@ public class UserController {
             return ResultUtil.error(ResultEnum.ILLEGAL_TOKEN);
         }
     }
+
+    @RequestMapping("/changePassword")//大小写不统一
+    public Result<Object> changePassword(@RequestBody Map<String, String> map) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        // 检查是否认证和 Principal 是否为 User 类型
+        if (authentication != null) {
+            User u = (User) authentication.getPrincipal();  // 强制类型转换
+            u = userService.login(u.getUsername());
+
+            if(map.get("oldPassword").equals(u.getPassword())){//老密码是否相同
+                userService.renewPassword(u.getUsername(), map.get("newPassword"));
+                return ResultUtil.success(ResultEnum.SUCCESS,null);
+            }else{
+                return ResultUtil.error(ResultEnum.WRONG_PASSWORD);
+            }
+        }
+        return ResultUtil.error(ResultEnum.UNKNOWN_ERROR);
+    }
+
 }

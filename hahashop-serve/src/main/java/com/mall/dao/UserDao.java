@@ -6,4 +6,5 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface UserDao {
     User login(String username);//获取整个User
+    Integer renewPassword(String username, String password);
 }
