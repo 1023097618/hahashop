@@ -24,7 +24,7 @@
       </el-table-column>
       <el-table-column fixed="right" width="210">
         <template slot="header">
-          <div style="display: flex; justify-content: center;">
+          <div style="display: flex; justify-content: center;" v-if="totalProducts<=0">
             <el-button size="mini" type="primary" icon="el-icon-plus" @click="AddGoods()"></el-button>
           </div>
         </template>
@@ -61,7 +61,7 @@
         this.currentPage = page
         this.GetGoods()
       },
-      deleteGood(id) {
+      DeleteGood(id) {
         deleteGood(id).then(
           res => {
             this.GetGoods()

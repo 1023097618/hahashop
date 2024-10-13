@@ -36,6 +36,12 @@ export default {
     PasswordChanege(){
       changePassword(this.form).then(res=>{
         console.log(res)
+        this.$store.dispatch('UserLogout')
+          this.$router.push('/login').catch(
+            err=>{
+              console.log(err)
+            }
+          )
       }).catch(err=>{
         console.log(err)
       })
