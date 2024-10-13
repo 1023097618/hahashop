@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.mall.dao.HistoryDao">
+    <!-- 增加历史记录 -->
+    <insert id="addHistory" parameterType="com.mall.entity.History" useGeneratedKeys="true" keyProperty="historyId">
+        INSERT INTO History (goodId, goodName, goodPrice, goodDesc, goodImage, operationTime)
+        VALUES (#{goodId}, #{goodName}, #{goodPrice}, #{goodDesc}, #{goodImage}, #{operationTime})
+    </insert>
+
+    <!--删除历史记录 -->
+    <delete id="deleteHistory" parameterType="Integer">
+        DELETE FROM History WHERE historyId = #{historyId}
+    </delete>
+
+    <!--查询历史记录 -->
+    <select id="getHistory" resultType="com.mall.entity.History">
+        SELECT historyId, goodId, goodName, goodPrice, goodImage,operationTime FROM History
+        LIMIT #{pageSize} OFFSET #{pageSize} * (#{pageNum} - 1)
+    </select>
+
+    <!--数量统计-->
+    <select id="countHistory" resultType="Integer">
+        SELECT COUNT(*) FROM History
+    </select>
+</mapper>

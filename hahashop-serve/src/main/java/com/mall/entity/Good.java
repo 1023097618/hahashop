@@ -15,4 +15,5 @@ public class Good {
     String goodImage;
     Integer goodState;
     Integer buyerNum;
+    Boolean display;
 }

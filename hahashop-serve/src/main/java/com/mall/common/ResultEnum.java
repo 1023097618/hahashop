@@ -11,7 +11,8 @@ public enum ResultEnum {
     WRONG_PASSWORD(302, "密码错误"),
     GOOD_NOT_EXIST(303, "商品不存在"),
     GOOD_IS_FROZEN(304, "商品已经被冻结"),
-    ILLEGAL_INFO(305, "输入信息不合法")
+    ILLEGAL_INFO(305, "输入信息不合法"),
+    HISTORY_NOT_EXIST(309,"历史信息不存在")
     ;
 
     private final int code; // 使用 final 修饰，确保值不可变

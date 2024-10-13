@@ -9,4 +9,11 @@
         SELECT * FROM User
         WHERE username = #{username}
     </select>
+
+    <!--更改密码-->
+    <update id="renewPassword" parameterType="com.mall.entity.User">
+        UPDATE User
+        SET password = #{password}
+        WHERE username = #{username}
+    </update>
 </mapper>

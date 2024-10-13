@@ -17,5 +17,6 @@ public class UserServiceImpl implements UserService {
         return userDao.login(username);
     }
 
-
+    @Override
+    public Boolean renewPassword(String username, String password) { return userDao.renewPassword(username, password)>0;}
 }

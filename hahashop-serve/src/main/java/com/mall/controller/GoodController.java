@@ -24,7 +24,7 @@ public class GoodController {
 
     @RequestMapping("/list")
     //获取所有商品信息
-    public Result goodList(@RequestParam Integer pageSize, @RequestParam Integer pageNum, HttpServletRequest request) {
+    public Result goodList(@RequestParam Integer pageSize, @RequestParam Integer pageNum) {
         List<Good> goodList = goodService.goodList(pageSize, pageNum);
         Integer totalGoods = goodService.countGoods();
 
@@ -35,7 +35,7 @@ public class GoodController {
         data.put("goods", goodList);
         data.put("totalGoods", totalGoods);
 
-        if (goodList != null) {
+        if (!goodList.isEmpty()) {
             return ResultUtil.success(SUCCESS, data);
         } else {
             return ResultUtil.error(GOOD_NOT_EXIST);
@@ -56,7 +56,7 @@ public class GoodController {
     }
 
     @RequestMapping("/update")
-    public Result<Object> goodUpdate(HttpServletRequest request, @RequestBody Good good) {
+    public Result<Object> goodUpdate(@RequestBody Good good) {
         if (goodService.getGoodById(good.getGoodId()) == null) {
             return ResultUtil.error(GOOD_NOT_EXIST);
         } else if (goodService.updateGood(good)) {
@@ -67,7 +67,7 @@ public class GoodController {
     }
 
     @RequestMapping("/add")
-    public Result<Object> goodAdd(HttpServletRequest request, @RequestBody Good good) {
+    public Result<Object> goodAdd(@RequestBody Good good) {
         if (goodService.addGood(good)) {
             return ResultUtil.success(SUCCESS, null);
         } else {
@@ -76,7 +76,7 @@ public class GoodController {
     }
 
     @RequestMapping("/delete")
-    public Result<Object> goodDelete(HttpServletRequest request, @RequestBody Map<String, Object> map) {
+    public Result<Object> goodDelete(@RequestBody Map<String, Object> map) {
         Integer goodId = Integer.valueOf(map.get("goodId").toString());
         if (goodService.getGoodById(goodId) == null) {
             return ResultUtil.error(GOOD_NOT_EXIST);
