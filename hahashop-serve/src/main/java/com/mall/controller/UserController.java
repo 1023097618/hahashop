@@ -4,7 +4,6 @@ package com.mall.controller;
 import com.mall.common.Result;
 import com.mall.common.ResultEnum;
 import com.mall.common.ResultUtil;
-import com.mall.entity.Temp;
 import com.mall.entity.User;
 import com.mall.service.UserService;
 import jakarta.annotation.Resource;
@@ -57,7 +56,7 @@ public class UserController {
     }
 
     @RequestMapping("/changePassword")//大小写不统一
-    public Result<Object> changePassword(@RequestBody Temp temp) {
+    public Result<Object> changePassword(@RequestBody Map<String, String> map) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         // 检查是否认证和 Principal 是否为 User 类型
@@ -65,8 +64,8 @@ public class UserController {
             User u = (User) authentication.getPrincipal();  // 强制类型转换
             u = userService.login(u.getUsername());
 
-            if(temp.getOldPassword().equals(u.getPassword())){//老密码是否相同
-                userService.renewPassword(u.getUsername(), temp.getNewPassword());
+            if(map.get("oldPassword").equals(u.getPassword())){//老密码是否相同
+                userService.renewPassword(u.getUsername(), map.get("newPassword"));
                 ResultUtil.success(ResultEnum.SUCCESS,null);
             }else{
                 ResultUtil.error(ResultEnum.WRONG_PASSWORD);
