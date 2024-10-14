@@ -1,5 +1,6 @@
 package com.mall.controller;
 
+import com.mall.common.JwtTokenUtil;
 import com.mall.common.Result;
 import com.mall.common.ResultUtil;
 import com.mall.entity.Good;
@@ -24,14 +25,20 @@ public class GoodController {
 
     @RequestMapping("/list")
     //获取所有商品信息
-    public Result goodList(@RequestParam Integer pageSize, @RequestParam Integer pageNum) {
+    public Result goodList(HttpServletRequest request,@RequestParam Integer pageSize, @RequestParam Integer pageNum) {
         List<Good> goodList = goodService.goodList(pageSize, pageNum);
         Integer totalGoods = goodService.countGoods();
-
+        String token = request.getHeader("X-hahashop-token");
         Map<String, Object> data = new HashMap<>();
-        for (Good good : goodList) {
-            good.setBuyerNum(0);
+        if(token!=null&&JwtTokenUtil.decodeToken(token)!=null){}
+        else if (token!=null&& JwtTokenUtil.decodeToken(token)==null) {
+            return ResultUtil.error(ILLEGAL_TOKEN);
+        } else {
+            for (Good good : goodList) {
+                good.setBuyerNum(0);
+            }
         }
+
         data.put("goods", goodList);
         data.put("totalGoods", totalGoods);
         return ResultUtil.success(SUCCESS, data);

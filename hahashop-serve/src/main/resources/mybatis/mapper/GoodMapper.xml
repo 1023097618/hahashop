@@ -40,7 +40,7 @@
     <update id="updateGood" parameterType="com.mall.entity.Good">
         UPDATE Good
         SET goodName = #{goodName}, goodPrice = #{goodPrice}, goodDesc = #{goodDesc},
-            buyerNum = #{buyerNum}, goodState = #{goodState}, goodImage = #{goodImage}
+            buyerNum = #{buyerNum}, goodImage = #{goodImage}
         WHERE goodId = #{goodId}
     </update>
 

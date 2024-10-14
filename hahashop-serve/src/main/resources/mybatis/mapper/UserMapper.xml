@@ -6,7 +6,7 @@
 <mapper namespace="com.mall.dao.UserDao">
     <!--通过登录时输入的用户名查询用户信息-->
     <select id="login" resultType="com.mall.entity.User">
-        SELECT * FROM User
+        SELECT id, username, password ,privilege FROM User
         WHERE username = #{username}
     </select>
 
