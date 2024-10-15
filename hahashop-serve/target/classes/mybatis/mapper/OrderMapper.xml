@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.mall.dao.OrderDao">
+    <!-- 添加订单 -->
+    <insert id="addOrder" parameterType="com.mall.entity.Order" useGeneratedKeys="true" keyProperty="orderId">
+        INSERT INTO Orders (goodId, buyerName, buyerAddress, buyerPhone, buyerDesc, isConfirmed)
+        VALUES (#{goodId}, #{buyerName}, #{buyerAddress}, #{buyerPhone}, #{buyerDesc}, #{isConfirmed})
+    </insert>
+
+    <!-- 根据商品ID获取所有订单 -->
+    <select id="getOrdersById" parameterType="Integer" resultType="com.mall.entity.Order">
+        SELECT * FROM Orders
+        WHERE goodId = #{goodId}
+    </select>
+
+    <!-- 确认订单 -->
+    <update id="confirmOrder" parameterType="Integer">
+        UPDATE Orders
+        SET isConfirmed = 1
+        WHERE orderId = #{orderId}
+    </update>
+
+    <!-- 撤销订单 -->
+    <update id="cancelOrder" parameterType="Integer">
+        UPDATE Orders
+        SET isConfirmed = 0
+        WHERE orderId = #{orderId}
+    </update>
+</mapper>

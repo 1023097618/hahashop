@@ -1,0 +1,20 @@
+server:
+  port: 8081 # 端口号
+spring:
+  datasource:
+    url: jdbc:sqlite:test.db # 创建的sqlite数据库所在路径
+    username: # 因为没有用户名和密码，所以这两个参数就没有值
+    password:
+    driver-class-name: org.sqlite.JDBC # sqlite驱动
+logging:
+  level:
+    com.example.demo.mapper: debug
+
+
+# mybatis配置
+mybatis:
+  mapper-locations: classpath:mybatis/mapper/*Mapper.xml # 配置mapper.xml文件路径
+  type-aliases-package: com.mall.entity # 实体类包名
+  #用于mybatis在控制台打印sql日志
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
