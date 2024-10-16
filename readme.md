@@ -1,3 +1,4 @@
+github地址：https://github.com/1023097618/hahashop
 --- 
 # 项目说明 感谢您对本项目的关注！如果您觉得这个项目对您有帮助，请为我们点一颗免费的⭐Star。 
 ## 前提条件 - 请确保您的计算机已配置好 Java 环境变量（推荐使用 Java 17）。 
@@ -16,4 +17,15 @@ npm run serve
 1. 使用 IntelliJ IDEA 打开 `hahashop-serve` 项目。 
 2. 确保 `pom.xml` 文件中的依赖已更新。 
 3. 运行 `MallApplication.java` 文件以启动后端服务。 
+ ## 功能说明 
+ ### 密码重置功能 如果您需要重置密码，请按照以下步骤操作：
+1. 打开命令提示符（CMD）。 
+2. 导航至 `hahashop-serve` 文件所在的目录。 
+3. 输入以下命令以重置密码： 
+```bash 
+java -Dfile.encoding=GBK -jar target/hahashop-server-0.0.1-SNAPSHOT.jar reset-password
+ ``` 
+4. 重置后，默认用户凭证为： 
+- 用户名：`admin` 
+- 密码：`123` 
 ---
