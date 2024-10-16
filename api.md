@@ -75,7 +75,7 @@ GET /good/list
 
 |名称|类型|必选|约束|中文名|说明|
 |---|---|---|---|---|---|
-|» code|integer|true|none||400表示查询商品成功<br />303表示查询商品失败|
+|» code|integer|true|none||400表示查询成功<br />303表示查询失败|
 |» data|object|true|none||none|
 |»» goods|[object]|true|none||none|
 |»»» goodName|string|true|none||商品名称|
@@ -163,6 +163,7 @@ goodName: ""
 
 |名称|位置|类型|必选|说明|
 |---|---|---|---|---|
+|X-Hahashop-Token|cookie|string| 是 |none|
 |body|body|object| 否 |none|
 |» goodImage|body|string(binary)| 是 |商品图片|
 |» goodId|body|integer| 是 |商品id|
@@ -203,7 +204,7 @@ goodName: ""
 |属性|值|
 |---|---|
 |code|400|
-|code|309|
+|code|303|
 |msg|购买成功|
 |msg|购买失败，商品已经被冻结|
 |msg|购买失败，填入的信息不合法|
@@ -226,6 +227,7 @@ goodName: ""
 
 |名称|位置|类型|必选|说明|
 |---|---|---|---|---|
+|X-Hahashop-Token|cookie|string| 是 |none|
 |body|body|object| 否 |none|
 |» goodImage|body|string(binary)| 是 |商品图片|
 |» goodDesc|body|string| 是 |商品描述信息|
@@ -285,6 +287,7 @@ DELETE /good/delete
 
 |名称|位置|类型|必选|说明|
 |---|---|---|---|---|
+|X-Hahashop-Token|cookie|string| 是 |none|
 |body|body|object| 否 |none|
 |» goodId|body|string| 是 |商品id|
 
@@ -391,6 +394,69 @@ POST /auth/login
 |msg|用户不存在|
 |msg|用户密码错误|
 
+## POST 卖家修改密码
+
+POST /auth/changePassword
+
+用户的username从token中获得
+
+> Body 请求参数
+
+```json
+{
+  "oldPassword": "zhangsan",
+  "newPassword": "123456"
+}
+```
+
+### 请求参数
+
+|名称|位置|类型|必选|说明|
+|---|---|---|---|---|
+|X-Hahashop-Token|cookie|string| 否 |none|
+|body|body|object| 否 |none|
+|» oldPassword|body|string| 是 |老密码|
+|» newPassword|body|string| 是 |新密码|
+
+> 返回示例
+
+> 200 Response
+
+```json
+{
+  "code": 400,
+  "data": {},
+  "msg": "登录成功"
+}
+```
+
+### 返回结果
+
+|状态码|状态码含义|说明|数据模型|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|none|Inline|
+
+### 返回数据结构
+
+状态码 **200**
+
+|名称|类型|必选|约束|中文名|说明|
+|---|---|---|---|---|---|
+|» code|integer|true|none||none|
+|» data|object|true|none||none|
+|» msg|string|true|none||none|
+
+#### 枚举值
+
+|属性|值|
+|---|---|
+|code|400|
+|code|201|
+|code|302|
+|msg|登录成功|
+|msg|用户不存在|
+|msg|用户密码错误|
+
 ## GET 获取用户信息
 
 GET /auth/info
@@ -451,6 +517,8 @@ GET /order/list
 |---|---|---|---|---|
 |X-Hahashop-Token|cookie|string| 是 |证明这是商家|
 |goodId|query|integer| 是 |商品id|
+|pageNum|query|integer| 否 |none|
+|pageSize|query|integer| 否 |none|
 
 > 返回示例
 
@@ -697,6 +765,140 @@ POST /order/cancelsell
 |code|303|
 |code|308|
 |code|201|
+
+# root/历史信息接口
+
+## GET 获取商品历史信息
+
+GET /history/list
+
+### 请求参数
+
+|名称|位置|类型|必选|说明|
+|---|---|---|---|---|
+|X-Hahashop-Token|cookie|string| 是 |证明这是商家|
+|pageSize|query|integer| 否 |返回10个数据|
+|pageNum|query|integer| 否 |第1页|
+
+> 返回示例
+
+> 200 Response
+
+```json
+{
+  "code": 400,
+  "data": {
+    "histories": [
+      {
+        "historyId": 0,
+        "operationTime": "2024-01-01 00:00:00",
+        "goodName": "比亚迪跑车",
+        "goodPrice": "100 ￥",
+        "goodId": 0,
+        "goodImage": "https://img.alicdn.com/imgextra/i2/O1CN01kcwuQk1LzVafnz3rv_!!6000000001370-0-tps-480-672.jpg",
+        "goodDesc": "非常好非常好非常好非常好非常好非常好非常好非常好非常好非常好非常好非常好非常好非常好非常好非常好非常好非常好非常好非常好非常好非常好"
+      }
+    ],
+    "totalHistories": 100
+  },
+  "msg": "查询商品成功"
+}
+```
+
+### 返回结果
+
+|状态码|状态码含义|说明|数据模型|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|none|Inline|
+
+### 返回数据结构
+
+状态码 **200**
+
+|名称|类型|必选|约束|中文名|说明|
+|---|---|---|---|---|---|
+|» code|integer|true|none||none|
+|» data|object|true|none||none|
+|»» histories|[object]|true|none||none|
+|»»» historyId|integer|true|none||历史记录的id|
+|»»» operationTime|string|true|none||操作的时间|
+|»»» goodName|string|true|none||商品名称|
+|»»» goodPrice|string|true|none||用string传输主要考虑了货币的种类，比如100€   100$|
+|»»» goodId|integer|true|none||此goodid会用在后续对后端的网络请求，在网络请求中对这个商品进行标识。<br />比如购买该商品时，前端会往后端传递这个id用于标识是这个商品|
+|»»» goodImage|string|true|none||商品图片的url地址|
+|»»» goodDesc|string|true|none||商品描述信息|
+|»» totalHistories|integer|true|none||历史记录总数量，用于前端计算总共有多少页|
+|» msg|string|true|none||none|
+
+#### 枚举值
+
+|属性|值|
+|---|---|
+|code|400|
+|code|1001|
+|code|201|
+|msg|查询商品成功|
+|msg|查询商品失败|
+
+## DELETE 删除历史记录
+
+DELETE /history/delete
+
+> Body 请求参数
+
+```json
+{
+  "historyId": "string"
+}
+```
+
+### 请求参数
+
+|名称|位置|类型|必选|说明|
+|---|---|---|---|---|
+|X-Hahashop-Token|cookie|string| 是 |none|
+|body|body|object| 否 |none|
+|» historyId|body|string| 是 |历史记录id|
+
+> 返回示例
+
+> 200 Response
+
+```json
+{
+  "code": 400,
+  "data": {},
+  "msg": "购买成功"
+}
+```
+
+### 返回结果
+
+|状态码|状态码含义|说明|数据模型|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|none|Inline|
+
+### 返回数据结构
+
+状态码 **200**
+
+|名称|类型|必选|约束|中文名|说明|
+|---|---|---|---|---|---|
+|» code|integer|true|none||none|
+|» data|object|true|none||none|
+|» msg|string|true|none||none|
+
+#### 枚举值
+
+|属性|值|
+|---|---|
+|code|400|
+|code|309|
+|code|201|
+|code|1001|
+|msg|购买成功|
+|msg|购买失败，商品已经被冻结|
+|msg|购买失败，填入的信息不合法|
 
 # 数据模型
 
