@@ -10,7 +10,7 @@ export function buyGoods(data){
 
 export function getOrders(goodId){
     return request({
-        url:'/order/list',
+        url:'/order/sellerlist',
         method:'get',
         params:{
             goodId
@@ -18,9 +18,9 @@ export function getOrders(goodId){
     })
 }
 
-export function sellGood(data){
+export function confirmSellGood(data){
     return request({
-        url:'/order/sell',
+        url:'/order/confirmsell',
         method:'post',
         data:data
     })
@@ -31,5 +31,13 @@ export function cancelSellGood(data){
         url:'/order/cancelsell',
         method:'post',
         data:data
+    })
+}
+
+export function getBuyerOrders(params){
+    return request({
+        url:'/order/buyerlist',
+        method:'get',
+        params
     })
 }

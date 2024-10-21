@@ -2,7 +2,7 @@ import router from "./router"
 import store from "./store"
 import { GetCookie,RemoveCookie } from "./utils/auth"
 
-const whiteList=['/login','/']
+const whiteList=['/login','/','/register']
 router.beforeEach((to,from,next)=>{
     const token=GetCookie()
     console.log(to.path)
@@ -11,13 +11,13 @@ router.beforeEach((to,from,next)=>{
             next()
         }else{
             console.log(store.getters.permmited)
-            if(!store.getters.permmited){
+            if(store.getters.permmited===0){
                 store.dispatch("GetUserInfoAction", token).then(() => {
                     //授权为真
                     if(to.path !== '/login'){
                         next(to.path)
                     }else{
-                        next('/dashboard/good/manager')
+                        next('/dashboard')
                     }
                 }).catch((err) => {
                     //授权为假
@@ -30,7 +30,7 @@ router.beforeEach((to,from,next)=>{
                 if(to.path !== '/login'){
                     next()
                 }else{
-                    next('/dashboard/good')
+                    next('/dashboard')
                 }
             }
         }

@@ -1,14 +1,20 @@
 <!-- Product.vue -->
 <template>
   <el-card :body-style="{ padding: '0px' }"
-    :class="{'frozen':(product.goodState===1),'active':(product.goodState===0),'clicked': clicked}" >
+    :class="{'frozen':(product.goodNum<=0),'active':(product.goodNum>0),'clicked': clicked}" >
+
     <div class="image-container" @click="handleClick">
-      <img :src="product.goodImage" class="image" >
+      <el-carousel trigger="click" height="150px" :autoplay="false" indicator-position="none">
+        <el-carousel-item v-for="(src,index) in product.goodImage" :key="index">
+          <img :src="src" class="image">
+        </el-carousel-item>
+      </el-carousel>
     </div>
     <div style="padding: 14px; line-height: 13px;" @click="handleClick">
       <span>{{product.goodName}}</span>
-      <div class="bottom clearfix">
+      <div style="display: flex; justify-content: space-between;">
         <time class="time">{{ product.goodPrice }}</time>
+        <time class="time">剩余库存:{{ product.goodNum }}</time>
       </div>
     </div>
   </el-card>
@@ -29,7 +35,8 @@
     },
     methods:{
       handleClick() {
-      if (this.product.goodState === 0) { // 只有在 active 状态下才响应点击
+        this.$emit('Userclick');
+      if (this.product.goodNum > 0) { // 只有在 active 状态下才响应点击
         this.clicked = true;
         setTimeout(() => {
           this.clicked = false;

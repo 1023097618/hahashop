@@ -1,0 +1,8 @@
+{
+    "code": 400,
+    "data": {
+      "url": "http://localhost:8080/storage/fetch/sjhcc8pkpxu0ofoymwdu.png",
+      "key": "sjhcc8pkpxu0ofoymwdu.png"
+    },
+    "msg": "查询商品成功"
+  }

@@ -57,8 +57,11 @@
         }
     },
     methods: {
-        openDialog(product){
+        openDialog(product,user){
           Object.assign(this.product, product);
+          this.form.buyerName=user.buyerName
+          this.form.buyerPhone=user.buyerPhone
+          this.form.buyerAddress=user.buyerAddress
           this.$emit('update:visible',true)
           getGoodsDetail(this.product.goodId)
           .then(res=>{

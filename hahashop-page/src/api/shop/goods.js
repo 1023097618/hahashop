@@ -41,3 +41,10 @@ export function addGoods(data){
         method:'post'
     })
 }
+
+export function getCategory(){
+    return request({
+        url:'/good/category',
+        method:'get'
+    })
+}

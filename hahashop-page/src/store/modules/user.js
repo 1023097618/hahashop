@@ -1,38 +1,48 @@
 import { Login,GetUserInfo } from "@/api/auth/login";
 import {SetCookie,RemoveCookie} from "@/utils/auth";
-import {asyncRoutes} from "@/router";
+import {addSellerRoute,addBuyerRoute} from "@/router";
 import router,{resetRouter} from "@/router";
 export default {
     state:{
         token:'',
-        username:'',
-        permitted:false,
-        permittedroutes:[]
+        //0代表没有授权  1代表卖家  2代表买家
+        permitted:0,
+        permittedroutes:[],
+        user:{
+            username:'',
+            buyerPhone:'',
+            buyerAddress:'',
+            userId:'',
+            buyerName:'',
+        }
     },
     mutations:{
         SET_TOKEN(state,token){
             state.token=token
         },
-        ADD_PERMS(state){
-            if(!state.permitted){
-            state.permittedroutes=asyncRoutes
-            console.log(asyncRoutes)
-            state.permitted=true
-            asyncRoutes.forEach(route=>{
-                router.addRoute(route)
-            })
+        ADD_PERMS(state,priviliage){
+            if(state.permitted===0){
+            state.permitted=priviliage
+            if(state.permitted===1){
+            state.permittedroutes=addSellerRoute()
+            }else if(state.permitted===2){
+                state.permittedroutes=addBuyerRoute()
+            }
             console.log(router)
         }
         },
-        SET_USERNAME(state,username){
-            state.username=username
+        SET_USER(state,user){
+            state.user.username=user.username
+            state.user.buyerName=user.buyerName
+            state.user.buyerAddress=user.buyerAddress
+            state.user.userId=user.userId
+            state.user.buyerPhone=user.buyerPhone
         },
         REMOVE_TOKEN(state){
             state.token=''
         },
         REMOVE_PERMS(state){
-            state.permitted=false,
-            state.permittedroutes=[]
+            state.permitted=0
             resetRouter()
         }
     },
@@ -53,10 +63,10 @@ export default {
             return new Promise((resolve,reject)=>{
                 GetUserInfo(token).then(
                     res=>{
-                        const username=res.data.data.username
-                        commit('SET_USERNAME',username)
+                        const user=res.data.data
+                        commit('SET_USER',user)
                         commit('SET_TOKEN',token)
-                        commit('ADD_PERMS')
+                        commit('ADD_PERMS',user.priviliage)
                         resolve()
                     }).catch(
                         err=>{

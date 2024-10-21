@@ -1,7 +1,7 @@
 <template>
   <el-dialog title="订单查看" :visible="this.visible" width="50%" :before-close="closeDialog">
     <h3 style="text-align: center;">{{good.goodName}}</h3>
-    <el-table :data="buyers" style="width: 100%" max-height="250" :row-class-name="confirmedHeightlight">
+    <el-table :data="orders" style="width: 100%" max-height="250" :row-class-name="confirmedHeightlight">
       <el-table-column prop="buyerPhone" label="买家手机" width="150">
       </el-table-column>
       <el-table-column prop="buyerAddress" label="买家地址" width="120">
@@ -13,11 +13,11 @@
       <el-table-column fixed="right" width="210">
         <template slot-scope="scope">
           <div style="display: flex; justify-content: center;">
-            <el-button @click.native.prevent="SellGood(scope.row.orderId)" type="primary" icon="el-icon-check" size="mini"
-              v-if="scope.row.isConfirmed==false && good.goodState==0">
+            <el-button @click.native.prevent="ConfirmSellGood(scope.row.orderId)" type="primary" icon="el-icon-check" size="mini"
+              v-if="scope.row.orderState===0">
             </el-button>
             <el-button @click.native.prevent="CancelSellGood(scope.row.orderId)" type="primary" icon="el-icon-close" size="mini"
-            v-if="scope.row.isConfirmed==true && good.goodState==1">
+            v-if="scope.row.orderState===0">
           </el-button>
           </div>
         </template>
@@ -38,7 +38,7 @@
 </style>
 
 <script>
-  import { getOrders,sellGood,cancelSellGood } from '@/api/order/order.js'
+  import { getOrders,confirmSellGood,cancelSellGood } from '@/api/order/order.js'
 
   export default {
     name: 'BuyerView',
@@ -48,10 +48,9 @@
           goodId: 1,
           goodName: 'loading...',
           goodPrice: 'loading...',
-          goodImage: '',
-          goodState: 0
+          goodImage: ''
         },
-        buyers: []
+        orders: []
       };
     },
 
@@ -69,8 +68,7 @@
       },
       GetOrders(){
         getOrders(this.good.goodId).then(res => {
-          this.buyers = res.data.data.orders
-          this.good.goodState = res.data.data.goodState
+          this.orders = res.data.data.orders
         }).catch(err => {
           console.log(err)
         })
@@ -89,9 +87,9 @@
         }
         return ''
       },
-      SellGood(orderId){
+      ConfirmSellGood(orderId){
         const goodId=this.good.goodId
-        sellGood({orderId,goodId}).then(
+        confirmSellGood({orderId,goodId}).then(
           res=>{
             this.GetOrders()
             console.log(res)

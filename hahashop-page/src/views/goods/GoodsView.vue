@@ -2,11 +2,11 @@
   <div id="goods">
     <webErrorResult :error="weberror"></webErrorResult>
     <el-skeleton :rows="3" animated :loading="isload" />
-    <el-table :data="goods" style="width: 100;" :height="tableConfig.height" :row-class-name="tableRowClassName"
+    <el-table :data="goods" style="width: 100;" :height="tableConfig.height" :row-class-name="tableRowClassName" :key="updatekey"
       v-if="!isload && !weberror">
       <el-table-column label="商品图片" width="120" fixed>
         <template slot-scope="scope">
-          <img :src="scope.row.goodImage"
+          <img :src="scope.row.goodImage[0]"
             style="width: 100px; height: 100px; object-fit: cover; object-position: center;">
         </template>
       </el-table-column>
@@ -14,7 +14,11 @@
       </el-table-column>
       <el-table-column prop="goodPrice" label="商品价格" width="120">
       </el-table-column>
+      <el-table-column prop="goodNum" label="剩余库存" width="120">
+      </el-table-column>
       <el-table-column prop="buyerNum" label="购买者数量" width="120">
+      </el-table-column>
+      <el-table-column prop="categoryName" label="商品种类" width="120">
       </el-table-column>
       <el-table-column label="订单查看" width="120">
         <template slot-scope="scope">
@@ -24,7 +28,7 @@
       </el-table-column>
       <el-table-column fixed="right" width="210">
         <template slot="header">
-          <div style="display: flex; justify-content: center;" v-if="totalProducts<=0">
+          <div style="display: flex; justify-content: center;">
             <el-button size="mini" type="primary" icon="el-icon-plus" @click="AddGoods()"></el-button>
           </div>
         </template>
@@ -33,7 +37,7 @@
             <el-button @click.native.prevent="EditGoods(scope.row)" type="primary" icon="el-icon-edit" size="mini">
             </el-button>
             <el-button @click.native.prevent="DeleteGood(scope.row.goodId)" type="danger" icon="el-icon-delete"
-              size="mini" v-if="scope.row.goodState==0">
+              size="mini">
             </el-button>
           </div>
         </template>
@@ -49,7 +53,7 @@
 </template>
 
 <script>
-  import { getGoods, deleteGood } from '@/api/shop/goods.js'
+  import { getGoods, deleteGood, getCategory } from '@/api/shop/goods.js'
   import GoodsEdit from './components/GoodsEdit.vue'
   import GoodsAdd from './components/GoodsAdd.vue'
   import BuyerView from './components/BuyerView.vue'
@@ -83,17 +87,19 @@
           this.totalProducts = res.data.data.totalGoods
           this.isload = false,
           this.weberror = false
+          this.Getcategoty()
+          this.updatekey=!this.updatekey
         }).catch(err => {
           this.isload = false,
-          this.weberror = true
+            this.weberror = true
           console.log(err)
         })
       },
       EditGoods(good) {
-        this.$refs.GoodsEdit.openDialog(good)
+        this.$refs.GoodsEdit.openDialog(good,this.category)
       },
       AddGoods() {
-        this.$refs.GoodsAdd.openDialog()
+        this.$refs.GoodsAdd.openDialog(this.category)
       },
       ViewBuyers(good) {
         this.$refs.BuyerView.openDialog(good)
@@ -103,11 +109,42 @@
         this.tableConfig.height = window.innerHeight - 100
       },
       tableRowClassName({ row }) {
-        if (row.goodState == 1) {
+        if (row.goodNum == 0) {
           return 'warning-row'
         }
         return ''
+      },
+      Getcategoty() {
+        getCategory().then(res => {
+          this.category = res.data.data.categoryList
+          this.goods.map(good=> {
+            good.categoryName=this.findLabelsByValues(this.category,good.categoryId)
+            return good
+          })
+          this.updatekey=!this.updatekey
+        })
+      },
+      findLabelsByValues(categoryList, values) {
+        if(categoryList===undefined||values===undefined){
+          return '无'
+        }
+        const labels = [];
+        function recursiveSearch(categories, targetValues) {
+          for (const category of categories) {
+            if (targetValues.includes(category.value)) {
+              labels.push(category.label);
+              targetValues.splice(targetValues.indexOf(category.value), 1);
+            }
+            if (category.children) {
+              recursiveSearch(category.children, targetValues);
+            }
+          }
+        }
+        const targetValues = [...values];
+        recursiveSearch(categoryList, targetValues);
+        return labels.join('/')===''?'无':labels.join('/')
       }
+
     },
     components: {
       GoodsEdit,
@@ -129,7 +166,10 @@
           height: 200
         },
         isload: true,
-        weberror: false
+        weberror: false,
+        category: [],
+        //表单没办法深度监听变量，所以需要一个updatekey来变化，每次update的时候都需要改变一下
+        updatekey:false
       }
     },
     created() {
@@ -149,6 +189,7 @@
   }
 
   #goods .warning-row {
-    background-color: rgb(253, 253, 206);;
+    background-color: rgb(253, 253, 206);
+    ;
   }
 </style>

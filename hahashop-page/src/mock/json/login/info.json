@@ -1,7 +1,12 @@
 {
     "code": 400,
     "data": {
-        "username": "string"
+        "username": "string",
+        "priviliage": 1,
+        "buyerPhone": "string",
+        "buyerAddress": "string",
+        "userId": 1,
+        "buyerName": "string"
     },
     "msg": "string"
-}
+  }

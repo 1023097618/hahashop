@@ -13,12 +13,22 @@
         </el-row>
       </el-header>
       <el-main>
+        <SearchInput @search="search" class="search" />
+        <div class="category">
+          <span class="demonstration">类别选择</span>
+          <el-cascader
+            v-model="category"
+            :options="options"
+            :props="{ expandTrigger: 'hover' }"
+            clearable
+            @change="handleChange"></el-cascader>
+        </div>
         <el-skeleton :rows="3" animated :loading="isload" />
         <webErrorResult :error="weberror"></webErrorResult>
         <div v-if="!isload && !weberror">
           <el-row :gutter="20" v-for="(row,rowindex) in productRows" :key="rowindex">
             <el-col :span="6" v-for="good in row" :key="good.goodId">
-              <ProductCard :product="good" @click.native="buy(good)" />
+              <ProductCard :product="good" @Userclick="buy(good)" />
             </el-col>
           </el-row>
           <el-pagination :current-page="currentPage" :page-size="pageSize" layout="prev, pager, next"
@@ -35,15 +45,17 @@
 <script>
   import ProductCard from '@/components/ProductCard';
   import PurchaseDialog from '@/components/PurchaseDialog'
-  import { getGoods } from '@/api/shop/goods.js'
+  import { getGoods,getCategory } from '@/api/shop/goods.js'
   import webErrorResult from '@/components/webErrorResult.vue'
+  import { GetCookie, RemoveCookie } from "@/utils/auth"
+  import SearchInput from '@/components/SearchInput.vue'
   // getGoods
-
   export default {
     components: {
       ProductCard,
       PurchaseDialog,
-      webErrorResult
+      webErrorResult,
+      SearchInput
     },
     data() {
       return {
@@ -53,17 +65,37 @@
         pageSize: 8,
         dialogVisible: false,
         isload: true,
-        weberror: false
+        weberror: false,
+        keyword:'',
+        category:[],
+        options:[
+          {
+            "children": [
+              {
+                "label": "布艺软装",
+                "value": 1008002
+              }
+            ],
+            "label": "居家",
+            "value": 1005000
+          }
+        ]
       };
     },
     methods: {
       fetchProducts() {
-        this.isload = true,
-
-          getGoods({
+        this.isload = true
+          const params={
             pageNum: this.currentPage,
             pageSize: this.pageSize
-          }).then(response => {
+          }
+          if(this.keyword){
+            params.goodName=this.keyword
+          }
+          if(this.category.length!==0){
+            params.category=JSON.stringify(this.category)
+          }
+          getGoods(params).then(response => {
             console.log(response)
             this.products = response.data.data.goods;
             this.totalProducts = response.data.data.totalGoods;
@@ -81,12 +113,46 @@
         this.fetchProducts();
       },
       login() {
-        this.$router.push('/login')
+        this.$router.push('/login').catch(err => {
+          console.log(err)
+        })
       },
       buy(product) {
-        if (product.goodState === 0) {
-          this.$refs.purchaseDialog.openDialog(product)
+        if (product.goodNum <= 0) {
+          return
         }
+        const token = GetCookie()
+        if (token) {
+          if (this.$store.getters.permmited===0) {
+            const user=this.$store.getters.user
+            this.$store.dispatch("GetUserInfoAction", token).then(() => {
+              this.$refs.purchaseDialog.openDialog(product,user)
+            }).catch((err) => {
+              console.log(err)
+              RemoveCookie()
+              this.login()
+            })
+          }
+          else {
+            const user=this.$store.getters.user
+            this.$refs.purchaseDialog.openDialog(product,user)
+          }
+        } else {
+          this.login()
+        }
+      },
+      search(key){
+        this.keyword=key
+        this.fetchProducts()
+      },
+      Getcategoty(){
+        getCategory().then(res=>{
+          this.options=res.data.data.categoryList
+        })
+      },
+      handleChange(value) {
+        this.category=value
+        this.fetchProducts()
       }
     },
     computed: {
@@ -101,13 +167,22 @@
     }
     ,
     created() {
-      this.fetchProducts();
+      this.fetchProducts()
+      this.Getcategoty();
     }
+
 
   }
 </script>
 
 <style scoped>
+  #layoutview .category{
+    line-height: 10px;
+  }
+  #layoutview .search{
+    line-height: 10px;
+  }
+
   /* 头部、尾部布局 */
   .el-header,
   .el-footer {

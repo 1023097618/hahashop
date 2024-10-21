@@ -25,3 +25,11 @@ export function changePassword(data){
         method:'post'
     })
 }
+
+export function registerUser(data){
+    return request({
+        url:'/auth/register',
+        data,
+        method:'post'
+    })
+}

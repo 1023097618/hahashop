@@ -1,0 +1,18 @@
+{
+  "code": 400,
+  "data": {
+    "categoryList": [
+      {
+        "label": "电子设备",
+        "value": 10086,
+        "children": [
+          {
+            "label": "笔记本电脑",
+            "value": 10087
+          }
+        ]
+      }
+    ]
+  },
+  "msg": "查询商品成功"
+}

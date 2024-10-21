@@ -6,36 +6,15 @@
         "goodName": "比亚迪跑车",
         "goodPrice": "100 ￥",
         "goodId": 10086,
-        "goodImage": "https://img.alicdn.com/imgextra/i2/O1CN01kcwuQk1LzVafnz3rv_!!6000000001370-0-tps-480-672.jpg",
-        "buyerNum":10
-      },
-      {
-        "goodName": "比亚迪跑车",
-        "goodPrice": "100 ￥",
-        "goodId": 10087,
-        "goodImage": "https://img.alicdn.com/imgextra/i2/O1CN01kcwuQk1LzVafnz3rv_!!6000000001370-0-tps-480-672.jpg",
-        "buyerNum":10
-      },
-      {
-        "goodName": "比亚迪跑车",
-        "goodPrice": "100 ￥",
-        "goodId": 10088,
-        "goodImage": "https://img.alicdn.com/imgextra/i2/O1CN01kcwuQk1LzVafnz3rv_!!6000000001370-0-tps-480-672.jpg",
-        "buyerNum":10
-      },
-      {
-        "goodName": "比亚迪跑车",
-        "goodPrice": "100 ￥",
-        "goodId": 10089,
-        "goodImage": "https://img.alicdn.com/imgextra/i2/O1CN01kcwuQk1LzVafnz3rv_!!6000000001370-0-tps-480-672.jpg",
-        "buyerNum":10
-      },
-      {
-        "goodName": "比亚迪跑车",
-        "goodPrice": "100 ￥",
-        "goodId": 10090,
-        "goodImage": "https://img.alicdn.com/imgextra/i2/O1CN01kcwuQk1LzVafnz3rv_!!6000000001370-0-tps-480-672.jpg",
-        "buyerNum":10
+        "goodImage": [
+          "http://localhost:8080/storage/fetch/sjhcc8pkpxu0ofoymwdu.png",
+          "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"
+        ],
+        "goodNum": 1,
+        "buyerNum": 0,
+        "categoryId": [
+          10086
+        ]
       }
     ],
     "totalGoods": 100
