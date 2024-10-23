@@ -1,6 +1,7 @@
 package com.mall.service.impl;
 
 
+import com.mall.common.TransformUtil;
 import com.mall.dao.GoodDao;
 import com.mall.dao.HistoryDao;
 import com.mall.entity.Good;
@@ -22,10 +23,16 @@ public class GoodServiceImpl implements GoodService {
     private HistoryDao historyDao;
     @Resource
     private HistoryService historyService;
+    @Resource
+    private TransformUtil transformUtil;
 
     @Override
-    public List<Good> goodList(Integer pageSize, Integer pageNum) {
-        return goodDao.goodList(pageSize,pageNum);
+    public List<Good> goodList(Integer pageSize, Integer pageNum, String goodName, Integer categoryId) {
+        List<Good> goods = goodDao.goodList(pageSize, pageNum, goodName, categoryId);
+        for(Good good : goods){
+            good.setGoodImage(transformUtil.stringToStringArray(good.getGoodImage()));
+        }
+        return goods;
     }
 
     @Override
@@ -43,11 +50,17 @@ public class GoodServiceImpl implements GoodService {
         return goodDao.getDetail(goodId);
     }
 
+
+
     @Override
     public Boolean addGood(Good good) {
         good.setBuyerNum(0);
         good.setGoodState(0);
-        Integer rowsAffected = goodDao.addGood(good);
+
+        //处理一下数据
+        String goodImage = transformUtil.stringArrayToString(good.getGoodImage());
+
+        Integer rowsAffected = goodDao.addGood(good, goodImage);
         if(rowsAffected > 0){//插入成功就加记录
             historyService.addHistory(good);
         }
@@ -56,13 +69,14 @@ public class GoodServiceImpl implements GoodService {
 
     @Override
     public Boolean updateGood(Good good) {
-        Integer rowsAffected = goodDao.updateGood(good);
 
+        String goodImage = transformUtil.stringArrayToString(good.getGoodImage());
+
+        Integer rowsAffected = goodDao.updateGood(good, goodImage);
         good = goodDao.getGoodById(good.getGoodId());
         if(rowsAffected > 0){//插入成功就加记录
             historyService.addHistory(good);
         }
-
         return rowsAffected > 0;
     }
 
@@ -84,6 +98,5 @@ public class GoodServiceImpl implements GoodService {
         }
         return false;
     }
-
 
 }

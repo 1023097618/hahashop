@@ -12,8 +12,9 @@ public class Good {
     String goodName;
     String goodDesc;
     String goodPrice;
-    String goodImage;
+    String[] goodImage;
     Integer goodState;
+    Integer categoryId;//二级分类ID
     Integer buyerNum;
-    Boolean display;
+    Integer goodNum;
 }
