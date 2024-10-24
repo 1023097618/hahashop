@@ -36,20 +36,16 @@ service.interceptors.response.use(
             } else if (data.code === 302) {
                 Message.error('用户密码错误')
             } else if (data.code === 303) {
-                Message.error('商品不存在')
+                Message.error('你操作的对象找不到了呢~')
             } else if (data.code === 304) {
-                Message.error('商品已经被冻结')
+                Message.error('该用户名已被占用')
             } else if (data.code === 305) {
-                Message.error('填入的信息不合法')
-            } else if (data.code === 307) {
-                Message.error('重复填入了信息')
-            } else if (data.code === 308) {
-                Message.error("商品未被冻结")
-            } else if (data.code === 309) {
-                Message.error('历史记录不存在')
+                Message.error('商品已经被抢完啦！')
             }
-            else {
-                Message.error("未知错误码")
+            else if(data.code===1001){
+                Message.error("服务器发生了未知错误")
+            }else{
+                Message.error("服务器返回未知错误码")
             }
             return Promise.reject('err')
         }
