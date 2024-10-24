@@ -19,6 +19,7 @@ const sellerRoutes = [
       ]
     },
     { path: '/dashboard/changePassword', name: 'ChangePasswordView', component: () => import('@/views/login/ChangePasswordView.vue'), hidden: false, meta:{title: '修改密码'} },
+    {path:'/dashboard/user',name:'UserView',component:()=>import('@/views/user/UserView.vue'),hiiden:false,meta:{title:'用户信息管理'}},
     { path: '/dashboard*', redirect: '/dashboard/good/manager', hidden: true }]
   }
 ]

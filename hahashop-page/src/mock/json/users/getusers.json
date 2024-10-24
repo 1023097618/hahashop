@@ -1,0 +1,15 @@
+{
+    "code": 400,
+    "data": {
+      "users": [
+        {
+          "userId": 0,
+          "userPhone": "string",
+          "userAddress": "string",
+          "userRealName": "string"
+        }
+      ],
+      "totalUsers": 100
+    },
+    "msg": "查询商品成功"
+  }

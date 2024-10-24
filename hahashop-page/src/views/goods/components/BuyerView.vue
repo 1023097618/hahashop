@@ -13,17 +13,19 @@
       <el-table-column fixed="right" width="210">
         <template slot-scope="scope">
           <div style="display: flex; justify-content: center;">
-            <el-button @click.native.prevent="ConfirmSellGood(scope.row.orderId)" type="primary" icon="el-icon-check" size="mini"
-              v-if="scope.row.orderState===0">
+            <el-button @click.native.prevent="ConfirmSellGood(scope.row.orderId)" type="primary" icon="el-icon-check"
+              size="mini" v-if="scope.row.orderState===0">
             </el-button>
-            <el-button @click.native.prevent="CancelSellGood(scope.row.orderId)" type="primary" icon="el-icon-close" size="mini"
-            v-if="scope.row.orderState===0">
-          </el-button>
+            <el-button @click.native.prevent="CancelSellGood(scope.row.orderId)" type="primary" icon="el-icon-close"
+              size="mini" v-if="scope.row.orderState===0">
+            </el-button>
           </div>
         </template>
       </el-table-column>
     </el-table>
-
+    <el-pagination :current-page="currentPage" :page-size="pageSize" layout="prev, pager, next" :total="totalOrders"
+      @current-change="handlePageChange" v-if="totalOrders > pageSize">
+    </el-pagination>
     <span slot="footer" class="dialog-footer">
       <el-button @click="closeDialog()">取 消</el-button>
       <el-button type="primary" @click="sureDialog()">确 定</el-button>
@@ -38,7 +40,7 @@
 </style>
 
 <script>
-  import { getOrders,confirmSellGood,cancelSellGood } from '@/api/order/order.js'
+  import { getOrders, confirmSellGood, cancelSellGood } from '@/api/order/order.js'
 
   export default {
     name: 'BuyerView',
@@ -48,8 +50,12 @@
           goodId: 1,
           goodName: 'loading...',
           goodPrice: 'loading...',
-          goodImage: ''
+          goodImage: '',
+
         },
+        currentPage: 1,
+        pageSize: 8,
+        totalOrders: 0,
         orders: []
       };
     },
@@ -66,9 +72,14 @@
         this.$emit('update:visible', true)
         this.GetOrders()
       },
-      GetOrders(){
-        getOrders(this.good.goodId).then(res => {
+      GetOrders() {
+        getOrders({
+          goodId: this.good.goodId
+          , currentPage: this.currentPage,
+          pageSize: this.pageSize
+        }).then(res => {
           this.orders = res.data.data.orders
+          this.totalOrders = res.data.data.totalOrders
         }).catch(err => {
           console.log(err)
         })
@@ -87,28 +98,32 @@
         }
         return ''
       },
-      ConfirmSellGood(orderId){
-        const goodId=this.good.goodId
-        confirmSellGood({orderId,goodId}).then(
-          res=>{
+      ConfirmSellGood(orderId) {
+        const goodId = this.good.goodId
+        confirmSellGood({ orderId, goodId }).then(
+          res => {
             this.GetOrders()
             console.log(res)
           }
-        ).catch(err=>{
+        ).catch(err => {
           console.log(err)
         })
       },
-      CancelSellGood(orderId){
-        const goodId=this.good.goodId
-        cancelSellGood({orderId,goodId}).then(
-          res=>{
+      CancelSellGood(orderId) {
+        const goodId = this.good.goodId
+        cancelSellGood({ orderId, goodId }).then(
+          res => {
             this.GetOrders()
             console.log(res)
           }
-        ).catch(err=>{
+        ).catch(err => {
           console.log(err)
         })
-      }
+      },
+      handlePageChange(page) {
+            this.currentPage = page
+            this.GetOrders()
+        }
     }
   };
 </script>

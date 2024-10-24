@@ -10,10 +10,10 @@ export default {
         permittedroutes:[],
         user:{
             username:'',
-            buyerPhone:'',
-            buyerAddress:'',
+            userPhone:'',
+            userAddress:'',
             userId:'',
-            buyerName:'',
+            userRealName:'',
         }
     },
     mutations:{
@@ -33,10 +33,10 @@ export default {
         },
         SET_USER(state,user){
             state.user.username=user.username
-            state.user.buyerName=user.buyerName
-            state.user.buyerAddress=user.buyerAddress
+            state.user.userRealName=user.userRealName
+            state.user.userAddress=user.userAddress
             state.user.userId=user.userId
-            state.user.buyerPhone=user.buyerPhone
+            state.user.userPhone=user.userPhone
         },
         REMOVE_TOKEN(state){
             state.token=''

@@ -7,10 +7,12 @@
   :before-close="closeDialog">
   <div style="text-align: center;">商品名:{{product.goodName}}</div>
   <div style="text-align: center;">商品价格:{{product.goodPrice}}</div>
-  <div style="text-align: center;">商品描述:{{product.goodDesc}}</div>
+  <!-- <div style="text-align: center;">商品描述：<div class="rich-text-content" v-html="product.goodDesc"></div></div> -->
+  <!-- 这样更安全，相信我，我们的hahashop是世界上最安全的网站！ -->
+  <div style="text-align: center;">商品描述：<div class="rich-text-content" v-dompurify-html="product.goodDesc"></div></div>
   <el-form :model="form" label-position="right" label-width="80px">
     <el-form-item label="姓名">
-      <el-input v-model="form.buyerName"></el-input>
+      <el-input v-model="form.buyerRealName"></el-input>
     </el-form-item>
     <el-form-item label="手机号">
       <el-input v-model="form.buyerPhone"></el-input>
@@ -36,7 +38,7 @@
     data() {
       return {
         form:{
-          buyerName: '',
+          buyerRealName: '',
           buyerPhone: '',
           buyerAddress: '',
           buyerDesc: ''
@@ -59,13 +61,15 @@
     methods: {
         openDialog(product,user){
           Object.assign(this.product, product);
-          this.form.buyerName=user.buyerName
-          this.form.buyerPhone=user.buyerPhone
-          this.form.buyerAddress=user.buyerAddress
+          this.form.buyerRealName=user.userRealName
+          this.form.buyerPhone=user.userPhone
+          this.form.buyerAddress=user.userAddress
           this.$emit('update:visible',true)
           getGoodsDetail(this.product.goodId)
           .then(res=>{
+
             this.product.goodDesc = res.data.data.goodDesc
+            console.log(this.product.goodDesc)
           }).catch(err=>{
             console.log(err)
           })
