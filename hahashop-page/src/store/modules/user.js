@@ -20,9 +20,9 @@ export default {
         SET_TOKEN(state,token){
             state.token=token
         },
-        ADD_PERMS(state,priviliage){
+        ADD_PERMS(state,privilege){
             if(state.permitted===0){
-            state.permitted=priviliage
+            state.permitted=privilege
             if(state.permitted===1){
             state.permittedroutes=addSellerRoute()
             }else if(state.permitted===2){
@@ -66,7 +66,7 @@ export default {
                         const user=res.data.data
                         commit('SET_USER',user)
                         commit('SET_TOKEN',token)
-                        commit('ADD_PERMS',user.priviliage)
+                        commit('ADD_PERMS',user.privilege)
                         resolve()
                     }).catch(
                         err=>{

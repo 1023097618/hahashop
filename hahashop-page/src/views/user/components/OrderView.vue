@@ -6,6 +6,8 @@
         </el-table-column>
         <el-table-column prop="buyerAddress" label="购买者手机号" width="120">
         </el-table-column>
+        <el-table-column prop="buyerGoodsNum" label="购买商品数量" width="120">
+        </el-table-column>
         <el-table-column prop="goodImage" label="商品图片" width="120">
         </el-table-column>
         <el-table-column prop="goodName" label="商品名称" width="120">
@@ -14,6 +16,14 @@
         </el-table-column>
         <el-table-column prop="buyerDesc" label="购买者备注" width="120">
         </el-table-column>
+        <el-table-column width="210" label="确认状态">
+          <template slot-scope="scope">
+              <div v-if="scope.row.orderState===0">订单正在进行中</div>
+              <div v-if="scope.row.orderState===1">订单被卖家取消</div>
+              <div v-if="scope.row.orderState===2">订单完成</div>
+          </template>
+      </el-table-column>
+      
       </el-table>
       <el-pagination :current-page="currentPage" :page-size="pageSize" layout="prev, pager, next"
       :total="totalOrders" @current-change="handlePageChange" v-if="totalOrders > pageSize">

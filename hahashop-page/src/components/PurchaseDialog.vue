@@ -23,6 +23,10 @@
     <el-form-item label="备注">
       <el-input type="textarea" v-model="form.buyerDesc"></el-input>
     </el-form-item>
+    <el-form-item label="购买数量">
+      <el-input-number v-model="form.buyerGoodsNum" @change="handleChange" :min="1" :max="10" label="描述文字"></el-input-number>
+    </el-form-item>
+    
   </el-form>
   <span slot="footer" class="dialog-footer">
     <el-button @click="closeDialog()">取 消</el-button>
@@ -41,7 +45,8 @@
           buyerRealName: '',
           buyerPhone: '',
           buyerAddress: '',
-          buyerDesc: ''
+          buyerDesc: '',
+          buyerGoodsNum:1
         },
         product:{
           goodDesc:'',
@@ -84,7 +89,10 @@
             }).catch(err=>{
               console.log(err)
             })
-        }
+        },
+        handleChange(value) {
+         this.form.buyerGoodsNum=value
+      }
     }
   };
 </script>

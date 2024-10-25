@@ -10,6 +10,15 @@
       </el-table-column>
       <el-table-column prop="buyerName" label="买家姓名" width="120">
       </el-table-column>
+      <el-table-column prop="buyerGoodsNum" label="买家购买商品数量" width="120">
+      </el-table-column>
+      <el-table-column width="210" label="确认状态">
+        <template slot-scope="scope">
+            <div v-if="scope.row.orderState===0">订单正在进行中</div>
+            <div v-if="scope.row.orderState===1">订单被卖家取消</div>
+            <div v-if="scope.row.orderState===2">订单完成</div>
+        </template>
+    </el-table-column>
       <el-table-column fixed="right" width="210">
         <template slot-scope="scope">
           <div style="display: flex; justify-content: center;">

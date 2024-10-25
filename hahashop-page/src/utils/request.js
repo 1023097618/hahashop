@@ -41,6 +41,8 @@ service.interceptors.response.use(
                 Message.error('该用户名已被占用')
             } else if (data.code === 305) {
                 Message.error('商品已经被抢完啦！')
+            } else if (data.code === 306) {
+                Message.error('非法输入！')
             }
             else if(data.code===1001){
                 Message.error("服务器发生了未知错误")

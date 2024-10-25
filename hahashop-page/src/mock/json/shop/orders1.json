@@ -8,10 +8,11 @@
         "buyerDesc": "这个我真的需要",
         "orderId": 11,
         "buyerName": "zhangsan",
-        "orderState": 0
+        "orderState": 0,
+        "buyerGoodsNum": 0
       }
     ],
-    "totalOrders": 100
+    "totalOrders": 0
   },
   "msg": "请求成功"
 }
