@@ -16,7 +16,7 @@
           <el-input v-model="good.goodNum"></el-input>
         </el-form-item>
         <el-form-item label="商品种类">
-          <el-cascader v-model="good.categoryId" :options="options" :props="{ expandTrigger: 'hover' }" clearable
+          <el-cascader v-model="good.categoryId" :options="options" :props="{ expandTrigger: 'hover',checkStrictly: true }" clearable
             @change="handleChange"></el-cascader>
         </el-form-item>
         <quill-editor v-model="good.goodDesc" ref="myQuillEditor" :options="editorOption">
@@ -46,7 +46,7 @@
           goodPrice: '',
           goodImage: '',
           goodDesc: '',
-          categoryId: []
+          categoryId: undefined
         },
         options: [],
         editorOption: { /* quill options */ }
@@ -83,7 +83,8 @@
           goodPrice: this.good.goodPrice,
           goodImage: this.good.goodImage,
           goodDesc: this.good.goodDesc,
-          goodId: this.good.goodId
+          goodId: this.good.goodId,
+          categoryId:this.good.categoryId
         }).then(res => {
           this.$emit('updateGoods')
           console.log(res)
@@ -93,7 +94,11 @@
       },
       handleChange(value) {
         console.log(value)
-        this.good.categoryId = value
+        if (Array.isArray(value) && value.length > 0) {
+          this.good.categoryId = value[value.length - 1];
+        } else {
+          this.good.categoryId = undefined;
+        }
       }
     }
   };

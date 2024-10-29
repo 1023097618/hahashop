@@ -16,12 +16,8 @@
         <SearchInput @search="search" class="search" />
         <div class="category">
           <span class="demonstration">类别选择</span>
-          <el-cascader
-            v-model="category"
-            :options="options"
-            :props="{ expandTrigger: 'hover' }"
-            clearable
-            @change="handleChange"></el-cascader>
+          <el-cascader v-model="category" :options="options" :props="{ expandTrigger: 'hover',checkStrictly: true }"
+            clearable @change="handleChange"></el-cascader>
         </div>
         <el-skeleton :rows="3" animated :loading="isload" />
         <webErrorResult :error="weberror"></webErrorResult>
@@ -45,7 +41,7 @@
 <script>
   import ProductCard from '@/components/ProductCard';
   import PurchaseDialog from '@/components/PurchaseDialog'
-  import { getGoods,getCategory } from '@/api/shop/goods.js'
+  import { getGoods, getCategory } from '@/api/shop/goods.js'
   import webErrorResult from '@/components/webErrorResult.vue'
   import { GetCookie, RemoveCookie } from "@/utils/auth"
   import SearchInput from '@/components/SearchInput.vue'
@@ -66,9 +62,9 @@
         dialogVisible: false,
         isload: true,
         weberror: false,
-        keyword:'',
-        category:[],
-        options:[
+        keyword: '',
+        category: undefined,
+        options: [
           {
             "children": [
               {
@@ -85,27 +81,27 @@
     methods: {
       fetchProducts() {
         this.isload = true
-          const params={
-            pageNum: this.currentPage,
-            pageSize: this.pageSize
-          }
-          if(this.keyword){
-            params.goodName=this.keyword
-          }
-          if(this.category.length!==0){
-            params.category=JSON.stringify(this.category)
-          }
-          getGoods(params).then(response => {
-            console.log(response)
-            this.products = response.data.data.goods;
-            this.totalProducts = response.data.data.totalGoods;
-            this.isload = false
-            this.weberror = false
-          }).catch(error => {
-            this.isload = false
-            this.weberror = true
-            console.error('Error fetching products:', error);
-          });
+        const params = {
+          pageNum: this.currentPage,
+          pageSize: this.pageSize
+        }
+        if (this.keyword) {
+          params.goodName = this.keyword
+        }
+        if (this.category) {
+          params.categoryId = this.category
+        }
+        getGoods(params).then(response => {
+          console.log(response)
+          this.products = response.data.data.goods;
+          this.totalProducts = response.data.data.totalGoods;
+          this.isload = false
+          this.weberror = false
+        }).catch(error => {
+          this.isload = false
+          this.weberror = true
+          console.error('Error fetching products:', error);
+        });
       }
       ,
       handlePageChange(page) {
@@ -123,10 +119,10 @@
         }
         const token = GetCookie()
         if (token) {
-          if (this.$store.getters.permmited===0) {
-            const user=this.$store.getters.user
+          if (this.$store.getters.permmited === 0) {
+            const user = this.$store.getters.user
             this.$store.dispatch("GetUserInfoAction", token).then(() => {
-              this.$refs.purchaseDialog.openDialog(product,user)
+              this.$refs.purchaseDialog.openDialog(product, user)
             }).catch((err) => {
               console.log(err)
               RemoveCookie()
@@ -134,24 +130,28 @@
             })
           }
           else {
-            const user=this.$store.getters.user
-            this.$refs.purchaseDialog.openDialog(product,user)
+            const user = this.$store.getters.user
+            this.$refs.purchaseDialog.openDialog(product, user)
           }
         } else {
           this.login()
         }
       },
-      search(key){
-        this.keyword=key
+      search(key) {
+        this.keyword = key
         this.fetchProducts()
       },
-      Getcategoty(){
-        getCategory().then(res=>{
-          this.options=res.data.data.categoryList
+      Getcategoty() {
+        getCategory().then(res => {
+          this.options = res.data.data.categoryList
         })
       },
       handleChange(value) {
-        this.category=value
+        if (Array.isArray(value) && value.length > 0) {
+          this.category = value[value.length - 1];
+        } else {
+          this.category = null; // 或者其他默认值，根据需要设置
+        }
         this.fetchProducts()
       }
     },
@@ -176,10 +176,11 @@
 </script>
 
 <style scoped>
-  #layoutview .category{
+  #layoutview .category {
     line-height: 10px;
   }
-  #layoutview .search{
+
+  #layoutview .search {
     line-height: 10px;
   }
 

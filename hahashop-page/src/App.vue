@@ -23,4 +23,20 @@
     .el-container{
       height: 100%;
     }
+
+    /* 多选框可以选择任意级 */
+    .el-cascader-panel .el-radio{
+        width: 100%;
+        height: 100%;
+        z-index: 10;
+        position: absolute;
+        top: 10px;
+        right: 10px;
+    }
+    .el-cascader-panel .el-radio__input{
+        visibility: hidden;
+    }
+    .el-cascader-panel .el-cascader-node__postfix {
+        top: 10px;
+    }
 </style>
