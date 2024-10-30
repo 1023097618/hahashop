@@ -24,14 +24,17 @@
                         <el-form-item label="密码">
                             <el-input v-model="form.password"></el-input>
                         </el-form-item>
+                        <el-form-item label="真实姓名">
+                            <el-input v-model="form.userRealName"></el-input>
+                        </el-form-item>
                         <el-form-item label="手机号">
-                            <el-input v-model="form.buyerPhone"></el-input>
+                            <el-input v-model="form.userPhone"></el-input>
                         </el-form-item>
                         <el-form-item label="手机验证码(默认1111)">
                             <el-input v-model="form.phoneCode"></el-input>
                         </el-form-item>
                         <el-form-item label="默认购买地点">
-                            <el-input v-model="form.buyerAddress"></el-input>
+                            <el-input v-model="form.userAddress"></el-input>
                         </el-form-item>
                     </el-form>
                 </el-row>
@@ -54,9 +57,10 @@
                 form: {
                     username: "",
                     password: "",
-                    buyerPhone: "",
+                    userPhone: "",
                     phoneCode: "",
-                    buyerAddress: ""
+                    userAddress: "",
+                    userRealName:""
                 }
             };
         },
@@ -88,7 +92,7 @@
         background: #ffffff;
         background-size: cover;
         width: 400px;
-        height: 470px;
+        height: 550px;
         margin: 100px auto;
         overflow: hidden;
         padding-top: 10px;

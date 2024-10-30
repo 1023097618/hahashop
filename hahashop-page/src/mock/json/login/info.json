@@ -1,12 +1,12 @@
 {
-    "code": 400,
-    "data": {
-        "username": "string",
-        "priviliage": 1,
-        "buyerPhone": "string",
-        "buyerAddress": "string",
-        "userId": 1,
-        "buyerName": "string"
-    },
-    "msg": "string"
-  }
+  "code": 400,
+  "data": {
+    "username": "string",
+    "privilege": 1,
+    "userPhone": "string",
+    "userAddress": "string",
+    "userId": 0,
+    "userRealName": "string"
+  },
+  "msg": "string"
+}

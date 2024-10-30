@@ -1,26 +1,31 @@
 <template>
-  <el-dialog title="增加商品" :visible="this.visible" width="30%" :before-close="closeDialog">
-    <el-form :model="good" label-position="right" label-width="80px">
-      <el-form-item label="商品名称">
-        <el-input v-model="good.goodName"></el-input>
-      </el-form-item>
-      <el-form-item label="商品价格">
-        <el-input v-model="good.goodPrice"></el-input>
-      </el-form-item>
-      <el-form-item label="商品图片">
-        <UploadPicture :urls.sync="good.goodImage"/>
-      </el-form-item>
-      <el-form-item label="剩余库存">
-        <el-input v-model="good.goodNum"></el-input>
-      </el-form-item>
-      <el-form-item label="商品种类">
-        <el-cascader v-model="good.categoryId" :options="options" :props="{ expandTrigger: 'hover' }" clearable
-          @change="handleChange"></el-cascader>
-      </el-form-item>
-      <el-form-item label="商品备注">
-        <el-input type="textarea" v-model="good.goodDesc"></el-input>
-      </el-form-item>
-    </el-form>
+  <el-dialog title="增加商品" :visible="this.visible" width="90%" :before-close="closeDialog" center
+    style="overflow: hidden" top="3vh">
+    <div style="overflow-y: auto; height: 70vh">
+      <el-form :model="good" label-position="right" label-width="80px">
+        <el-form-item label="商品名称">
+          <el-input v-model="good.goodName"></el-input>
+        </el-form-item>
+        <el-form-item label="商品价格">
+          <el-input v-model="good.goodPrice"></el-input>
+        </el-form-item>
+        <el-form-item label="商品图片">
+          <UploadPicture :urls.sync="good.goodImage" />
+        </el-form-item>
+        <el-form-item label="剩余库存">
+          <el-input v-model="good.goodNum"></el-input>
+        </el-form-item>
+        <el-form-item label="商品种类">
+          <el-cascader v-model="good.categoryId" :options="options" :props="{ expandTrigger: 'hover',checkStrictly: true }" clearable
+            @change="handleChange"></el-cascader>
+        </el-form-item>
+        <quill-editor v-model="good.goodDesc" ref="myQuillEditor" :options="editorOption">
+        </quill-editor>
+        <!-- <el-form-item label="商品备注">
+          <el-input type="textarea" v-model="good.goodDesc"></el-input>
+        </el-form-item> -->
+      </el-form>
+    </div>
     <span slot="footer" class="dialog-footer">
       <el-button @click="closeDialog()">取 消</el-button>
       <el-button type="primary" @click="sureDialog()">确 定</el-button>
@@ -40,9 +45,10 @@
           goodPrice: '',
           goodImage: [],
           goodDesc: '',
-          categoryId: []
+          categoryId: undefined
         },
-        options: []
+        options: [],
+        editorOption: { /* quill options */ }
       };
     },
 
@@ -52,7 +58,7 @@
         required: true
       }
     },
-    components:{
+    components: {
       UploadPicture
     }
     ,
@@ -70,7 +76,8 @@
           goodName: this.good.goodName,
           goodPrice: this.good.goodPrice,
           goodImage: this.good.goodImage,
-          goodDesc: this.good.goodDesc
+          goodDesc: this.good.goodDesc,
+          categoryId:this.good.categoryId
         }).then(res => {
           this.$emit('updateGoods')
           console.log(res)
@@ -79,7 +86,11 @@
         })
       },
       handleChange(value) {
-        this.good.categoryId = value
+        if (Array.isArray(value) && value.length > 0) {
+          this.good.categoryId = value[value.length - 1];
+        } else {
+          this.good.categoryId = undefined;
+        }
       }
     }
   };

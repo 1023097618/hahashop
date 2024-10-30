@@ -7,14 +7,11 @@
         "goodPrice": "100 ￥",
         "goodId": 10086,
         "goodImage": [
-          "http://localhost:8080/storage/fetch/sjhcc8pkpxu0ofoymwdu.png",
-          "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"
+          "http://localhost:8080/storage/fetch/sjhcc8pkpxu0ofoymwdu.png"
         ],
-        "goodNum": 1,
+        "goodNum": 2,
         "buyerNum": 0,
-        "categoryId": [
-          10086
-        ]
+        "categoryId": 10087
       }
     ],
     "totalGoods": 100

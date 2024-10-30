@@ -29,7 +29,7 @@
                 </template>
             </el-table-column>
         </el-table>
-        <el-pagination :current-page="currentPage" :page-size="pageSize" layout="prev, pager, next"
+        <el-pagination :current-page="currentPage" :page-size="pageSize" layout="prev, pager, next" background
             :total="totalHistories" @current-change="handlePageChange" v-if="totalHistories > pageSize">
         </el-pagination>
     </div>
@@ -57,6 +57,7 @@
             },
             GetHistories() {
                 this.isload = true
+                this.weberror=false
                 getHistories(
                     {
                         pageNum: this.currentPage,

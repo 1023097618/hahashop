@@ -13,16 +13,12 @@
         </el-row>
       </el-header>
       <el-main>
-        <SearchInput @search="search" class="search" />
-        <div class="category">
+        <SearchInput @search="search" class="search" :options="options"/>
+        <!-- <div class="category">
           <span class="demonstration">类别选择</span>
-          <el-cascader
-            v-model="category"
-            :options="options"
-            :props="{ expandTrigger: 'hover' }"
-            clearable
-            @change="handleChange"></el-cascader>
-        </div>
+          <el-cascader v-model="category" :options="options" :props="{ expandTrigger: 'hover',checkStrictly: true }"
+            clearable @change="handleChange"></el-cascader>
+        </div> -->
         <el-skeleton :rows="3" animated :loading="isload" />
         <webErrorResult :error="weberror"></webErrorResult>
         <div v-if="!isload && !weberror">
@@ -31,10 +27,10 @@
               <ProductCard :product="good" @Userclick="buy(good)" />
             </el-col>
           </el-row>
-          <el-pagination :current-page="currentPage" :page-size="pageSize" layout="prev, pager, next"
-            :total="totalProducts" @current-change="handlePageChange" v-if="totalProducts > pageSize">
-          </el-pagination>
         </div>
+        <el-pagination :current-page="currentPage" :page-size="pageSize" layout="prev, pager, next" background
+        :total="totalProducts" @current-change="handlePageChange" v-if="totalProducts > pageSize" class="pagination-container">
+        </el-pagination>
       </el-main>
     </el-container>
     <PurchaseDialog :visible.sync="dialogVisible" ref="purchaseDialog" />
@@ -45,7 +41,7 @@
 <script>
   import ProductCard from '@/components/ProductCard';
   import PurchaseDialog from '@/components/PurchaseDialog'
-  import { getGoods,getCategory } from '@/api/shop/goods.js'
+  import { getGoods, getCategory } from '@/api/shop/goods.js'
   import webErrorResult from '@/components/webErrorResult.vue'
   import { GetCookie, RemoveCookie } from "@/utils/auth"
   import SearchInput from '@/components/SearchInput.vue'
@@ -66,9 +62,9 @@
         dialogVisible: false,
         isload: true,
         weberror: false,
-        keyword:'',
-        category:[],
-        options:[
+        keyword: '',
+        category: undefined,
+        options: [
           {
             "children": [
               {
@@ -85,27 +81,28 @@
     methods: {
       fetchProducts() {
         this.isload = true
-          const params={
-            pageNum: this.currentPage,
-            pageSize: this.pageSize
-          }
-          if(this.keyword){
-            params.goodName=this.keyword
-          }
-          if(this.category.length!==0){
-            params.category=JSON.stringify(this.category)
-          }
-          getGoods(params).then(response => {
-            console.log(response)
-            this.products = response.data.data.goods;
-            this.totalProducts = response.data.data.totalGoods;
-            this.isload = false
-            this.weberror = false
-          }).catch(error => {
-            this.isload = false
-            this.weberror = true
-            console.error('Error fetching products:', error);
-          });
+        this.weberror = false
+        const params = {
+          pageNum: this.currentPage,
+          pageSize: this.pageSize
+        }
+        if (this.keyword) {
+          params.goodName = this.keyword
+        }
+        if (this.category) {
+          params.categoryId = this.category
+        }
+        getGoods(params).then(response => {
+          console.log(response)
+          this.products = response.data.data.goods;
+          this.totalProducts = response.data.data.totalGoods;
+          this.isload = false
+          this.weberror = false
+        }).catch(error => {
+          this.isload = false
+          this.weberror = true
+          console.error('Error fetching products:', error);
+        });
       }
       ,
       handlePageChange(page) {
@@ -123,10 +120,10 @@
         }
         const token = GetCookie()
         if (token) {
-          if (this.$store.getters.permmited===0) {
-            const user=this.$store.getters.user
+          if (this.$store.getters.permmited === 0) {
+            const user = this.$store.getters.user
             this.$store.dispatch("GetUserInfoAction", token).then(() => {
-              this.$refs.purchaseDialog.openDialog(product,user)
+              this.$refs.purchaseDialog.openDialog(product, user)
             }).catch((err) => {
               console.log(err)
               RemoveCookie()
@@ -134,26 +131,24 @@
             })
           }
           else {
-            const user=this.$store.getters.user
-            this.$refs.purchaseDialog.openDialog(product,user)
+            const user = this.$store.getters.user
+            this.$refs.purchaseDialog.openDialog(product, user)
           }
         } else {
           this.login()
         }
       },
-      search(key){
-        this.keyword=key
+      search(key,category) {
+        this.keyword = key
+        this.category=category
         this.fetchProducts()
       },
-      Getcategoty(){
-        getCategory().then(res=>{
-          this.options=res.data.data.categoryList
+      Getcategoty() {
+        getCategory().then(res => {
+          this.options = res.data.data.categoryList
         })
       },
-      handleChange(value) {
-        this.category=value
-        this.fetchProducts()
-      }
+
     },
     computed: {
       productRows() {
@@ -176,17 +171,18 @@
 </script>
 
 <style scoped>
-  #layoutview .category{
+  #layoutview .category {
     line-height: 10px;
   }
-  #layoutview .search{
+
+  #layoutview .search {
     line-height: 10px;
   }
 
   /* 头部、尾部布局 */
   .el-header,
   .el-footer {
-    background-color: #B3C0D1;
+    background-color: #f5f5f5;
     color: #333;
     text-align: center;
     line-height: 100px;
@@ -206,7 +202,6 @@
   }
 
   .el-main {
-    background-color: #E9EEF3;
     color: #333;
     text-align: center;
     line-height: 160px;
@@ -260,4 +255,14 @@
   .row-bg {
     padding: 10px 0;
   }
+
+  #layoutview .pagination-container {
+  display: flex;
+  justify-content: center; /* 水平居中 */
+  position: fixed; /* 固定定位 */
+  bottom: 0; /* 贴着底边 */
+  width: 100%; /* 占满宽度 */
+  line-height: normal;
+  padding: 40px 0;
+}
 </style>

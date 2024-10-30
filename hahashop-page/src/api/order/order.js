@@ -8,13 +8,11 @@ export function buyGoods(data){
     })
 }
 
-export function getOrders(goodId){
+export function getOrders(params){
     return request({
         url:'/order/sellerlist',
         method:'get',
-        params:{
-            goodId
-        }
+        params
     })
 }
 

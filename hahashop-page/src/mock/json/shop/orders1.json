@@ -7,10 +7,13 @@
         "buyerAddress": "商专",
         "buyerDesc": "这个我真的需要",
         "orderId": 11,
-        "buyerName": "zhangsan",
-        "orderState": 0
+        "buyerRealName": "zhangsan",
+        "orderState": 0,
+        "buyerGoodsNum": 0,
+        "orderPrice": "string"
       }
-    ]
+    ],
+    "totalOrders": 0
   },
   "msg": "请求成功"
 }

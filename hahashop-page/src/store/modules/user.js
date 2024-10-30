@@ -10,19 +10,19 @@ export default {
         permittedroutes:[],
         user:{
             username:'',
-            buyerPhone:'',
-            buyerAddress:'',
+            userPhone:'',
+            userAddress:'',
             userId:'',
-            buyerName:'',
+            userRealName:'',
         }
     },
     mutations:{
         SET_TOKEN(state,token){
             state.token=token
         },
-        ADD_PERMS(state,priviliage){
+        ADD_PERMS(state,privilege){
             if(state.permitted===0){
-            state.permitted=priviliage
+            state.permitted=privilege
             if(state.permitted===1){
             state.permittedroutes=addSellerRoute()
             }else if(state.permitted===2){
@@ -33,10 +33,10 @@ export default {
         },
         SET_USER(state,user){
             state.user.username=user.username
-            state.user.buyerName=user.buyerName
-            state.user.buyerAddress=user.buyerAddress
+            state.user.userRealName=user.userRealName
+            state.user.userAddress=user.userAddress
             state.user.userId=user.userId
-            state.user.buyerPhone=user.buyerPhone
+            state.user.userPhone=user.userPhone
         },
         REMOVE_TOKEN(state){
             state.token=''
@@ -66,7 +66,7 @@ export default {
                         const user=res.data.data
                         commit('SET_USER',user)
                         commit('SET_TOKEN',token)
-                        commit('ADD_PERMS',user.priviliage)
+                        commit('ADD_PERMS',user.privilege)
                         resolve()
                     }).catch(
                         err=>{

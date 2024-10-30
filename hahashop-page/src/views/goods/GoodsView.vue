@@ -43,7 +43,7 @@
         </template>
       </el-table-column>
     </el-table>
-    <el-pagination :current-page="currentPage" :page-size="pageSize" layout="prev, pager, next" :total="totalProducts"
+    <el-pagination :current-page="currentPage" :page-size="pageSize" layout="prev, pager, next" :total="totalProducts" background
       @current-change="handlePageChange" v-if="totalProducts > pageSize">
     </el-pagination>
     <GoodsEdit :visible.sync="GoodsEditVisible" @updateGoods="GetGoods" ref="GoodsEdit" />
@@ -77,6 +77,7 @@
       },
       GetGoods() {
         this.isload = true
+        this.weberror=false
         getGoods(
           {
             pageNum: this.currentPage,
@@ -124,27 +125,24 @@
           this.updatekey=!this.updatekey
         })
       },
-      findLabelsByValues(categoryList, values) {
-        if(categoryList===undefined||values===undefined){
-          return '无'
-        }
-        const labels = [];
-        function recursiveSearch(categories, targetValues) {
-          for (const category of categories) {
-            if (targetValues.includes(category.value)) {
-              labels.push(category.label);
-              targetValues.splice(targetValues.indexOf(category.value), 1);
-            }
-            if (category.children) {
-              recursiveSearch(category.children, targetValues);
+      // 递归查找函数
+      findLabelsByValues(categories, targetValue, path = []) {
+        for (let category of categories) {
+          // 如果找到了匹配的值，返回路径
+          if (category.value === targetValue) {
+            return [...path, category.label].join('/');
+          }
+          // 如果有子分类，递归查找
+          if (category.children) {
+            const result = this.findLabelsByValues(category.children, targetValue, [...path, category.label]);
+            if (result) {
+              return result;
             }
           }
         }
-        const targetValues = [...values];
-        recursiveSearch(categoryList, targetValues);
-        return labels.join('/')===''?'无':labels.join('/')
+        // 如果没有找到，返回空字符串或其他默认值
+        return '';
       }
-
     },
     components: {
       GoodsEdit,

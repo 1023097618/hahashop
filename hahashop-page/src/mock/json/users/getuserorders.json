@@ -1,0 +1,22 @@
+{
+  "code": 400,
+  "data": {
+    "orders": [
+      {
+        "orderId": 0,
+        "orderState": 0,
+        "goodId": 0,
+        "goodImage": "string",
+        "goodName": "string",
+        "orderPrice": "string",
+        "buyerDesc": "string",
+        "buyerRealName": "string",
+        "buyerAddress": "string",
+        "buyerPhone": "string",
+        "buyerGoodsNum": 0
+      }
+    ],
+    "totalOrders": 100
+  },
+  "msg": "查询商品成功"
+}
