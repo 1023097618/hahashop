@@ -19,7 +19,7 @@
                 </template>
             </el-table-column>
         </el-table>
-        <el-pagination :current-page="currentPage" :page-size="pageSize" layout="prev, pager, next"
+        <el-pagination :current-page="currentPage" :page-size="pageSize" layout="prev, pager, next" background
             :total="totalUsers" @current-change="handlePageChange" v-if="totalUsers > pageSize">
         </el-pagination>
         <OrderView :visible.sync="OrderViewVisible" @updateUsers="GetUsers" ref="OrderView" />

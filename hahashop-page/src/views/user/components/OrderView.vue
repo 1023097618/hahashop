@@ -27,7 +27,7 @@
       </el-table-column>
       
       </el-table>
-      <el-pagination :current-page="currentPage" :page-size="pageSize" layout="prev, pager, next"
+      <el-pagination :current-page="currentPage" :page-size="pageSize" layout="prev, pager, next" background
       :total="totalOrders" @current-change="handlePageChange" v-if="totalOrders > pageSize">
       </el-pagination>
       <span slot="footer" class="dialog-footer">

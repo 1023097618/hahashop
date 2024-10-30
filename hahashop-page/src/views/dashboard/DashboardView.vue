@@ -23,7 +23,7 @@
 
 <style scoped>
   .el-header {
-    background-color: #B3C0D1;
+    background-color: #f5f5f5;
     color: #333;
     line-height: 60px;
   }

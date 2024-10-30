@@ -43,7 +43,7 @@
         </template>
       </el-table-column>
     </el-table>
-    <el-pagination :current-page="currentPage" :page-size="pageSize" layout="prev, pager, next" :total="totalProducts"
+    <el-pagination :current-page="currentPage" :page-size="pageSize" layout="prev, pager, next" :total="totalProducts" background
       @current-change="handlePageChange" v-if="totalProducts > pageSize">
     </el-pagination>
     <GoodsEdit :visible.sync="GoodsEditVisible" @updateGoods="GetGoods" ref="GoodsEdit" />

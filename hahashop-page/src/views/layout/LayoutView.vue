@@ -13,12 +13,12 @@
         </el-row>
       </el-header>
       <el-main>
-        <SearchInput @search="search" class="search" />
-        <div class="category">
+        <SearchInput @search="search" class="search" :options="options"/>
+        <!-- <div class="category">
           <span class="demonstration">类别选择</span>
           <el-cascader v-model="category" :options="options" :props="{ expandTrigger: 'hover',checkStrictly: true }"
             clearable @change="handleChange"></el-cascader>
-        </div>
+        </div> -->
         <el-skeleton :rows="3" animated :loading="isload" />
         <webErrorResult :error="weberror"></webErrorResult>
         <div v-if="!isload && !weberror">
@@ -28,8 +28,8 @@
             </el-col>
           </el-row>
         </div>
-        <el-pagination :current-page="currentPage" :page-size="pageSize" layout="prev, pager, next"
-        :total="totalProducts" @current-change="handlePageChange" v-if="totalProducts > pageSize">
+        <el-pagination :current-page="currentPage" :page-size="pageSize" layout="prev, pager, next" background
+        :total="totalProducts" @current-change="handlePageChange" v-if="totalProducts > pageSize" class="pagination-container">
         </el-pagination>
       </el-main>
     </el-container>
@@ -138,8 +138,9 @@
           this.login()
         }
       },
-      search(key) {
+      search(key,category) {
         this.keyword = key
+        this.category=category
         this.fetchProducts()
       },
       Getcategoty() {
@@ -147,14 +148,7 @@
           this.options = res.data.data.categoryList
         })
       },
-      handleChange(value) {
-        if (Array.isArray(value) && value.length > 0) {
-          this.category = value[value.length - 1];
-        } else {
-          this.category = null; // 或者其他默认值，根据需要设置
-        }
-        this.fetchProducts()
-      }
+
     },
     computed: {
       productRows() {
@@ -188,7 +182,7 @@
   /* 头部、尾部布局 */
   .el-header,
   .el-footer {
-    background-color: #B3C0D1;
+    background-color: #f5f5f5;
     color: #333;
     text-align: center;
     line-height: 100px;
@@ -208,7 +202,6 @@
   }
 
   .el-main {
-    background-color: #E9EEF3;
     color: #333;
     text-align: center;
     line-height: 160px;
@@ -262,4 +255,14 @@
   .row-bg {
     padding: 10px 0;
   }
+
+  #layoutview .pagination-container {
+  display: flex;
+  justify-content: center; /* 水平居中 */
+  position: fixed; /* 固定定位 */
+  bottom: 0; /* 贴着底边 */
+  width: 100%; /* 占满宽度 */
+  line-height: normal;
+  padding: 40px 0;
+}
 </style>

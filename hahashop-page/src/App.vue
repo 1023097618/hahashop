@@ -13,11 +13,13 @@
       right: 0;
       margin: 8px !important;
     }
+    *{
+      box-sizing:border-box !important
+    }
 
     #app {
       width: 100%;
       height: 100%;
-      background: #f5f4f4;
     }
 
     .el-container{
@@ -39,4 +41,7 @@
     .el-cascader-panel .el-cascader-node__postfix {
         top: 10px;
     }
+
+
+
 </style>
