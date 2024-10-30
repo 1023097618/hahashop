@@ -13,13 +13,15 @@
       right: 0;
       margin: 8px !important;
     }
-    *{
+    /* *{
       box-sizing:border-box !important
-    }
+    } */
+
 
     #app {
       width: 100%;
       height: 100%;
+      background-color: #f5f4f4;
     }
 
     .el-container{

@@ -8,8 +8,8 @@
         <el-aside width="200px" class="sidebar-container">
           <SidebarView />
         </el-aside>
-        <el-main>
-          <AppMain/>
+        <el-main :style="{ height: height + 'px' }">
+          <AppMain />
         </el-main>
       </el-container>
     </el-container>
@@ -23,7 +23,7 @@
 
 <style scoped>
   .el-header {
-    background-color: #f5f5f5;
+    background-color: #B3C0D1;
     color: #333;
     line-height: 60px;
   }
@@ -35,6 +35,7 @@
   .el-main{
     margin-left: 200px;
     padding: 0px;
+    background-color: #E9EEF3;
   }
 
   .sidebar-container{
@@ -56,7 +57,25 @@ export default {
       NavbarView,
       AppMain
   },
-    name:'DashboardView'
+    name:'DashboardView',
+    data() {
+      return {
+        height: 0
+      }
+    },
+    methods: {
+      //自适应表格高度  8+60
+      getHeight() {
+        this.height = window.innerHeight - 68
+      }
+    },
+    created() {
+      this.getHeight()
+      window.addEventListener('resize', this.getHeight)
+    },
+    destroyed() {
+      window.removeEventListener('resize', this.getHeight)
+    },
     
 };
 </script>

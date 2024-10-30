@@ -76,6 +76,7 @@
     width: 400px;
     height: 350px;
     margin: 100px auto;
+    margin-bottom: 0px;
     overflow: hidden;
     padding-top: 10px;
     line-height: 40px;

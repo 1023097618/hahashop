@@ -171,6 +171,9 @@
 </script>
 
 <style scoped>
+    #layoutview{
+    height: 100%;
+  }
   #layoutview .category {
     line-height: 10px;
   }
@@ -182,7 +185,7 @@
   /* 头部、尾部布局 */
   .el-header,
   .el-footer {
-    background-color: #f5f5f5;
+    background-color: #B3C0D1;
     color: #333;
     text-align: center;
     line-height: 100px;
@@ -202,6 +205,7 @@
   }
 
   .el-main {
+    background-color: #E9EEF3;
     color: #333;
     text-align: center;
     line-height: 160px;
