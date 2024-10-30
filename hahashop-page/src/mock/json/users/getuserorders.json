@@ -8,9 +8,9 @@
         "goodId": 0,
         "goodImage": "string",
         "goodName": "string",
-        "goodPrice": "string",
+        "orderPrice": "string",
         "buyerDesc": "string",
-        "buyerName": "string",
+        "buyerRealName": "string",
         "buyerAddress": "string",
         "buyerPhone": "string",
         "buyerGoodsNum": 0

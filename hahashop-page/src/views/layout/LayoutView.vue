@@ -27,10 +27,10 @@
               <ProductCard :product="good" @Userclick="buy(good)" />
             </el-col>
           </el-row>
-          <el-pagination :current-page="currentPage" :page-size="pageSize" layout="prev, pager, next"
-            :total="totalProducts" @current-change="handlePageChange" v-if="totalProducts > pageSize">
-          </el-pagination>
         </div>
+        <el-pagination :current-page="currentPage" :page-size="pageSize" layout="prev, pager, next"
+        :total="totalProducts" @current-change="handlePageChange" v-if="totalProducts > pageSize">
+        </el-pagination>
       </el-main>
     </el-container>
     <PurchaseDialog :visible.sync="dialogVisible" ref="purchaseDialog" />
@@ -81,6 +81,7 @@
     methods: {
       fetchProducts() {
         this.isload = true
+        this.weberror = false
         const params = {
           pageNum: this.currentPage,
           pageSize: this.pageSize

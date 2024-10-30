@@ -2,7 +2,7 @@
   "code": 400,
   "data": {
     "username": "string",
-    "privilege": 1,
+    "privilege": 2,
     "userPhone": "string",
     "userAddress": "string",
     "userId": 0,

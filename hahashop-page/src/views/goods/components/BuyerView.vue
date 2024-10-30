@@ -8,9 +8,11 @@
       </el-table-column>
       <el-table-column prop="buyerDesc" label="买家备注" width="120">
       </el-table-column>
-      <el-table-column prop="buyerName" label="买家姓名" width="120">
+      <el-table-column prop="buyerRealName" label="买家姓名" width="120">
       </el-table-column>
       <el-table-column prop="buyerGoodsNum" label="买家购买商品数量" width="120">
+      </el-table-column>
+      <el-table-column prop="orderPrice" label="支付价格" width="120">
       </el-table-column>
       <el-table-column width="210" label="确认状态">
         <template slot-scope="scope">

@@ -57,6 +57,7 @@
             },
             GetHistories() {
                 this.isload = true
+                this.weberror=false
                 getHistories(
                     {
                         pageNum: this.currentPage,

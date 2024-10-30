@@ -2,9 +2,11 @@
     <el-dialog title="订单查看" :visible="this.visible" width="50%" :before-close="closeDialog">
       <h3 style="text-align: center;">用户姓名：{{user.userRealName}}</h3>
       <el-table :data="orders" style="width: 100%" max-height="250" :row-class-name="confirmedHeightlight">
-        <el-table-column prop="buyerPhone" label="购买者姓名" width="150">
+        <el-table-column prop="buyerRealName" label="购买者姓名" width="150">
         </el-table-column>
-        <el-table-column prop="buyerAddress" label="购买者手机号" width="120">
+        <el-table-column prop="buyerPhone" label="购买者手机号" width="150">
+        </el-table-column>
+        <el-table-column prop="buyerAddress" label="购买者地址" width="120">
         </el-table-column>
         <el-table-column prop="buyerGoodsNum" label="购买商品数量" width="120">
         </el-table-column>
@@ -12,7 +14,7 @@
         </el-table-column>
         <el-table-column prop="goodName" label="商品名称" width="120">
         </el-table-column>
-        <el-table-column prop="goodPrice" label="商品价格" width="120">
+        <el-table-column prop="orderPrice" label="支付价格" width="120">
         </el-table-column>
         <el-table-column prop="buyerDesc" label="购买者备注" width="120">
         </el-table-column>

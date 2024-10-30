@@ -7,14 +7,14 @@
         "buyerPhone": "110",
         "buyerAddress": "商专",
         "buyerDesc": "这个我真的需要",
-        "oderId": 11,
-        "buyerName": "zhangsan",
+        "orderId": 11,
+        "buyerRealName": "zhangsan",
         "goodId": "string",
         "goodImage": "string",
         "goodName": "string",
-        "goodPrice": "string",
-        "orderState": 1,
-        "buyerGoodsNum": 0
+        "orderState": 0,
+        "buyerGoodsNum": 0,
+        "orderPrice": "string"
       }
     ]
   },

@@ -42,6 +42,7 @@
             },
             GetUsers() {
                 this.isload = true
+                this.weberror=false
                 getUsers(
                     {
                         pageNum: this.currentPage,

@@ -77,6 +77,7 @@
       },
       GetGoods() {
         this.isload = true
+        this.weberror=false
         getGoods(
           {
             pageNum: this.currentPage,
