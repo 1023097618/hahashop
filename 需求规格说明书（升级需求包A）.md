@@ -233,83 +233,75 @@
 
  **1. 用户表（User）** 
 
-- 用户ID(UserId,主键，自动生成)
-
-- 用户名（Username,唯一，不为空）
-
-- 密码（Password,加密存储，不为空）
-
-- 电话（Phone）
-
-- 默认交易地址(DeLocation)
-
-- 用户权限（privilege,不为空,1为卖家，0为买家）
+| 名 | 含义| 类型 | 规范以及说明|
+|---|---|---|---|
+| id | 用户ID |INTEGER |主键，自动生成|
+| username |用户名 |TEXT|唯一，不为空|
+|password|密码|TEXT|加密存储，不为空|
+|privilege|用户权限|INTEGER|不为空，1为卖家，2为买家|
+|userPhone|电话|VARCHAR|大小为20|
+|userAddress|交易地址|VARCHAR|大小为255|
+|userRealName|买家真实姓名|VARCHAR|大小为100|
 
  **2. 商品表(Good)** 
 
-- 商品ID(GoodId,主键，自动生成)
+| 名 | 含义| 类型 | 规范以及说明|
+|---|---|---|---|
+|goodId|商品ID|INTEGER|主键，自动生成|
+|goodName|商品名称|TEXT|不为空|
+|goodDesc|商品描述|TEXT|可以是文本、图片与视频；图片和视频存放链接|
+|goodPrice|商品价格|REAL|不为空|
+|goodImage|商品图片|TEXT|存放图片链接。当有多个图片时，多个链接之间用逗号分隔|
+|buyerNum|购买数量|INTEGER||
+|categoryId|类别ID|INTEGER|不为空，为类别（Category）表的外键|
+|goodNum|商品数量|INTEGER|不为空|
 
-- 商品名称(GoodName,不为空)
+ **3. 订单表(Orders)**  
 
-- 一级类别(CategoryLevel1）
+| 名 | 含义| 类型 | 规范以及说明|
+|---|---|---|---|
+|orderId|订单ID|INTEGER|主键，自动生成|
+|goodId|商品ID|INTEGER|不为空，商品（Good）表的外键|
+|userId|用户ID|INTEGER|不为空，用户（User）表的外键|
+|buyerName|买家名字|TEXT|不为空|
+|buyerAddress|买家地址|TEXT|不为空|
+|buyerPhone|买家电话|TEXT|不为空|
+|buyerDesc|买家备注|TEXT||
+|orderState|订单状态|INTEGER|不为空，0：进行中， 1：已完成， 2：已取消|
+|buyerGoodsNum|买家购买数量|INTEGER|不为空|
+|orderPrice|订单价格|REAL||
 
-- 二级类别(CategoryLevel2）
+ **4. 历史商品表(History）** 
 
-- 商品描述(GoodDesc,支持富媒体)
+| 名 | 含义| 类型 | 规范以及说明|
+|---|---|---|---|
+|historyId|历史ID|INTEGER|主键，自动生成|
+|goodId|商品ID|INTEGER|不为空，商品表（Good)的外键|
+|goodName|商品名称|VARCHAR|大小为255|
+|goodDesc|商品描述|TEXT||
+|goodPrice|商品价格|REAL||
+|goodImage|商品图片|TEXT|为商品表中商品图片的第一个链接|
+|operationTime|上架时间|TEXT||
 
-- 商品价格(GoodPrice,不为空）
+**5.类别表（Category）**
 
-- 商品库存(GoodNumber，不为空）
+| 名 | 含义| 类型 | 规范以及说明|
+|---|---|---|---|
+|categoryId|类别ID|INTEGER|主键，自动生成|
+|categoryName|类别名称|VARCHAR|大小为255，不为空|
+|pid|父级id|INTEGER|类别是一级则为0，二级则为1|
 
-- 商品状态(GoodState，1为上架，0为下架）
+**6.图片信息表（Storage）**
 
- **3. 商品图片表（GoodImg，因为需要上传多个图片）** 
+| 名 | 含义| 类型 | 规范以及说明|
+|---|---|---|---|
+|id |图片信息ID|INTEGER|主键，自动生成|
+|key|图片唯一名称|TEXT|图片的唯一索引|
+|name|图片名称|TEXT|
+|type|图片类型|TEXT|例如：jpg,png等|
+|size|图片大小|TEXT|
+|url|图片链接|TEXT|
 
-- 图片ID(ImgId，主键，自动生成)
-
-- 商品ID(goodId,外键，关联到商品表)
-
-- 图片链接(ImgPath)
-
- **4. 订单表(Orders)**  
-
-- 订单ID(OrderID,主键，自动生成)
-
-- 用户ID(UserId,外键，关联到用户表)
-
-- 订单日期(OrderDate)
-
-- 订单状态(OrderState，枚举，“已下单”“已完成”)
-
- **5.  订单商品表(OrderGood,主要管理商品库存)** 
-
-- 订单商品ID(OrderGoodId,主键，自动生成)
-
-- 订单ID(OrderId,外键，关联到订单表)
-
-- 商品ID(GoodId，外键，关联到商品表)
-
-- 购买数量(Quantity)
-
- **6. 历史商品表(History）** 
-
-- 历史商品ID(HistoryId,主键,自动生成）
-
-- 商品ID(GoodId,外键，关联到商品表，用于追踪该历史记录对应的原始商品)
-
-- 商品名称(GoodName)
-
-- 一级类别(CategoryLevel1)
-
-- 二级类别(CategoryLevel2）
-
-- 商品描述(GoodDesc)
-
-- 商品图片ID(GoodImgId，外键，关联商品图片表)
-
-- 上传时间(OperationTime)
-
-- 下架时间(DownTime)
 
 <h3 id="tht">3.2数据规范</h3>
 
