@@ -6,8 +6,8 @@
 <mapper namespace="com.mall.dao.OrderDao">
     <!-- 添加订单 -->
     <insert id="addOrder" parameterType="com.mall.entity.Order">
-        INSERT INTO Orders (goodId, userId, buyerName, buyerAddress, buyerPhone, buyerDesc, orderState, buyerGoodsNum, orderPrice)
-        VALUES (#{goodId}, #{userId}, #{buyerName}, #{buyerAddress}, #{buyerPhone}, #{buyerDesc}, #{orderState}, #{buyerGoodsNum}, #{orderPrice})
+        INSERT INTO Orders (goodId, userId, buyerRealName, buyerAddress, buyerPhone, buyerDesc, orderState, buyerGoodsNum, orderPrice)
+        VALUES (#{goodId}, #{userId}, #{buyerRealName}, #{buyerAddress}, #{buyerPhone}, #{buyerDesc}, #{orderState}, #{buyerGoodsNum}, #{orderPrice})
     </insert>
 
     <!-- 获取订单 -->

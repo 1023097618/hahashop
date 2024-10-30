@@ -3,6 +3,7 @@ package com.mall.common;
 import com.mall.entity.User;
 import com.mall.service.AuthService;
 import jakarta.annotation.Resource;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -20,7 +21,7 @@ public class CheckUtil {
 
     @Resource
     private AuthService authService;
-    public User tookenCheck(){
+    public User tookenCheck() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User u = (User) authentication.getPrincipal();  // 强制类型转换
         u = authService.login(u.getUsername());

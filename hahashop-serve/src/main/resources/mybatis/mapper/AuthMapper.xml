@@ -6,7 +6,7 @@
 <mapper namespace="com.mall.dao.AuthDao">
     <!--通过登录时输入的用户名查询用户信息-->
     <select id="login" resultType="com.mall.entity.User">
-        SELECT id, username, password ,privilege ,userPhone ,userAddress, userRealName FROM User
+        SELECT userId, username, password ,privilege ,userPhone ,userAddress, userRealName FROM User
         WHERE username = #{username}
     </select>
 
@@ -19,20 +19,20 @@
 
     <!--获取用户信息-->
     <select id="getInfo" resultType="com.mall.entity.User">
-        SELECT id, username, privilege ,userPhone ,userAddress, userRealName FROM User
-        WHERE id = #{userid}
+        SELECT userId, username, privilege ,userPhone ,userAddress, userRealName FROM User
+        WHERE username = #{username}
     </select>
 
     <!--selectUsernameByExample-->
     <select id="selectUsernameByUsername">
-        SELECT username FROM User
+        SELECT COUNT(*) FROM User
         WHERE username = #{username}
     </select>
 
     <!--register-->
-    <insert id="register">
+    <insert id="register" parameterType="com.mall.entity.User">
         INSERT INTO User(username, password, privilege, userPhone, userAddress, userRealName)
-        VALUES (#{username}, #{password}, #{priviledge}, #{userPhone}, #{userAddress}, #{userRealName})
+        VALUES (#{username}, #{password}, #{privilege}, #{userPhone}, #{userAddress}, #{userRealName})
     </insert>
 
 </mapper>

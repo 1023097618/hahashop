@@ -4,10 +4,12 @@ import com.mall.common.*;
 import com.mall.entity.Good;
 import com.mall.entity.Order;
 import com.mall.entity.User;
+import com.mall.service.AuthService;
 import com.mall.service.GoodService;
 import com.mall.service.OrderService;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -31,20 +33,29 @@ public class OrderController {
     private CheckUtil checkUtil;
     @Resource
     private TransformUtil transformUtil;
+    @Resource
+    AuthService authService;
 
     @RequestMapping("/buy")
     public Result<Object> addOrder(@RequestBody Order order) {//添加订单
-        if(checkUtil.tookenCheck().getPrivilege() != 2){ return ResultUtil.error(ILLEGAL_TOKEN);}
+        User user = checkUtil.tookenCheck();
+        if(user.getPrivilege() != 2){ return ResultUtil.error(ILLEGAL_TOKEN);}
+
         Good good = goodService.getGoodById(order.getGoodId());
         if (good == null) {
             return ResultUtil.error(GOOD_NOT_EXIST);
         }
+
         order.setOrderPrice(good.getGoodPrice());
         if (!checkUtil.isValidPhoneNumber(order.getBuyerPhone())||order.getBuyerGoodsNum() <= 0) {
             return ResultUtil.error(ILLEGAL_INFO);
         } else if (good.getGoodState() == null || good.getGoodState() == 1) {
             return ResultUtil.error(GOOD_IS_FROZEN);
-        } else if (orderService.addOrder(order)) {
+        }
+
+        user = authService.login(user.getUsername());
+        order.setUserId(user.getUserId());
+        if (orderService.addOrder(order)) {
             return ResultUtil.success(SUCCESS, null);
         }
         return ResultUtil.error(UNKNOWN_ERROR);
@@ -115,7 +126,7 @@ public class OrderController {
     }
 
     @RequestMapping("cancelsell")
-    public Result<Object> cancelOrder(@RequestBody Map<String, Object> orderRequest, HttpServletRequest request) {
+    public Result<Object> cancelOrder(@RequestBody Map<String, Object> orderRequest) {
         User user = checkUtil.tookenCheck();
         if(user.getPrivilege() != 1){ return ResultUtil.error(ILLEGAL_TOKEN);}
         if(orderService.orderStateChange((Integer) orderRequest.get("orderId"), StateChangeUtil.StateChange(CANCELED))){

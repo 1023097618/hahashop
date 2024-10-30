@@ -27,5 +27,5 @@ public class AuthServiceImpl implements AuthService {
     public Boolean userIsExist(String username) { return authDao.selectUsernameByUsername(username) > 0; }
 
     @Override
-    public User getInfo(Integer userId) { return authDao.getInfo(userId); }
+    public User getInfo(String username) { return authDao.getInfo(username); }
 }

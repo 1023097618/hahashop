@@ -8,8 +8,8 @@
     <select id="goodList" resultType="com.mall.entity.Good">
         SELECT goodId, goodName, goodPrice, goodImage, goodState, buyerNum, categoryId, goodNum FROM Good
         WHERE goodNum > 0
-        <if test="pageName != null and pageName != ''">
-            AND goodName LIKE CONCAT('%', #{pageName}, '%')
+        <if test="goodName != null">
+            AND goodName LIKE CONCAT('%', #{goodName}, '%')
         </if>
         <if test="categoryId != null">
             AND categoryId = #{categoryId}
