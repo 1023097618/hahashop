@@ -21,7 +21,7 @@ public class JwtTokenUtil {
     public static String generateToken(User user) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("username", user.getUsername());
-        claims.put("userId", user.getId());
+        claims.put("userId", user.getUserId());
 
         return Jwts.builder()
                 .setClaims(claims)
@@ -48,7 +48,7 @@ public class JwtTokenUtil {
             // Create and return a User object
             User user = new User();
             user.setUsername(username);
-            user.setId(userId);
+            user.setUserId(userId);
 
             return user;
         } catch (Exception e) {

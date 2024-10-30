@@ -1,15 +1,20 @@
 package com.mall.controller;
 
+import com.mall.common.CheckUtil;
 import com.mall.common.JwtTokenUtil;
 import com.mall.common.Result;
 import com.mall.common.ResultUtil;
+import com.mall.entity.Category;
 import com.mall.entity.Good;
 import com.mall.entity.Order;
+import com.mall.service.CategoryService;
 import com.mall.service.GoodService;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,11 +27,16 @@ public class GoodController {
 
     @Resource
     private GoodService goodService;
-
+    @Resource
+    private CategoryService categoryService;
+    @Resource
+    private CheckUtil checkUtil;
     @RequestMapping("/list")
     //获取所有商品信息
-    public Result goodList(HttpServletRequest request,@RequestParam Integer pageSize, @RequestParam Integer pageNum) {
-        List<Good> goodList = goodService.goodList(pageSize, pageNum);
+    public Result goodList(HttpServletRequest request,
+                           @RequestParam Integer pageSize, @RequestParam Integer pageNum,
+                           @RequestParam(required = false) String goodName, @RequestParam(required = false) Integer categoryId) {
+        List<Good> goodList = goodService.goodList(pageSize, pageNum, goodName, categoryId);
         Integer totalGoods = goodService.countGoods();
         String token = request.getHeader("X-hahashop-token");
         Map<String, Object> data = new HashMap<>();
@@ -38,7 +48,6 @@ public class GoodController {
                 good.setBuyerNum(0);
             }
         }
-
         data.put("goods", goodList);
         data.put("totalGoods", totalGoods);
         return ResultUtil.success(SUCCESS, data);
@@ -46,6 +55,7 @@ public class GoodController {
 
     @RequestMapping("/detail")
     public Result<Object> goodDetail(@RequestParam Integer id) {
+        if(checkUtil.tookenCheck()!=null){ return ResultUtil.error(ILLEGAL_TOKEN); }
         String goodDesc = goodService.getDetail(id);
         Map<String, Object> data = new HashMap<>();
         data.put("goodDesc", goodDesc);
@@ -59,6 +69,7 @@ public class GoodController {
 
     @RequestMapping("/update")
     public Result<Object> goodUpdate(@RequestBody Good good) {
+        if(checkUtil.tookenCheck().getPrivilege() != 1){ return ResultUtil.error(ILLEGAL_TOKEN); }
         if (goodService.getGoodById(good.getGoodId()) == null) {
             return ResultUtil.error(GOOD_NOT_EXIST);
         } else if (goodService.updateGood(good)) {
@@ -70,6 +81,7 @@ public class GoodController {
 
     @RequestMapping("/add")
     public Result<Object> goodAdd(@RequestBody Good good) {
+        if(checkUtil.tookenCheck().getPrivilege() != 1){ return ResultUtil.error(ILLEGAL_TOKEN); }
         if (goodService.addGood(good)) {
             return ResultUtil.success(SUCCESS, null);
         } else {
@@ -87,7 +99,35 @@ public class GoodController {
         } else {
             return ResultUtil.error(UNKNOWN_ERROR);
         }
-
     }
+
+    @RequestMapping("/category")
+    public Result<Object> goodCategory() {
+        Map<String, Object> data = new HashMap<>();
+        List<Map<String, Object>> categoryList = new ArrayList<>();
+
+        List<Category> fathers = categoryService.findByCategoryPid(0);
+
+        for (Category category : fathers) {
+            Map<String, Object> fatherMap = new HashMap<>();//父，一个父级一个
+            fatherMap.put("label", category.getCategoryName());
+            fatherMap.put("value", category.getCategoryId());
+            List<Map<String, Object>> children = new ArrayList<>();//子级
+            List<Category> child = categoryService.findByCategoryPid(category.getCategoryId());//父级id是子级的pid
+            for (Category childCategory : child) {
+                Map<String, Object> childMap = new HashMap<>();
+                childMap.put("label", childCategory.getCategoryName());
+                childMap.put("value", childCategory.getCategoryId());
+                children.add(childMap);
+            }
+            fatherMap.put("children", children);//对应的子级置入
+            categoryList.add(fatherMap);//
+        }
+        data.put("categoryList", categoryList);
+        return ResultUtil.success(SUCCESS, data);
+    }
+
+
+
 }
 

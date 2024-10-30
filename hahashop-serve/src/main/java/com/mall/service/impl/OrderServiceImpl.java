@@ -18,16 +18,18 @@ public class OrderServiceImpl implements OrderService {
     private GoodDao goodDao;
 
     @Override
-    public Boolean addOrder(Order order){
+    public Boolean addOrder(Order order){//设计很差，需要修改
         try {
             // 调用 Dao 插入操作，返回受影响的行数
-            order.setIsConfirmed(false);//订单状态
-            Integer rowsAffected = orderDao.addOrder(order);
-            // 如果返回值大于0，说明插入成功，返回 true
-            if(rowsAffected > 0){
+            order.setOrderState(0);//订单状态,0进行中,1已完成,2已取消
+            Integer rowsAffected = goodDao.goodNumChange(order.getGoodId(), order.getBuyerGoodsNum());
+            if(rowsAffected > 0) {//库存检查，库存够就add订单
+                orderDao.addOrder(order);
                 goodDao.buyerNumUpdate(order.getGoodId());
+                return true;
+            }else{
+                return false;
             }
-            return true;
         } catch (Exception e) {
             // 捕获异常并记录日志，可以使用 Logger 代替 e.printStackTrace()
             e.printStackTrace();
@@ -36,33 +38,15 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<Order> getOrdersById(Integer goodId){
-        return orderDao.getOrdersById(goodId);
+    public List<Order> getOrdersByExample(Integer pageSize, Integer pageNum,
+                                         Integer userId, Integer goodId) {
+        return orderDao.getOrdersByExample(pageSize, pageNum, userId, goodId);
     }
 
     @Override
-    public Boolean confirmOrder(Integer orderId){
-        try{
-            Integer rowsAffected = orderDao.confirmOrder(orderId);
-            if(rowsAffected > 0){
-                return true;
-            }
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-        return false;
-    }
+    public Integer countOrdersByExample(Integer userId, Integer goodId) { return orderDao.countOrdersByExample(userId, goodId); }
+
 
     @Override
-    public Boolean cancelOrder(Integer orderId){
-        try{
-            Integer rowsAffected = orderDao.cancelOrder(orderId);
-            if(rowsAffected > 0){
-                return true;
-            }
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-        return false;
-    }
+    public Boolean orderStateChange(Integer orderId, Integer orderState) { return orderDao.orderStateChange(orderId, orderState) > 0; }
 }

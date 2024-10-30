@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface GoodService {
     //获取所有
-    List<Good> goodList(Integer pageSize, Integer pageNum);
+    List<Good> goodList(Integer pageSize, Integer pageNum, String pageName, Integer categoryId);
     //获取单项
     Good getGoodById(Integer id);
     //获取详细
