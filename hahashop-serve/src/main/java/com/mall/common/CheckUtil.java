@@ -5,9 +5,11 @@ import com.mall.service.AuthService;
 import jakarta.annotation.Resource;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
 
+@Component
 public class CheckUtil {
-    public static boolean isValidPhoneNumber(String phoneNumber) {
+    public boolean isValidPhoneNumber(String phoneNumber) {
 //        // 正则表达式，匹配11位的数字
 //        String regex = "\\d{11}";
 //

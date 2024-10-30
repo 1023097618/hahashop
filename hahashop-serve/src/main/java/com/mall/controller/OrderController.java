@@ -36,18 +36,18 @@ public class OrderController {
     public Result<Object> addOrder(@RequestBody Order order) {//添加订单
         if(checkUtil.tookenCheck().getPrivilege() != 2){ return ResultUtil.error(ILLEGAL_TOKEN);}
         Good good = goodService.getGoodById(order.getGoodId());
-        order.setOrderPrice(good.getGoodPrice());
         if (good == null) {
             return ResultUtil.error(GOOD_NOT_EXIST);
-        } else if (!CheckUtil.isValidPhoneNumber(order.getBuyerPhone())||order.getBuyerGoodsNum() <= 0) {
+        }
+        order.setOrderPrice(good.getGoodPrice());
+        if (!checkUtil.isValidPhoneNumber(order.getBuyerPhone())||order.getBuyerGoodsNum() <= 0) {
             return ResultUtil.error(ILLEGAL_INFO);
         } else if (good.getGoodState() == null || good.getGoodState() == 1) {
             return ResultUtil.error(GOOD_IS_FROZEN);
         } else if (orderService.addOrder(order)) {
             return ResultUtil.success(SUCCESS, null);
-        } else {
-            return ResultUtil.error(UNKNOWN_ERROR);
         }
+        return ResultUtil.error(UNKNOWN_ERROR);
     }
 
     @RequestMapping({"/sellerlist","/buyerlist"})

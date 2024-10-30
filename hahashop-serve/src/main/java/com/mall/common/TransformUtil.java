@@ -1,7 +1,10 @@
 package com.mall.common;
 
+import org.springframework.stereotype.Component;
+
 import java.util.Arrays;
 
+@Component
 public class TransformUtil {
     public String stringArrayToString(String[] str){ return String.join(",", str);}
     public String[] stringToStringArray(String[] str){ return (String.join(",", str)).split(",");}

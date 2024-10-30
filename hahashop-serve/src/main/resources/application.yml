@@ -18,6 +18,7 @@ mybatis:
   #用于mybatis在控制台打印sql日志
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  type-handlers-package: com.mall.common
 
 file:
-  upload-dir: upload/images
+  image-dir: src/main/resources/static/images
