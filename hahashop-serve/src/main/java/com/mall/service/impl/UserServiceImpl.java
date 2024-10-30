@@ -1,11 +1,12 @@
 package com.mall.service.impl;
 
-
 import com.mall.dao.UserDao;
 import com.mall.entity.User;
 import com.mall.service.UserService;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -13,10 +14,11 @@ public class UserServiceImpl implements UserService {
     private UserDao userDao;
 
     @Override
-    public User login(String username) {//数据库获取信息
-        return userDao.login(username);
-    }
+    public List<User> getUsers(Integer pageSize, Integer pageNum) { return userDao.getUsers(pageSize, pageNum); }
 
     @Override
-    public Boolean renewPassword(String username, String password) { return userDao.renewPassword(username, password)>0;}
+    public Integer countUsers() { return userDao.countUsers(); }
+
+
+
 }

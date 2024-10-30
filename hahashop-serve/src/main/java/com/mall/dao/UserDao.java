@@ -1,10 +1,17 @@
 package com.mall.dao;
 
+
 import com.mall.entity.User;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 @Mapper
 public interface UserDao {
-    User login(String username);//获取整个User
-    Integer renewPassword(String username, String password);
+    List<User> getUsers(@Param("pageSize") Integer pageSize, @Param("pageNum") Integer pageNum);
+    Integer countUsers();
+
+
+
 }

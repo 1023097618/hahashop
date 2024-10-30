@@ -1,9 +1,10 @@
 package com.mall.service;
 
-
 import com.mall.entity.User;
 
+import java.util.List;
+
 public interface UserService {
-    User login(String username);//数据库获取User信息
-    Boolean renewPassword(String username, String password);
+    List<User> getUsers(Integer pageSize, Integer pageNum);
+    Integer countUsers();
 }
