@@ -57,6 +57,10 @@
 
 - 卖家可以查看历史发布商品。
 
+<h3 id="oth">1.3业务流程图</h3>
+
+![业务流程图](https://gitee.com/zhishidiannaoka/hahashop/raw/master/2235020429-%E9%A2%9D%E5%A4%96%E6%88%90%E6%9E%9C%E7%89%A9/2-images/%E4%B8%9A%E5%8A%A1%E6%B5%81%E7%A8%8B%E5%9B%BE.png)
+
 <h2 id="t">二、用户需求</h2>
 
 <h3 id="to">2.1用户角色</h3>
