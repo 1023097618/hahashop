@@ -39,16 +39,37 @@
 
     <!-- 增加商品 -->
     <insert id="addGood" parameterType="com.mall.entity.Good">
-        INSERT INTO Good (goodName, goodPrice, goodDesc, goodImage, buyerNum, goodState, categoryId)
-        VALUES (#{goodName}, #{goodPrice}, #{goodDesc}, #{goodImage}, #{buyerNum}, #{goodState}, #{categoryId})
+        INSERT INTO Good (goodName, goodPrice, goodDesc, goodImage, buyerNum, goodState, categoryId, goodNum)
+        VALUES (#{good.goodName}, #{good.goodPrice}, #{good.goodDesc}, #{good.goodImage}, #{good.buyerNum}, #{good.goodState}, #{good.categoryId}, #{good.goodNum})
     </insert>
 
     <!-- 更新商品 -->
     <update id="updateGood" parameterType="com.mall.entity.Good">
         UPDATE Good
-        SET goodName = #{goodName}, goodPrice = #{goodPrice}, goodDesc = #{goodDesc},
-            buyerNum = #{buyerNum}, goodImage = #{goodImage}, categoryId = #{categoryId}
-        WHERE goodId = #{goodId}
+        <set>
+            <if test="good.goodName != null">
+                goodName = #{good.goodName},
+            </if>
+            <if test="good.goodPrice != null">
+                goodPrice = #{good.goodPrice},
+            </if>
+            <if test="good.goodDesc != null">
+                goodDesc = #{good.goodDesc},
+            </if>
+            <if test="good.buyerNum != null">
+                buyerNum = #{good.buyerNum},
+            </if>
+            <if test="good.goodImage != null">
+                goodImage = #{good.goodImage},
+            </if>
+            <if test="good.categoryId != null">
+                categoryId = #{good.categoryId},
+            </if>
+            <if test="good.goodNum != null">
+                goodNum = #{good.goodNum},
+            </if>
+        </set>
+        WHERE goodId = #{good.goodId}
     </update>
 
     <!-- 删除商品 -->

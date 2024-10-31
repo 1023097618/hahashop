@@ -12,8 +12,8 @@
         <el-form-item label="商品图片">
           <UploadPicture :urls.sync="good.goodImage" />
         </el-form-item>
-        <el-form-item label="剩余库存">
-          <el-input v-model="good.goodNum"></el-input>
+        <el-form-item label="剩余库存" >
+          <el-input v-model.number="good.goodNum" type="number"></el-input>
         </el-form-item>
         <el-form-item label="商品种类">
           <el-cascader v-model="good.categoryId" :options="options" :props="{ expandTrigger: 'hover',checkStrictly: true }" clearable
@@ -46,7 +46,8 @@
           goodPrice: '',
           goodImage: '',
           goodDesc: '',
-          categoryId: undefined
+          categoryId: undefined,
+          goodNum:0
         },
         options: [],
         editorOption: { /* quill options */ }
@@ -84,7 +85,8 @@
           goodImage: this.good.goodImage,
           goodDesc: this.good.goodDesc,
           goodId: this.good.goodId,
-          categoryId:this.good.categoryId
+          categoryId:this.good.categoryId,
+          goodNum:this.good.goodNum
         }).then(res => {
           this.$emit('updateGoods')
           console.log(res)

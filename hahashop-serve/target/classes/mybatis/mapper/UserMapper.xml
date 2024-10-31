@@ -7,7 +7,7 @@
     <select id="getUsers">
         SELECT * FROM User
         <if test="pageSize >= 0 and pageNum >= 0">
-            WHERE LIMIT #{pageSize} OFFSET #{pageSize} * (#{pageNum} - 1)
+            LIMIT #{pageSize} OFFSET #{pageSize} * (#{pageNum} - 1)
         </if>
     </select>
 

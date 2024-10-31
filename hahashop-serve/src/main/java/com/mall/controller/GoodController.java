@@ -74,10 +74,12 @@ public class GoodController {
     @RequestMapping("/update")
     public Result<Object> goodUpdate(@RequestBody Good good) {
         User user = checkUtil.tookenCheck();
+
         if(user!=null && user.getPrivilege() != 1){ return ResultUtil.error(ILLEGAL_TOKEN); }
         if (goodService.getGoodById(good.getGoodId()) == null) {
             return ResultUtil.error(GOOD_NOT_EXIST);
-        } else if (goodService.updateGood(good)) {
+        }
+        if (goodService.updateGood(good)) {
             return ResultUtil.success(SUCCESS, null);
         } else {
             return ResultUtil.error(UNKNOWN_ERROR);
@@ -86,7 +88,7 @@ public class GoodController {
 
     @RequestMapping("/add")
     public Result<Object> goodAdd(@RequestBody Good good) {
-        User user = checkUtil.tookenCheck();
+        User user = checkUtil.tookenCheck(); System.out.println(good.getGoodNum());
         if(user!=null && user.getPrivilege() != 1){ return ResultUtil.error(ILLEGAL_TOKEN); }
         if (goodService.addGood(good)) {
             return ResultUtil.success(SUCCESS, null);
