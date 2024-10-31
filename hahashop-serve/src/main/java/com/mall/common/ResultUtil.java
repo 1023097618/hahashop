@@ -1,5 +1,8 @@
 package com.mall.common;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class ResultUtil {
     public static Result<Object> success(ResultEnum resultEnum, Object object) {
         Result<Object> result = new Result<>();

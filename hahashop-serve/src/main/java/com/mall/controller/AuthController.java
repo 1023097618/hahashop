@@ -6,6 +6,7 @@ import com.mall.dao.GoodDao;
 import com.mall.entity.User;
 import com.mall.service.AuthService;
 import jakarta.annotation.Resource;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -49,11 +50,13 @@ public class AuthController {
     @RequestMapping("/info")//需要具体实现
     public Result<Object> info(@RequestParam String token) {
         User user = JwtTokenUtil.decodeToken(token);//token在login的时候就传好了，后端给前端什么前端就会回来什么
+
         if (user != null) {
             Map<String, Object> data = new HashMap<>();
-            user = authService.getInfo(user.getUserId());
+            user = authService.getInfo(user.getUsername());
+
             data.put("username", user.getUsername());
-            data.put("priviliage", user.getPrivilege());
+            data.put("privilege", user.getPrivilege());
             data.put("userPhone", user.getUserPhone());
             data.put("userAddress", user.getUserAddress());
             data.put("userId", user.getUserId());
@@ -84,11 +87,11 @@ public class AuthController {
     }
 
     @RequestMapping("/register")
-    public Result<Object> register(@RequestBody User user,@RequestParam String phoneCode) {
-        phoneCode = "1111";//目前默认，后续改
-        if(phoneCode != "1111"){
-            ResultUtil.error(ResultEnum.UNKNOWN_ERROR);
-        } else if (authService.userIsExist(user.getUsername())) {//查验存在性
+    public Result<Object> register(@RequestBody User user) {
+//        if(phoneCode != "1111"){
+//            ResultUtil.error(ResultEnum.UNKNOWN_ERROR);
+//        } else
+            if (authService.userIsExist(user.getUsername())) {//查验存在性
             ResultUtil.error(ResultEnum.USER_HAS_EXIST);
         } else{
             user.setPrivilege(2);

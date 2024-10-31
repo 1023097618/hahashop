@@ -5,28 +5,46 @@
 
 <mapper namespace="com.mall.dao.OrderDao">
     <!-- 添加订单 -->
-    <insert id="addOrder" parameterType="com.mall.entity.Order" useGeneratedKeys="true" keyProperty="orderId">
-        INSERT INTO Orders (goodId, buyerName, buyerAddress, buyerPhone, buyerDesc, isConfirmed)
-        VALUES (#{goodId}, #{buyerName}, #{buyerAddress}, #{buyerPhone}, #{buyerDesc}, #{isConfirmed})
+    <insert id="addOrder" parameterType="com.mall.entity.Order">
+        INSERT INTO Orders (goodId, userId, buyerRealName, buyerAddress, buyerPhone, buyerDesc, orderState, buyerGoodsNum, orderPrice)
+        VALUES (#{goodId}, #{userId}, #{buyerRealName}, #{buyerAddress}, #{buyerPhone}, #{buyerDesc}, #{orderState}, #{buyerGoodsNum}, #{orderPrice})
     </insert>
 
-    <!-- 根据商品ID获取所有订单 -->
-    <select id="getOrdersById" parameterType="Integer" resultType="com.mall.entity.Order">
+    <!-- 获取订单 -->
+    <select id="getOrdersByExample" parameterType="Integer" resultType="com.mall.entity.Order">
         SELECT * FROM Orders
-        WHERE goodId = #{goodId}
+        WHERE
+        <if test="goodId >= 0">
+            goodId = #{goodId}
+        </if>
+        <if test="userId >= 0">
+            userId = #{userId}
+        </if>
+        <if test="pageSize >= 0 and pageNum >= 0">
+            LIMIT #{pageSize} OFFSET #{pageSize} * (#{pageNum} - 1)
+        </if>
+    </select>
+    <!-- 统计数 -->
+    <select id="countOrdersByExample" resultType="Integer">
+        SELECT COUNT(*) FROM Orders
+        WHERE
+        <if test="userId >= 0">
+            userId = #{userId}
+        </if>
+        <if test="goodId >=0">
+            goodId = #{goodId}
+        </if>
     </select>
 
-    <!-- 确认订单 -->
-    <update id="confirmOrder" parameterType="Integer">
+    <!--订单状态改变-->
+    <update id="orderStateChange">
         UPDATE Orders
-        SET isConfirmed = 1
+        SET orderState = #{orderState}
         WHERE orderId = #{orderId}
+
     </update>
 
-    <!-- 撤销订单 -->
-    <update id="cancelOrder" parameterType="Integer">
-        UPDATE Orders
-        SET isConfirmed = 0
-        WHERE orderId = #{orderId}
-    </update>
+
+
+
 </mapper>

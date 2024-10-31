@@ -4,11 +4,14 @@ import com.mall.common.*;
 import com.mall.entity.Good;
 import com.mall.entity.Order;
 import com.mall.entity.User;
+import com.mall.service.AuthService;
 import com.mall.service.GoodService;
 import com.mall.service.OrderService;
 import com.mall.service.UserService;
 import jakarta.annotation.Resource;
+import jakarta.servlet.http.HttpServletRequest;
 import org.apache.ibatis.annotations.Mapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,8 +25,6 @@ import java.util.Map;
 @RequestMapping("/user")
 public class UserController {
     @Resource
-    private CheckUtil checkUtil;
-    @Resource
     private TransformUtil transformUtil;
     @Resource
     private UserService userService;
@@ -31,10 +32,14 @@ public class UserController {
     private OrderService orderService;
     @Resource
     private GoodService goodService;
-
+    @Resource
+    private AuthService authService;
+    @Autowired
+    private CheckUtil checkUtil;
 
     @RequestMapping("/list")
     public Result<Object> getAllUsers(@RequestParam(required = false, defaultValue = "-1") Integer pageSize, @RequestParam(required = false, defaultValue = "-1") Integer pageNum) {
+
         if(checkUtil.tookenCheck().getPrivilege() != 1){ return ResultUtil.error(ResultEnum.ILLEGAL_TOKEN); }
         if(pageSize < 0|| pageNum < 0){ return ResultUtil.error(ResultEnum.UNKNOWN_ERROR); }
         List<User> userList = userService.getUsers(pageSize, pageNum);
@@ -58,7 +63,8 @@ public class UserController {
     public Result<Object> getOrderListByUserId(@RequestParam(required = false, defaultValue = "-1") Integer pageSize,
                                                @RequestParam(required = false, defaultValue = "-1") Integer pageNum,
                                                @RequestParam(required = false) Integer userId) {
-        if(checkUtil.tookenCheck().getPrivilege() != 1){ return ResultUtil.error(ResultEnum.ILLEGAL_TOKEN); }
+        User user = checkUtil.tookenCheck();
+        if(user.getPrivilege() != 1){ return ResultUtil.error(ResultEnum.ILLEGAL_TOKEN); }
         List<Order> orderList = orderService.getOrdersByExample(pageSize, pageNum, userId, -1);
         List<Map<String, Object>> orders = new ArrayList<>();
         for(Order order : orderList){

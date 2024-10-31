@@ -4,10 +4,12 @@ import com.mall.common.*;
 import com.mall.entity.Good;
 import com.mall.entity.Order;
 import com.mall.entity.User;
+import com.mall.service.AuthService;
 import com.mall.service.GoodService;
 import com.mall.service.OrderService;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -31,32 +33,41 @@ public class OrderController {
     private CheckUtil checkUtil;
     @Resource
     private TransformUtil transformUtil;
+    @Resource
+    AuthService authService;
 
     @RequestMapping("/buy")
     public Result<Object> addOrder(@RequestBody Order order) {//添加订单
-        if(checkUtil.tookenCheck().getPrivilege() != 2){ return ResultUtil.error(ILLEGAL_TOKEN);}
+        User user = checkUtil.tookenCheck();
+        if(user.getPrivilege() != 2){ return ResultUtil.error(ILLEGAL_TOKEN);}
+
         Good good = goodService.getGoodById(order.getGoodId());
-        order.setOrderPrice(good.getGoodPrice());
         if (good == null) {
             return ResultUtil.error(GOOD_NOT_EXIST);
-        } else if (!CheckUtil.isValidPhoneNumber(order.getBuyerPhone())||order.getBuyerGoodsNum() <= 0) {
+        }
+
+        order.setOrderPrice(good.getGoodPrice());
+        if (!checkUtil.isValidPhoneNumber(order.getBuyerPhone())||order.getBuyerGoodsNum() <= 0) {
             return ResultUtil.error(ILLEGAL_INFO);
         } else if (good.getGoodState() == null || good.getGoodState() == 1) {
             return ResultUtil.error(GOOD_IS_FROZEN);
-        } else if (orderService.addOrder(order)) {
-            return ResultUtil.success(SUCCESS, null);
-        } else {
-            return ResultUtil.error(UNKNOWN_ERROR);
         }
+
+        user = authService.login(user.getUsername());
+        order.setUserId(user.getUserId());
+        if (orderService.addOrder(order)) {
+            return ResultUtil.success(SUCCESS, null);
+        }
+        return ResultUtil.error(UNKNOWN_ERROR);
     }
 
     @RequestMapping({"/sellerlist","/buyerlist"})
-    public Result<Object> getOrderListByExample(@RequestParam(required = false) Integer pageSize, @RequestParam(required = false) Integer pageNum,
-                                                @RequestParam(required = false) Integer userId, @RequestParam(required = false) Integer goodId) {//按商品id获得对应订单
+    public Result<Object> getOrderListByExample(@RequestParam(required = false, defaultValue = "-1") Integer pageSize, @RequestParam(required = false, defaultValue = "-1") Integer pageNum,
+                                                @RequestParam(required = false, defaultValue = "-1") Integer userId, @RequestParam(required = false, defaultValue = "-1") Integer goodId) {//按商品id获得对应订单
         if(checkUtil.tookenCheck().getPrivilege() != 1 && checkUtil.tookenCheck().getPrivilege() != 2){ return ResultUtil.error(ILLEGAL_TOKEN);}
         User user = checkUtil.tookenCheck();
         if(user.getPrivilege() == 1){
-            List<Order> allOrder = orderService.getOrdersByExample(pageSize, pageNum, -1, goodId);
+            List<Order> allOrder = orderService.getOrdersByExample(pageSize, pageNum, userId, goodId);
             List<Map<String, Object>> orders = new ArrayList<>();
             for(Order order : allOrder){
                 Map<String,Object> o = new HashMap<>();
@@ -69,13 +80,13 @@ public class OrderController {
                 o.put("buyerGoodsNum",order.getBuyerGoodsNum());
                 orders.add(o);
             }
-            Integer totalOrders = orderService.countOrdersByExample(-1, goodId);
+            Integer totalOrders = orderService.countOrdersByExample(userId, goodId);
             Map<String,Object> data = new HashMap<>();
             data.put("orders",orders);
             data.put("totalOrders",totalOrders);
             return ResultUtil.success(SUCCESS,data);
         }else if(user.getPrivilege() == 2){
-            List<Order> allOrder = orderService.getOrdersByExample(pageSize, pageNum, userId, -1);
+            List<Order> allOrder = orderService.getOrdersByExample(pageSize, pageNum, user.getUserId(), goodId);
             List<Map<String, Object>> orders = new ArrayList<>();
             for(Order order : allOrder){
                 Good good = goodService.getGoodById(order.getGoodId());
@@ -93,7 +104,7 @@ public class OrderController {
                 o.put("buyerGoodsNum",order.getBuyerGoodsNum());
                 orders.add(o);
             }
-            Integer totalOrders = orderService.countOrdersByExample(userId, -1);
+            Integer totalOrders = orderService.countOrdersByExample(user.getUserId(), goodId);
             Map<String,Object> data = new HashMap<>();
             data.put("orders",orders);
             data.put("totalOrders",totalOrders);
@@ -115,7 +126,7 @@ public class OrderController {
     }
 
     @RequestMapping("cancelsell")
-    public Result<Object> cancelOrder(@RequestBody Map<String, Object> orderRequest, HttpServletRequest request) {
+    public Result<Object> cancelOrder(@RequestBody Map<String, Object> orderRequest) {
         User user = checkUtil.tookenCheck();
         if(user.getPrivilege() != 1){ return ResultUtil.error(ILLEGAL_TOKEN);}
         if(orderService.orderStateChange((Integer) orderRequest.get("orderId"), StateChangeUtil.StateChange(CANCELED))){

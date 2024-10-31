@@ -8,5 +8,5 @@ public interface AuthService {
     Boolean renewPassword(String username, String password);
     Boolean register(User user);
     Boolean userIsExist(String username);
-    User getInfo(Integer userId);
+    User getInfo(String username);
 }
