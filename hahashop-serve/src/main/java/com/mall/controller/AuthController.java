@@ -56,7 +56,7 @@ public class AuthController {
             user = authService.getInfo(user.getUsername());
 
             data.put("username", user.getUsername());
-            data.put("priviliage", user.getPrivilege());
+            data.put("privilege", user.getPrivilege());
             data.put("userPhone", user.getUserPhone());
             data.put("userAddress", user.getUserAddress());
             data.put("userId", user.getUserId());

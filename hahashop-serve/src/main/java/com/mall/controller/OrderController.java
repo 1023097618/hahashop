@@ -62,12 +62,12 @@ public class OrderController {
     }
 
     @RequestMapping({"/sellerlist","/buyerlist"})
-    public Result<Object> getOrderListByExample(@RequestParam(required = false) Integer pageSize, @RequestParam(required = false) Integer pageNum,
-                                                @RequestParam(required = false) Integer userId, @RequestParam(required = false) Integer goodId) {//按商品id获得对应订单
+    public Result<Object> getOrderListByExample(@RequestParam(required = false, defaultValue = "-1") Integer pageSize, @RequestParam(required = false, defaultValue = "-1") Integer pageNum,
+                                                @RequestParam(required = false, defaultValue = "-1") Integer userId, @RequestParam(required = false, defaultValue = "-1") Integer goodId) {//按商品id获得对应订单
         if(checkUtil.tookenCheck().getPrivilege() != 1 && checkUtil.tookenCheck().getPrivilege() != 2){ return ResultUtil.error(ILLEGAL_TOKEN);}
         User user = checkUtil.tookenCheck();
         if(user.getPrivilege() == 1){
-            List<Order> allOrder = orderService.getOrdersByExample(pageSize, pageNum, -1, goodId);
+            List<Order> allOrder = orderService.getOrdersByExample(pageSize, pageNum, userId, goodId);
             List<Map<String, Object>> orders = new ArrayList<>();
             for(Order order : allOrder){
                 Map<String,Object> o = new HashMap<>();
@@ -80,13 +80,13 @@ public class OrderController {
                 o.put("buyerGoodsNum",order.getBuyerGoodsNum());
                 orders.add(o);
             }
-            Integer totalOrders = orderService.countOrdersByExample(-1, goodId);
+            Integer totalOrders = orderService.countOrdersByExample(userId, goodId);
             Map<String,Object> data = new HashMap<>();
             data.put("orders",orders);
             data.put("totalOrders",totalOrders);
             return ResultUtil.success(SUCCESS,data);
         }else if(user.getPrivilege() == 2){
-            List<Order> allOrder = orderService.getOrdersByExample(pageSize, pageNum, userId, -1);
+            List<Order> allOrder = orderService.getOrdersByExample(pageSize, pageNum, user.getUserId(), goodId);
             List<Map<String, Object>> orders = new ArrayList<>();
             for(Order order : allOrder){
                 Good good = goodService.getGoodById(order.getGoodId());
@@ -104,7 +104,7 @@ public class OrderController {
                 o.put("buyerGoodsNum",order.getBuyerGoodsNum());
                 orders.add(o);
             }
-            Integer totalOrders = orderService.countOrdersByExample(userId, -1);
+            Integer totalOrders = orderService.countOrdersByExample(user.getUserId(), goodId);
             Map<String,Object> data = new HashMap<>();
             data.put("orders",orders);
             data.put("totalOrders",totalOrders);
