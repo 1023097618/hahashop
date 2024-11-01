@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.mall.dao.ImageStorageDao">
+    <insert id="store" parameterType="com.mall.entity.ImageStorage">
+        INSERT INTO ImageStorage(key, name, type, size, url)
+        VALUES (#{key}, #{name}, #{type}, #{size}, #{url})
+    </insert>
+
+    <select id="findByKey">
+        SELECT id, key, name, type, size, url FROM ImageStorage
+        WHERE key = #{key}
+    </select>
+
+</mapper>

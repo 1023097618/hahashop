@@ -27,8 +27,7 @@ public class GoodController {
 
     @Resource
     private GoodService goodService;
-    @Resource
-    private AuthService authService;
+
     @Resource
     private CategoryService categoryService;
     @Autowired
