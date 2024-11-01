@@ -41,7 +41,7 @@ function createRoute() {
 const router = createRoute()
 export function resetRouter() {
   const newrouter = createRoute()
-  router.match = newrouter.match
+  router.matcher = newrouter.matcher
 }
 
 export function addSellerRoute(){
