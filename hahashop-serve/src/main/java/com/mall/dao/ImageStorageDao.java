@@ -9,7 +9,6 @@ import java.util.Objects;
 
 @Mapper
 public interface ImageStorageDao {
-    @Options(useGeneratedKeys = true, keyProperty = "id")
     Integer store(ImageStorage imageStorage);
 
     ImageStorage findByKey(String key);

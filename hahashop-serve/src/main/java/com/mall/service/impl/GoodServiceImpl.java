@@ -1,6 +1,8 @@
 package com.mall.service.impl;
 
 
+import com.mall.common.StateChangeUtil;
+import com.mall.common.StateEnum;
 import com.mall.common.TransformUtil;
 import com.mall.dao.GoodDao;
 import com.mall.dao.HistoryDao;
@@ -14,6 +16,9 @@ import org.springframework.stereotype.Service;
 import java.util.Date;
 import java.util.List;
 
+import static com.mall.common.StateEnum.ACTIVE;
+import static com.mall.common.StateEnum.SOLD_OUT;
+
 @Service
 public class GoodServiceImpl implements GoodService {
 
@@ -22,13 +27,15 @@ public class GoodServiceImpl implements GoodService {
     @Resource
     private HistoryDao historyDao;
     @Resource
+    private StateChangeUtil stateChangeUtil;
+    @Resource
     private HistoryService historyService;
     @Resource
     private TransformUtil transformUtil;
 
     @Override
-    public List<Good> goodList(Integer pageSize, Integer pageNum, String goodName, Integer categoryId) {
-        List<Good> goods = goodDao.goodList(pageSize, pageNum, goodName, categoryId);
+    public List<Good> goodList(Integer pageSize, Integer pageNum, String goodName, Integer categoryId, Integer privilege) {
+        List<Good> goods = goodDao.goodList(pageSize, pageNum, goodName, categoryId, privilege);
         for(Good good : goods){
             good.setGoodImage(transformUtil.stringToStringArray(good.getGoodImage()));
         }
@@ -41,8 +48,8 @@ public class GoodServiceImpl implements GoodService {
     }
 
     @Override
-    public Integer countGoods(){
-        return goodDao.countGoods();
+    public Integer countGoods(Integer privilege) {
+        return goodDao.countGoods( privilege );
     }
 
     @Override
@@ -54,11 +61,12 @@ public class GoodServiceImpl implements GoodService {
 
     @Override
     public Boolean addGood(Good good) {
-        good.setBuyerNum(0);
-        good.setGoodState(0);
 
         //处理一下数据
         String goodImage = transformUtil.stringArrayToString(good.getGoodImage());
+        good.setBuyerNum(0);
+        if(good.getGoodNum() > 0) { good.setGoodState(stateChangeUtil.StateChange(ACTIVE)); }
+        else{ good.setGoodState(stateChangeUtil.StateChange(SOLD_OUT)); }
 
         Integer rowsAffected = goodDao.addGood(good, goodImage);
         if(rowsAffected > 0){//插入成功就加记录
@@ -71,6 +79,8 @@ public class GoodServiceImpl implements GoodService {
     public Boolean updateGood(Good good) {
 
         String goodImage = transformUtil.stringArrayToString(good.getGoodImage());
+        if(good.getGoodNum() > 0) { good.setGoodState(stateChangeUtil.StateChange(ACTIVE)); }
+        else{ good.setGoodState(stateChangeUtil.StateChange(SOLD_OUT)); }
 
         Integer rowsAffected = goodDao.updateGood(good, goodImage);
         good = goodDao.getGoodById(good.getGoodId());

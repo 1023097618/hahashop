@@ -26,8 +26,11 @@ import static com.mall.common.ResultEnum.*;
 public class GoodController {
 
     @Resource
+    private AuthService authService;
+    @Resource
     private GoodService goodService;
-
+    @Resource
+    private StateChangeUtil stateChangeUtil;
     @Resource
     private CategoryService categoryService;
     @Autowired
@@ -38,21 +41,32 @@ public class GoodController {
     public Result goodList(HttpServletRequest request,
                            @RequestParam Integer pageSize, @RequestParam Integer pageNum,
                            @RequestParam(required = false) String goodName, @RequestParam(required = false) Integer categoryId) {
-        List<Good> goodList = goodService.goodList(pageSize, pageNum, goodName, categoryId);
-        Integer totalGoods = goodService.countGoods();
-        String token = request.getHeader("X-hahashop-token");
+
+        String token = request.getHeader("x-hahashop-token");
         Map<String, Object> data = new HashMap<>();
-        if(token!=null&&JwtTokenUtil.decodeToken(token)!=null){}
-        else if (token!=null&& JwtTokenUtil.decodeToken(token)==null) {
-            return ResultUtil.error(ILLEGAL_TOKEN);
-        } else {
-            for (Good good : goodList) {
-                good.setBuyerNum(0);
+        if(token == null || JwtTokenUtil.decodeToken(token) != null){
+
+            User user = new User();
+            if (token != null){
+                user = (User) JwtTokenUtil.decodeToken(token);
+                user = authService.login(user.getUsername());
             }
+
+            List<Good> goodList = goodService.goodList(pageSize, pageNum, goodName, categoryId, user.getPrivilege());
+            Integer totalGoods = goodService.countGoods(user.getPrivilege());
+            if(token == null || user.getPrivilege() == 2){
+                for (Good good : goodList) {
+                    good.setBuyerNum(0);
+                }
+            }
+
+            data.put("goods", goodList);
+            data.put("totalGoods", totalGoods);
+            return ResultUtil.success(SUCCESS, data);}
+        else if (JwtTokenUtil.decodeToken(token) == null) {
+            return ResultUtil.error(ILLEGAL_TOKEN);
         }
-        data.put("goods", goodList);
-        data.put("totalGoods", totalGoods);
-        return ResultUtil.success(SUCCESS, data);
+        return ResultUtil.error(UNKNOWN_ERROR);
     }
 
     @RequestMapping("/detail")

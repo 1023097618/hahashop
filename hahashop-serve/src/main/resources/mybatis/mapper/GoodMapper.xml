@@ -6,8 +6,16 @@
 <mapper namespace="com.mall.dao.GoodDao">
     <!--获取商品信息-->
     <select id="goodList" resultType="com.mall.entity.Good">
-        SELECT goodId, goodName, goodPrice, goodImage, goodState, buyerNum, categoryId, goodNum FROM Good
-        WHERE goodNum > 0
+        <choose>
+            <when test="privilege == 1">
+                SELECT goodId, goodName, goodPrice, goodImage, goodState, buyerNum, categoryId, goodNum FROM Good
+            </when>
+            <otherwise>
+                SELECT goodId, goodName, goodPrice, goodImage, goodState, buyerNum, categoryId, goodNum FROM Good
+                WHERE goodState = 0
+            </otherwise>
+        </choose>
+
         <if test="goodName != null">
             AND goodName LIKE CONCAT('%', #{goodName}, '%')
         </if>
@@ -65,6 +73,9 @@
             <if test="good.categoryId != null">
                 categoryId = #{good.categoryId},
             </if>
+            <if test="good.goodState != null">
+                goodState = #{good.goodState},
+            </if>
             <if test="good.goodNum != null">
                 goodNum = #{good.goodNum},
             </if>
@@ -79,7 +90,15 @@
 
     <!-- 统计商品种数 -->
     <select id="countGoods" resultType="Integer">
-        SELECT COUNT(*) FROM Good
+        <choose>
+            <when test="privilege == 1">
+                SELECT COUNT(*) FROM Good
+            </when>
+            <otherwise>
+                SELECT COUNT(*) FROM Good
+                WHERE goodState = 0
+            </otherwise>
+        </choose>
     </select>
 
     <!-- 更改商品状态 -->

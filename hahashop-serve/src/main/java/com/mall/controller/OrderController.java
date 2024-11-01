@@ -24,7 +24,8 @@ import static com.mall.common.StateEnum.*;
 @RestController
 @RequestMapping("/order")
 public class OrderController {
-
+    @Resource
+    private AuthService authService;
     @Resource
     private OrderService orderService;
     @Resource
@@ -34,7 +35,7 @@ public class OrderController {
     @Resource
     private TransformUtil transformUtil;
     @Resource
-    AuthService authService;
+    private StateChangeUtil stateChangeUtil;
 
     @RequestMapping("/buy")
     public Result<Object> addOrder(@RequestBody Order order) {//添加订单
@@ -49,7 +50,7 @@ public class OrderController {
         order.setOrderPrice(good.getGoodPrice());
         if (!checkUtil.isValidPhoneNumber(order.getBuyerPhone())||order.getBuyerGoodsNum() <= 0) {
             return ResultUtil.error(ILLEGAL_INFO);
-        } else if (good.getGoodState() == null || good.getGoodState() == 1) {
+        } else if (good.getGoodState() == 3) {
             return ResultUtil.error(GOOD_IS_FROZEN);
         }
 
@@ -118,7 +119,7 @@ public class OrderController {
     public Result<Object> completeOrder(@RequestBody Map<String, Object> orderRequest) {
         User user = checkUtil.tookenCheck();
         if(user.getPrivilege() != 1){ return ResultUtil.error(ILLEGAL_TOKEN);}
-        if(orderService.orderStateChange((Integer) orderRequest.get("orderId"), StateChangeUtil.StateChange(COMPLETE))){
+        if(orderService.orderStateChange((Integer) orderRequest.get("orderId"), stateChangeUtil.StateChange(COMPLETE))){
             return ResultUtil.success(SUCCESS, null);
         }else{
             return ResultUtil.error(UNKNOWN_ERROR);
@@ -129,7 +130,7 @@ public class OrderController {
     public Result<Object> cancelOrder(@RequestBody Map<String, Object> orderRequest) {
         User user = checkUtil.tookenCheck();
         if(user.getPrivilege() != 1){ return ResultUtil.error(ILLEGAL_TOKEN);}
-        if(orderService.orderStateChange((Integer) orderRequest.get("orderId"), StateChangeUtil.StateChange(CANCELED))){
+        if(orderService.orderStateChange((Integer) orderRequest.get("orderId"), stateChangeUtil.StateChange(CANCELED))){
             return ResultUtil.success(SUCCESS, null);
         }else{
             return ResultUtil.error(UNKNOWN_ERROR);

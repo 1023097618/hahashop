@@ -6,7 +6,8 @@ import lombok.Getter;
 public enum StateEnum {
     ACTIVE(0,"进行中"),
     CANCELED(1,"已完成"),
-    COMPLETE(2,"已取消");
+    COMPLETE(2,"已取消"),
+    SOLD_OUT(3,"已售罄")
     ;
     private final Integer state;
     private final String description;

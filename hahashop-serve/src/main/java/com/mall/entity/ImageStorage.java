@@ -7,10 +7,10 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ImageStorage {
-    Integer id;
-    String key;
-    String name;
-    String type;
-    Long size;
-    String url;
+    private Integer id;
+    private String key;
+    private String name;
+    private String type;
+    private Long size;
+    private String url;
 }

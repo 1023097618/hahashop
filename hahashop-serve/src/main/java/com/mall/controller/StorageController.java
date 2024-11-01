@@ -21,7 +21,9 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
+import java.net.URLEncoder;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -41,7 +43,7 @@ public class StorageController {
 
     @Value("${file.image-dir}") String imageDir;
 
-    private final String baseurl = "https://localhost:8081/storage/fetch/";
+    private final String baseurl = "http://localhost:8081/storage/fetch/";
 
     @RequestMapping ("/upload")
     public Result<Object> upload(@RequestParam("file") MultipartFile file) throws IOException {
@@ -51,33 +53,36 @@ public class StorageController {
         String originalFilename = file.getOriginalFilename();
         //key生成
         String key = UUID.randomUUID().toString()+"_"+originalFilename;
+        String encodedKey = URLEncoder.encode(key,"UTF-8");//统一编码
         //Storage构造
         ImageStorage imageStorage = new ImageStorage();
         imageStorage.setName(originalFilename);
-        imageStorage.setKey(key);
+        imageStorage.setKey(encodedKey);
         imageStorage.setSize(file.getSize());
-        imageStorage.setType(originalFilename.substring(originalFilename.lastIndexOf(".")));
-        imageStorage.setUrl(baseurl + key);
+        imageStorage.setUrl(baseurl + encodedKey);
+//        imageStorage.setType(originalFilename.substring(originalFilename.lastIndexOf(".")));
+        imageStorage.setType(Files.probeContentType(Paths.get(imageDir+key)));
         //数据库存入
         Map<String, Object> data = imageStorageService.store(imageStorage);
+
         if(data.get("id") != null){
-            Files.copy(file.getInputStream(), Paths.get(imageDir).toAbsolutePath().normalize().resolve(key));
+            Files.copy(file.getInputStream(), Paths.get(imageDir).toAbsolutePath().normalize().resolve(encodedKey));
         }
         return ResultUtil.success(SUCCESS,data);
     }
 
     @RequestMapping("/fetch/{key:.+}")
-    public ResponseEntity<Resource> fetch(@PathVariable String key) throws MalformedURLException {
+    public ResponseEntity<Resource> fetch(@PathVariable String key) throws MalformedURLException, UnsupportedEncodingException {
+        key = URLEncoder.encode(key, "UTF-8");
         ImageStorage imageStorage = imageStorageService.findByKey(key);
         if (imageStorage == null || key == null) {
             return ResponseEntity.notFound().build();
         }
-        if (key.contains("../")) {
-            return ResponseEntity.badRequest().build();
+        if (key.contains("../")) {//防止路径穿透攻击
+            return ResponseEntity.notFound().build();
         }
         String type = imageStorage.getType();
         MediaType mediaType = MediaType.parseMediaType(type);
-
         Path filePath = Paths.get(imageDir).toAbsolutePath().normalize().resolve(key);
         if(!Files.exists(filePath) || !Files.isReadable(filePath)){
             return ResponseEntity.notFound().build();
@@ -89,7 +94,4 @@ public class StorageController {
         }
         return ResponseEntity.ok().contentType(mediaType).body(file);
     }
-
-
-
 }
