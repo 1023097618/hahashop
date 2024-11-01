@@ -8,11 +8,11 @@ import java.util.Date;
 @Setter
 @Getter
 public class History {
-    Integer historyId;//主键 数据库自增
-    Integer goodId;
-    String goodName;
-    String goodDesc;
-    String goodPrice;
-    String goodImage;
-    String operationTime;
+    private Integer historyId;//主键 数据库自增
+    private Integer goodId;
+    private String goodName;
+    private String goodDesc;
+    private String goodPrice;
+    private String goodImage;
+    private String operationTime;
 }

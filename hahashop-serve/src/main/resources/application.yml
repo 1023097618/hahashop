@@ -9,7 +9,10 @@ spring:
 logging:
   level:
     com.example.demo.mapper: debug
-
+servlet:
+  multipart:
+    max-file-size: 100MB   # 设置最大文件大小
+    max-request-size: 100MB  # 设置最大请求大小
 
 # mybatis配置
 mybatis:

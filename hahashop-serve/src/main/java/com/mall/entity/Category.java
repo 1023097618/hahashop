@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Category {
-    Integer categoryId;
-    String categoryName;
-    Integer pid;
+    private Integer categoryId;
+    private String categoryName;
+    private Integer pid;
 }

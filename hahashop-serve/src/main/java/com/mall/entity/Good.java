@@ -8,13 +8,13 @@ import lombok.Setter;
 @Setter
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Good {
-    Integer goodId;//数据库自增
-    String goodName;
-    String goodDesc;
-    String goodPrice;
-    String[] goodImage;
-    Integer goodState;
-    Integer categoryId;//二级分类ID
-    Integer buyerNum;
-    Integer goodNum;
+    private Integer goodId;//数据库自增
+    private String goodName;
+    private String goodDesc;
+    private String goodPrice;
+    private String[] goodImage;
+    private Integer goodState;
+    private Integer categoryId;//二级分类ID
+    private Integer buyerNum;
+    private Integer goodNum;
 }
