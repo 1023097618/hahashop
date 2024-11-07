@@ -18,12 +18,13 @@ public class HistroyServiceImpl implements HistoryService {
     private HistoryDao histroyDao;
 
     @Override
-    public void addHistory(Good good) {
+    public void addHistory(Good good, String goodImage) {
         History history = new History();
         history.setGoodId(good.getGoodId());
         history.setGoodName(good.getGoodName());
         history.setGoodPrice(good.getGoodPrice());
         history.setGoodDesc(good.getGoodDesc());
+        history.setGoodImage(goodImage);
         // 创建日期对象
         Date date = new Date();
         // 使用 SimpleDateFormat 格式化日期为"yyyy-MM-dd"
@@ -34,9 +35,7 @@ public class HistroyServiceImpl implements HistoryService {
     }
 
     @Override
-    public Integer deleteHistory(Integer id) {
-        return histroyDao.deleteHistory(id);
-    }
+    public Integer deleteHistory(Integer id) { return histroyDao.deleteHistory(id);}
 
     @Override
     public List<History> getHistory(Integer pageSize, Integer pageNum) {
@@ -47,4 +46,7 @@ public class HistroyServiceImpl implements HistoryService {
     public Integer countHistory() {
         return histroyDao.countHistory();
     }
+
+    @Override
+    public Boolean findHistoryById(Integer historyId) { return histroyDao.findHistoryByhistoryId(historyId) > 0;}
 }

@@ -14,6 +14,6 @@ public interface OrderDao {
     Integer countOrdersByExample(@Param("userId") Integer userId, @Param("goodId") Integer goodId);
 
     Integer orderStateChange(@Param("orderId") Integer orderId, @Param("orderState") Integer orderState);
-
+    Integer findOrderByorderId(@Param("orderId") Integer orderId);
 
 }

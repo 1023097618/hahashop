@@ -52,17 +52,22 @@ public class GoodController {
                 user = authService.login(user.getUsername());
             }
 
-            List<Good> goodList = goodService.goodList(pageSize, pageNum, goodName, categoryId, user.getPrivilege());
-            Integer totalGoods = goodService.countGoods(user.getPrivilege());
-            if(token == null || user.getPrivilege() == 2){
-                for (Good good : goodList) {
-                    good.setBuyerNum(0);
+            try{
+                List<Good> goodList = goodService.goodList(pageSize, pageNum, goodName, categoryId, user.getPrivilege());
+                Integer totalGoods = goodService.countGoods(user.getPrivilege());
+                if(token == null || user.getPrivilege() == 2){
+                    for (Good good : goodList) {
+                        good.setBuyerNum(0);
+                    }
                 }
+                data.put("goods", goodList);
+                data.put("totalGoods", totalGoods);
+            }catch (Exception e){
+                return ResultUtil.error(EXAMPLE_NOT_EXIST);
             }
+        return ResultUtil.success(SUCCESS, data);}
 
-            data.put("goods", goodList);
-            data.put("totalGoods", totalGoods);
-            return ResultUtil.success(SUCCESS, data);}
+
         else if (JwtTokenUtil.decodeToken(token) == null) {
             return ResultUtil.error(ILLEGAL_TOKEN);
         }
@@ -80,7 +85,7 @@ public class GoodController {
         if (goodDesc != null) {
             return ResultUtil.success(SUCCESS, data);
         } else {
-            return ResultUtil.error(UNKNOWN_ERROR);
+            return ResultUtil.error(EXAMPLE_NOT_EXIST);
         }
     }
 
@@ -90,7 +95,7 @@ public class GoodController {
 
         if(user!=null && user.getPrivilege() != 1){ return ResultUtil.error(ILLEGAL_TOKEN); }
         if (goodService.getGoodById(good.getGoodId()) == null) {
-            return ResultUtil.error(GOOD_NOT_EXIST);
+            return ResultUtil.error(EXAMPLE_NOT_EXIST);
         }
         if (goodService.updateGood(good)) {
             return ResultUtil.success(SUCCESS, null);
@@ -117,7 +122,7 @@ public class GoodController {
 
         Integer goodId = Integer.valueOf(map.get("goodId").toString());
         if (goodService.getGoodById(goodId) == null) {
-            return ResultUtil.error(GOOD_NOT_EXIST);
+            return ResultUtil.error(EXAMPLE_NOT_EXIST);
         } else if (goodService.deleteGood(goodId)) {
             return ResultUtil.success(SUCCESS, null);
         } else {
@@ -127,31 +132,31 @@ public class GoodController {
 
     @RequestMapping("/category")
     public Result<Object> goodCategory() {
-        Map<String, Object> data = new HashMap<>();
-        List<Map<String, Object>> categoryList = new ArrayList<>();
+        try{
+            Map<String, Object> data = new HashMap<>();
+            List<Map<String, Object>> categoryList = new ArrayList<>();
+            List<Category> fathers = categoryService.findByCategoryPid(0);
 
-        List<Category> fathers = categoryService.findByCategoryPid(0);
-
-        for (Category category : fathers) {
-            Map<String, Object> fatherMap = new HashMap<>();//父，一个父级一个
-            fatherMap.put("label", category.getCategoryName());
-            fatherMap.put("value", category.getCategoryId());
-            List<Map<String, Object>> children = new ArrayList<>();//子级
-            List<Category> child = categoryService.findByCategoryPid(category.getCategoryId());//父级id是子级的pid
-            for (Category childCategory : child) {
-                Map<String, Object> childMap = new HashMap<>();
-                childMap.put("label", childCategory.getCategoryName());
-                childMap.put("value", childCategory.getCategoryId());
-                children.add(childMap);
+            for (Category category : fathers) {
+                Map<String, Object> fatherMap = new HashMap<>();//父，一个父级一个
+                fatherMap.put("label", category.getCategoryName());
+                fatherMap.put("value", category.getCategoryId());
+                List<Map<String, Object>> children = new ArrayList<>();//子级
+                List<Category> child = categoryService.findByCategoryPid(category.getCategoryId());//父级id是子级的pid
+                for (Category childCategory : child) {
+                    Map<String, Object> childMap = new HashMap<>();
+                    childMap.put("label", childCategory.getCategoryName());
+                    childMap.put("value", childCategory.getCategoryId());
+                    children.add(childMap);
+                }
+                fatherMap.put("children", children);//对应的子级置入
+                categoryList.add(fatherMap);//
+                data.put("categoryList", categoryList);
             }
-            fatherMap.put("children", children);//对应的子级置入
-            categoryList.add(fatherMap);//
+            return ResultUtil.success(SUCCESS, data);
+        }catch (Exception e){
+            return ResultUtil.error(EXAMPLE_NOT_EXIST);
         }
-        data.put("categoryList", categoryList);
-        return ResultUtil.success(SUCCESS, data);
     }
-
-
-
 }
 

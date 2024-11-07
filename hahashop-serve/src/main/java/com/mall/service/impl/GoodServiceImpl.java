@@ -70,7 +70,7 @@ public class GoodServiceImpl implements GoodService {
 
         Integer rowsAffected = goodDao.addGood(good, goodImage);
         if(rowsAffected > 0){//插入成功就加记录
-            historyService.addHistory(good);
+            historyService.addHistory(good, good.getGoodImage()[0]);
         }
         return rowsAffected > 0;
     }
@@ -85,7 +85,7 @@ public class GoodServiceImpl implements GoodService {
         Integer rowsAffected = goodDao.updateGood(good, goodImage);
         good = goodDao.getGoodById(good.getGoodId());
         if(rowsAffected > 0){//插入成功就加记录
-            historyService.addHistory(good);
+            historyService.addHistory(good, good.getGoodImage()[0]);
         }
         return rowsAffected > 0;
     }

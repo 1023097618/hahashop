@@ -44,14 +44,14 @@ public class OrderController {
 
         Good good = goodService.getGoodById(order.getGoodId());
         if (good == null) {
-            return ResultUtil.error(GOOD_NOT_EXIST);
+            return ResultUtil.error(EXAMPLE_NOT_EXIST);
         }
 
         order.setOrderPrice(good.getGoodPrice());
         if (!checkUtil.isValidPhoneNumber(order.getBuyerPhone())||order.getBuyerGoodsNum() <= 0) {
             return ResultUtil.error(ILLEGAL_INFO);
         } else if (good.getGoodState() == 3) {
-            return ResultUtil.error(GOOD_IS_FROZEN);
+            return ResultUtil.error(GOOD_IS_SELLOUT);
         }
 
         user = authService.login(user.getUsername());
@@ -68,48 +68,57 @@ public class OrderController {
         if(checkUtil.tookenCheck().getPrivilege() != 1 && checkUtil.tookenCheck().getPrivilege() != 2){ return ResultUtil.error(ILLEGAL_TOKEN);}
         User user = checkUtil.tookenCheck();
         if(user.getPrivilege() == 1){
-            List<Order> allOrder = orderService.getOrdersByExample(pageSize, pageNum, userId, goodId);
-            List<Map<String, Object>> orders = new ArrayList<>();
-            for(Order order : allOrder){
-                Map<String,Object> o = new HashMap<>();
-                o.put("buyerPhone",order.getBuyerPhone());
-                o.put("buyerAddress",order.getBuyerAddress());
-                o.put("buyerDesc",order.getBuyerDesc());
-                o.put("orderId",order.getOrderId());
-                o.put("buyerRealName",order.getBuyerRealName());
-                o.put("orderState",order.getOrderState());
-                o.put("buyerGoodsNum",order.getBuyerGoodsNum());
-                orders.add(o);
+            try{
+                List<Order> allOrder = orderService.getOrdersByExample(pageSize, pageNum, userId, goodId);
+                List<Map<String, Object>> orders = new ArrayList<>();
+                for(Order order : allOrder){
+                    Map<String,Object> o = new HashMap<>();
+                    o.put("buyerPhone",order.getBuyerPhone());
+                    o.put("buyerAddress",order.getBuyerAddress());
+                    o.put("buyerDesc",order.getBuyerDesc());
+                    o.put("orderId",order.getOrderId());
+                    o.put("buyerRealName",order.getBuyerRealName());
+                    o.put("orderState",order.getOrderState());
+                    o.put("buyerGoodsNum",order.getBuyerGoodsNum());
+                    orders.add(o);
+                }
+                Integer totalOrders = orderService.countOrdersByExample(userId, goodId);
+                Map<String,Object> data = new HashMap<>();
+                data.put("orders",orders);
+                data.put("totalOrders",totalOrders);
+                return ResultUtil.success(SUCCESS,data);
+            } catch (Exception e) {
+                return ResultUtil.error(EXAMPLE_NOT_EXIST);
             }
-            Integer totalOrders = orderService.countOrdersByExample(userId, goodId);
-            Map<String,Object> data = new HashMap<>();
-            data.put("orders",orders);
-            data.put("totalOrders",totalOrders);
-            return ResultUtil.success(SUCCESS,data);
         }else if(user.getPrivilege() == 2){
-            List<Order> allOrder = orderService.getOrdersByExample(pageSize, pageNum, user.getUserId(), goodId);
-            List<Map<String, Object>> orders = new ArrayList<>();
-            for(Order order : allOrder){
-                Good good = goodService.getGoodById(order.getGoodId());
-                Map<String,Object> o = new HashMap<>();
-                o.put("buyerPhone",order.getBuyerPhone());
-                o.put("buyerAddress",order.getBuyerAddress());
-                o.put("buyerDesc",order.getBuyerDesc());
-                o.put("orderId",order.getOrderId());
-                o.put("buyerRealName",order.getBuyerRealName());
-                o.put("goodId",order.getGoodId());
-                o.put("goodImage",transformUtil.stringToStringArray(good.getGoodImage())[0]);
-                o.put("goodName",good.getGoodName());
-                o.put("goodPrice",good.getGoodPrice());
-                o.put("orderState",order.getOrderState());
-                o.put("buyerGoodsNum",order.getBuyerGoodsNum());
-                orders.add(o);
+            try{
+                List<Order> allOrder = orderService.getOrdersByExample(pageSize, pageNum, user.getUserId(), goodId);
+                List<Map<String, Object>> orders = new ArrayList<>();
+                for(Order order : allOrder){
+                    Good good = goodService.getGoodById(order.getGoodId());
+                    Map<String,Object> o = new HashMap<>();
+                    o.put("buyerPhone",order.getBuyerPhone());
+                    o.put("buyerAddress",order.getBuyerAddress());
+                    o.put("buyerDesc",order.getBuyerDesc());
+                    o.put("orderId",order.getOrderId());
+                    o.put("buyerRealName",order.getBuyerRealName());
+                    o.put("goodId",order.getGoodId());
+                    o.put("goodImage",transformUtil.stringToStringArray(good.getGoodImage())[0]);
+                    o.put("goodName",good.getGoodName());
+                    o.put("goodPrice",good.getGoodPrice());
+                    o.put("orderState",order.getOrderState());
+                    o.put("buyerGoodsNum",order.getBuyerGoodsNum());
+                    orders.add(o);
+                }
+                Integer totalOrders = orderService.countOrdersByExample(user.getUserId(), goodId);
+                Map<String,Object> data = new HashMap<>();
+                data.put("orders",orders);
+                data.put("totalOrders",totalOrders);
+                return ResultUtil.success(SUCCESS,data);
+            } catch (Exception e) {
+                return ResultUtil.error(EXAMPLE_NOT_EXIST);
             }
-            Integer totalOrders = orderService.countOrdersByExample(user.getUserId(), goodId);
-            Map<String,Object> data = new HashMap<>();
-            data.put("orders",orders);
-            data.put("totalOrders",totalOrders);
-            return ResultUtil.success(SUCCESS,data);
+
         }else {
             return ResultUtil.error(ILLEGAL_INFO);
         }
@@ -119,6 +128,7 @@ public class OrderController {
     public Result<Object> completeOrder(@RequestBody Map<String, Object> orderRequest) {
         User user = checkUtil.tookenCheck();
         if(user.getPrivilege() != 1){ return ResultUtil.error(ILLEGAL_TOKEN);}
+        if(!orderService.findOrderByorderId((Integer) orderRequest.get("orderId"))){ return ResultUtil.error(EXAMPLE_NOT_EXIST);}
         if(orderService.orderStateChange((Integer) orderRequest.get("orderId"), stateChangeUtil.StateChange(COMPLETE))){
             return ResultUtil.success(SUCCESS, null);
         }else{
@@ -126,10 +136,11 @@ public class OrderController {
         }
     }
 
-    @RequestMapping("cancelsell")
+    @RequestMapping("/cancelsell")
     public Result<Object> cancelOrder(@RequestBody Map<String, Object> orderRequest) {
         User user = checkUtil.tookenCheck();
         if(user.getPrivilege() != 1){ return ResultUtil.error(ILLEGAL_TOKEN);}
+        if(!orderService.findOrderByorderId((Integer) orderRequest.get("orderId"))){ return ResultUtil.error(EXAMPLE_NOT_EXIST); }
         if(orderService.orderStateChange((Integer) orderRequest.get("orderId"), stateChangeUtil.StateChange(CANCELED))){
             return ResultUtil.success(SUCCESS, null);
         }else{
