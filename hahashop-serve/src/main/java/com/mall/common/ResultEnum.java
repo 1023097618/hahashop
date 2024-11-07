@@ -9,14 +9,11 @@ public enum ResultEnum {
     ILLEGAL_TOKEN(201, "token不合法"),
     USER_NOT_EXIST(301, "用户不存在"),
     WRONG_PASSWORD(302, "密码错误"),
-    GOOD_NOT_EXIST(303, "商品不存在"),
-    GOOD_IS_FROZEN(304, "商品已经被冻结"),
-    ILLEGAL_INFO(305, "输入信息不合法"),
-    OVER_RANGE(306,"购买商品超出库存"),
-    REPEAT_INFO(307,"购买失败，同一件商品重复填入信息"),
-    GOOD_IS_ACTIVE(308,"撤销贩卖失败，商品未被冻结"),
-    HISTORY_NOT_EXIST(309,"历史信息不存在"),
-    USER_HAS_EXIST(310,"用户名已存在"),
+    EXAMPLE_NOT_EXIST(303, "操作对象找不到了"),
+    USER_HAS_EXIST(304,"用户名已存在"),
+    GOOD_IS_SELLOUT(305, "商品已经卖完啦"),
+    ILLEGAL_INFO(306, "输入信息不合法"),
+    OVER_RANGE(307,"购买商品超出库存"),
     ;
 
     private final int code; // 使用 final 修饰，确保值不可变

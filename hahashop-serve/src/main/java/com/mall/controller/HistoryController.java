@@ -37,11 +37,12 @@ public class HistoryController {
 
     @RequestMapping("/delete")
     public Result<Object> delete(@RequestBody History history) {
+        if (!historyService.findHistoryById(history.getHistoryId())){ return ResultUtil.error(EXAMPLE_NOT_EXIST); }
         Integer rowsAffected = historyService.deleteHistory(history.getHistoryId());
         if (rowsAffected > 0) {
             return ResultUtil.success(SUCCESS,null);
         }else{
-            return ResultUtil.error(HISTORY_NOT_EXIST);
+            return ResultUtil.error(UNKNOWN_ERROR);
         }
     }
 }

@@ -10,4 +10,5 @@ public interface OrderService {
     List<Order> getOrdersByExample(Integer pageSize, Integer pageNum, Integer userId, Integer goodId);//获取所有的订单
     Integer countOrdersByExample(Integer userId, Integer goodId);
     Boolean orderStateChange(Integer orderId, Integer orderState);
+    Boolean findOrderByorderId(Integer orderId);
 }

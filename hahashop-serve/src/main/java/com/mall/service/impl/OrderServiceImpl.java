@@ -60,4 +60,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Boolean orderStateChange(Integer orderId, Integer orderState) { return orderDao.orderStateChange(orderId, orderState) > 0; }
+
+    @Override
+    public Boolean findOrderByorderId(Integer orderId) { return orderDao.findOrderByorderId(orderId) > 0; }
 }
