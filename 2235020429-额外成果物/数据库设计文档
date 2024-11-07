@@ -1,0 +1,108 @@
+<h2 id="th">三、技术需求</h2>
+
+<h3 id="tho">3.1数据库设计</h3>
+
+**汇总表**
+
+一共有六张表，如下
+
+|表名|含义|
+|---|---|
+|User|用户表|
+|Good|商品表|
+|Orders|订单表|
+|History|历史商品表|
+|Category|类别表|
+|Storage|图片信息表|
+
+ **1. 用户表（User）** 
+
+| 名 | 含义| 类型 | 规范以及说明|
+|---|---|---|---|
+| id | 用户ID |INTEGER |主键，自动生成|
+| username |用户名 |TEXT|唯一，不为空|
+|password|密码|TEXT|加密存储，不为空|
+|privilege|用户权限|INTEGER|不为空，1为卖家，2为买家|
+|userPhone|电话|VARCHAR|大小为20|
+|userAddress|交易地址|VARCHAR|大小为255|
+|userRealName|买家真实姓名|VARCHAR|大小为100|
+
+ **2. 商品表(Good)** 
+
+| 名 | 含义| 类型 | 规范以及说明|
+|---|---|---|---|
+|goodId|商品ID|INTEGER|主键，自动生成|
+|goodName|商品名称|TEXT|不为空|
+|goodDesc|商品描述|TEXT|可以是文本、图片与视频；图片和视频存放链接|
+|goodPrice|商品价格|REAL|不为空|
+|goodImage|商品图片|TEXT|存放图片链接。当有多个图片时，多个链接之间用逗号分隔|
+|buyerNum|购买数量|INTEGER||
+|categoryId|类别ID|INTEGER|不为空，为类别（Category）表的外键|
+|goodNum|商品数量|INTEGER|不为空|
+
+ **3. 订单表(Orders)**  
+
+| 名 | 含义| 类型 | 规范以及说明|
+|---|---|---|---|
+|orderId|订单ID|INTEGER|主键，自动生成|
+|goodId|商品ID|INTEGER|不为空，商品（Good）表的外键|
+|userId|用户ID|INTEGER|不为空，用户（User）表的外键|
+|buyerName|买家名字|TEXT|不为空|
+|buyerAddress|买家地址|TEXT|不为空|
+|buyerPhone|买家电话|TEXT|不为空|
+|buyerDesc|买家备注|TEXT||
+|orderState|订单状态|INTEGER|不为空，0：进行中， 1：已完成， 2：已取消|
+|buyerGoodsNum|买家购买数量|INTEGER|不为空|
+|orderPrice|订单价格|REAL||
+
+ **4. 历史商品表(History）** 
+
+| 名 | 含义| 类型 | 规范以及说明|
+|---|---|---|---|
+|historyId|历史ID|INTEGER|主键，自动生成|
+|goodId|商品ID|INTEGER|不为空，商品表（Good)的外键|
+|goodName|商品名称|VARCHAR|大小为255|
+|goodDesc|商品描述|TEXT||
+|goodPrice|商品价格|REAL||
+|goodImage|商品图片|TEXT|为商品表中商品图片的第一个链接|
+|operationTime|上架时间|TEXT||
+
+**5.类别表（Category）**
+
+| 名 | 含义| 类型 | 规范以及说明|
+|---|---|---|---|
+|categoryId|类别ID|INTEGER|主键，自动生成|
+|categoryName|类别名称|VARCHAR|大小为255，不为空|
+|pid|父级id|INTEGER|类别是一级则为0，二级则为1|
+
+**6.图片信息表（Storage）**
+
+| 名 | 含义| 类型 | 规范以及说明|
+|---|---|---|---|
+|id |图片信息ID|INTEGER|主键，自动生成|
+|key|图片唯一名称|TEXT|图片的唯一索引|
+|name|图片名称|TEXT|
+|type|图片类型|TEXT|例如：jpg,png等|
+|size|图片大小|TEXT|
+|url|图片链接|TEXT|
+
+
+<h3 id="tht">3.2数据规范</h3>
+
+- 商品名称：长度不超过255个字符，支持中英文及特殊字符。
+
+- 商品描述：无长度限制，支持富媒体展示，如文字、图片和视频等。
+
+- 商品图片：图片应上传至服务器并存储其URL链接，支持常见图片格式（JPEG, PNG等），图片大小不超过5MB。
+
+- 商品价格：格式为数字，保留两位小数，支持正数表示价格。
+
+- 商品库存：格式为数字，发布商品时，只能大于0 。
+
+- 用户名：长度在5-20个字符之间，支持中英文及数字，唯一性校验。
+
+- 用户密码：采用强密码策略（至少8位，包含大小写字母、数字和特殊字符），并且加密存储。
+
+- 用户号码：是11位有效号码，同一个买家在购买不同的商品时填写的号码应该保持一致。
+
+- 用户地址：包含包含省、市、区（县）、街道（乡镇）及具体的门牌号或小区名称、楼栋号、单元号等信息。避免使用模糊或产生歧义的词汇，如“附近”“旁边”等。
