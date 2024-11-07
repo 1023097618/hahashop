@@ -30,8 +30,7 @@ import java.nio.file.Paths;
 import java.util.Map;
 import java.util.UUID;
 
-import static com.mall.common.ResultEnum.SUCCESS;
-import static com.mall.common.ResultEnum.UNKNOWN_ERROR;
+import static com.mall.common.ResultEnum.*;
 
 @RestController
 @RequestMapping("/storage")
@@ -48,7 +47,7 @@ public class StorageController {
     @RequestMapping ("/upload")
     public Result<Object> upload(@RequestParam("file") MultipartFile file) throws IOException {
 
-        if(checkUtil.tookenCheck().getPrivilege() != 1){ResultUtil.error(UNKNOWN_ERROR);}
+        if(checkUtil.tookenCheck().getPrivilege() != 1){return ResultUtil.error(ILLEGAL_TOKEN);}
         //图片名获取（含扩展名）
         String originalFilename = file.getOriginalFilename();
         //key生成
