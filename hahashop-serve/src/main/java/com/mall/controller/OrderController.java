@@ -93,34 +93,6 @@ public class OrderController {
                 return ResultUtil.error(EXAMPLE_NOT_EXIST);
             }
         }else if(user.getPrivilege() == 2){
-<<<<<<< HEAD
-            try{
-                List<Order> allOrder = orderService.getOrdersByExample(pageSize, pageNum, user.getUserId(), goodId);
-                List<Map<String, Object>> orders = new ArrayList<>();
-                for(Order order : allOrder){
-                    Good good = goodService.getGoodById(order.getGoodId());
-                    Map<String,Object> o = new HashMap<>();
-                    o.put("buyerPhone",order.getBuyerPhone());
-                    o.put("buyerAddress",order.getBuyerAddress());
-                    o.put("buyerDesc",order.getBuyerDesc());
-                    o.put("orderId",order.getOrderId());
-                    o.put("buyerRealName",order.getBuyerRealName());
-                    o.put("goodId",order.getGoodId());
-                    o.put("goodImage",transformUtil.stringToStringArray(good.getGoodImage())[0]);
-                    o.put("goodName",good.getGoodName());
-                    o.put("goodPrice",good.getGoodPrice());
-                    o.put("orderState",order.getOrderState());
-                    o.put("buyerGoodsNum",order.getBuyerGoodsNum());
-                    orders.add(o);
-                }
-                Integer totalOrders = orderService.countOrdersByExample(user.getUserId(), goodId);
-                Map<String,Object> data = new HashMap<>();
-                data.put("orders",orders);
-                data.put("totalOrders",totalOrders);
-                return ResultUtil.success(SUCCESS,data);
-            } catch (Exception e) {
-                return ResultUtil.error(EXAMPLE_NOT_EXIST);
-=======
             List<Order> allOrder = orderService.getOrdersByExample(pageSize, pageNum, user.getUserId(), goodId);
             List<Map<String, Object>> orders = new ArrayList<>();
             for(Order order : allOrder){
@@ -144,9 +116,12 @@ public class OrderController {
                 o.put("orderState",order.getOrderState());
                 o.put("buyerGoodsNum",order.getBuyerGoodsNum());
                 orders.add(o);
->>>>>>> serve
             }
-
+            Integer totalOrders = orderService.countOrdersByExample(user.getUserId(), goodId);
+            Map<String,Object> data = new HashMap<>();
+            data.put("orders",orders);
+            data.put("totalOrders",totalOrders);
+            return ResultUtil.success(SUCCESS,data);
         }else {
             return ResultUtil.error(ILLEGAL_INFO);
         }

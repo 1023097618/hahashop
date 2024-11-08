@@ -27,7 +27,7 @@
 
     <!--根据商品ID获取单个商品-->
     <select id="getGoodById" parameterType="Integer" resultType="com.mall.entity.Good">
-        SELECT goodId, goodName, goodPrice, goodImage, goodState, buyerNum, categoryId
+        SELECT goodId, goodName, goodPrice, goodImage, goodState, buyerNum, categoryId, goodNum
         FROM Good
         WHERE goodId = #{goodId}
     </select>
