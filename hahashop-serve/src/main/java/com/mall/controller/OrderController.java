@@ -50,15 +50,10 @@ public class OrderController {
         order.setOrderPrice(good.getGoodPrice());
         if (!checkUtil.isValidPhoneNumber(order.getBuyerPhone())||order.getBuyerGoodsNum() <= 0) {
             return ResultUtil.error(ILLEGAL_INFO);
-<<<<<<< HEAD
-        } else if (good.getGoodState() == 3) {
-            return ResultUtil.error(GOOD_IS_SELLOUT);
-=======
         } else if (good.getGoodState().equals(SOLD_OUT.getState())) {
             return ResultUtil.error(GOOD_IS_SELLOUT);
         } else if (order.getBuyerGoodsNum() > good.getGoodNum()) {
             return ResultUtil.error(OVER_RANGE);
->>>>>>> serve
         }
 
         user = authService.login(user.getUsername());
