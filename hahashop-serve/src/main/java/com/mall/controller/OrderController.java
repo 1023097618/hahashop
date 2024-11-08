@@ -50,8 +50,15 @@ public class OrderController {
         order.setOrderPrice(good.getGoodPrice());
         if (!checkUtil.isValidPhoneNumber(order.getBuyerPhone())||order.getBuyerGoodsNum() <= 0) {
             return ResultUtil.error(ILLEGAL_INFO);
+<<<<<<< HEAD
         } else if (good.getGoodState() == 3) {
             return ResultUtil.error(GOOD_IS_SELLOUT);
+=======
+        } else if (good.getGoodState().equals(SOLD_OUT.getState())) {
+            return ResultUtil.error(GOOD_IS_SELLOUT);
+        } else if (order.getBuyerGoodsNum() > good.getGoodNum()) {
+            return ResultUtil.error(OVER_RANGE);
+>>>>>>> serve
         }
 
         user = authService.login(user.getUsername());
@@ -91,6 +98,7 @@ public class OrderController {
                 return ResultUtil.error(EXAMPLE_NOT_EXIST);
             }
         }else if(user.getPrivilege() == 2){
+<<<<<<< HEAD
             try{
                 List<Order> allOrder = orderService.getOrdersByExample(pageSize, pageNum, user.getUserId(), goodId);
                 List<Map<String, Object>> orders = new ArrayList<>();
@@ -117,6 +125,31 @@ public class OrderController {
                 return ResultUtil.success(SUCCESS,data);
             } catch (Exception e) {
                 return ResultUtil.error(EXAMPLE_NOT_EXIST);
+=======
+            List<Order> allOrder = orderService.getOrdersByExample(pageSize, pageNum, user.getUserId(), goodId);
+            List<Map<String, Object>> orders = new ArrayList<>();
+            for(Order order : allOrder){
+                Good good = goodService.getGoodById(order.getGoodId());
+                Map<String,Object> o = new HashMap<>();
+                o.put("buyerPhone",order.getBuyerPhone());
+                o.put("buyerAddress",order.getBuyerAddress());
+                o.put("buyerDesc",order.getBuyerDesc());
+                o.put("orderId",order.getOrderId());
+                o.put("buyerRealName",order.getBuyerRealName());
+                if(good == null){
+                    o.put("goodImage", null);
+                    o.put("goodName", "该商品已被下架");
+                    o.put("goodId", -1);
+                }else{
+                    o.put("goodImage",transformUtil.stringToStringArray(good.getGoodImage())[0]);
+                    o.put("goodName",good.getGoodName());
+                    o.put("goodId",order.getGoodId());
+                }
+                o.put("goodPrice",order.getOrderPrice());
+                o.put("orderState",order.getOrderState());
+                o.put("buyerGoodsNum",order.getBuyerGoodsNum());
+                orders.add(o);
+>>>>>>> serve
             }
 
         }else {
