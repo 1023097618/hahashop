@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static com.mall.common.ResultEnum.GOOD_IS_SELLOUT;
 import static com.mall.common.StateEnum.SOLD_OUT;
 
 @Service
@@ -21,7 +22,7 @@ public class OrderServiceImpl implements OrderService {
     private OrderDao orderDao;
     @Resource
     private GoodDao goodDao;
-    @Autowired
+    @Resource
     private StateChangeUtil stateChangeUtil;
 
     @Override
@@ -33,9 +34,9 @@ public class OrderServiceImpl implements OrderService {
             if(good.getGoodNum() >= order.getBuyerGoodsNum()) {//库存检查，库存够就add订单
                 orderDao.addOrder(order);
                 goodDao.buyerNumUpdate(order.getGoodId());
-                goodDao.goodNumChange(order.getOrderId(), order.getBuyerGoodsNum());
+                goodDao.goodNumChange(order.getGoodId(), order.getBuyerGoodsNum());
                 if(good.getGoodNum() == order.getBuyerGoodsNum()) {
-                    order.setOrderState(stateChangeUtil.StateChange(SOLD_OUT));
+                    goodDao.stateChange(good.getGoodId(), stateChangeUtil.StateChange(SOLD_OUT));
                 }
                 return true;
             }else{
