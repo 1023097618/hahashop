@@ -108,6 +108,7 @@ public class GoodController {
     public Result<Object> goodAdd(@RequestBody Good good) {
         User user = checkUtil.tookenCheck(); System.out.println(good.getGoodNum());
         if(user!=null && user.getPrivilege() != 1){ return ResultUtil.error(ILLEGAL_TOKEN); }
+        if(good.getGoodImage() == null){ return ResultUtil.error(EXAMPLE_NOT_EXIST); }
         if (goodService.addGood(good)) {
             return ResultUtil.success(SUCCESS, null);
         } else {
