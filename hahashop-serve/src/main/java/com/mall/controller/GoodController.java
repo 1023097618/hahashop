@@ -54,7 +54,7 @@ public class GoodController {
 
             try{
                 List<Good> goodList = goodService.goodList(pageSize, pageNum, goodName, categoryId, user.getPrivilege());
-                Integer totalGoods = goodService.countGoods(user.getPrivilege());
+                Integer totalGoods = goodService.countGoods(user.getPrivilege(), goodName, categoryId);
                 if(token == null || user.getPrivilege() == 2){
                     for (Good good : goodList) {
                         good.setBuyerNum(0);

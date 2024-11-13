@@ -46,7 +46,7 @@
     </update>
 
     <!-- 增加商品 -->
-    <insert id="addGood" parameterType="com.mall.entity.Good">
+    <insert id="addGood" parameterType="com.mall.entity.Good" useGeneratedKeys="true" keyProperty="goodId">
         INSERT INTO Good (goodName, goodPrice, goodDesc, goodImage, buyerNum, goodState, categoryId, goodNum)
         VALUES (#{good.goodName}, #{good.goodPrice}, #{good.goodDesc}, #{good.goodImage}, #{good.buyerNum}, #{good.goodState}, #{good.categoryId}, #{good.goodNum})
     </insert>
@@ -90,15 +90,30 @@
 
     <!-- 统计商品种数 -->
     <select id="countGoods" resultType="Integer">
-        <choose>
-            <when test="privilege == 1">
-                SELECT COUNT(*) FROM Good
-            </when>
-            <otherwise>
-                SELECT COUNT(*) FROM Good
-                WHERE goodState = 0
-            </otherwise>
-        </choose>
+        SELECT COUNT(*) FROM Good
+        <where>
+            <choose>
+                <when test="privilege == 1">
+                    <!-- 如果是有权限的用户，所有商品都计数 -->
+                    <if test="goodName != null">
+                        AND goodName LIKE CONCAT('%', #{goodName}, '%')
+                    </if>
+                    <if test="categoryId != null">
+                        AND categoryId = #{categoryId}
+                    </if>
+                </when>
+                <otherwise>
+                    <!-- 如果是普通用户，只统计 goodState 为 0 的商品 -->
+                    goodState = 0
+                    <if test="goodName != null">
+                        AND goodName LIKE CONCAT('%', #{goodName}, '%')
+                    </if>
+                    <if test="categoryId != null">
+                        AND categoryId = #{categoryId}
+                    </if>
+                </otherwise>
+            </choose>
+        </where>
     </select>
 
     <!-- 更改商品状态 -->
