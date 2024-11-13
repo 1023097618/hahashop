@@ -72,9 +72,15 @@ public class UserController {
             Good good = goodService.getGoodById(order.getGoodId());
             map.put("orderId", order.getOrderId());
             map.put("orderState", order.getOrderState());
-            map.put("goodId", order.getGoodId());
-            map.put("goodImage", transformUtil.stringToStringArray(good.getGoodImage())[0]);
-            map.put("goodName", good.getGoodName());
+            if(good == null){
+                map.put("goodImage", null);
+                map.put("goodName", "该商品已被下架");
+                map.put("goodId", -1);
+            }else{
+                map.put("goodImage", transformUtil.stringToStringArray(good.getGoodImage())[0]);
+                map.put("goodName", good.getGoodName());
+                map.put("goodId", order.getGoodId());
+            }
             map.put("orderPrice", order.getOrderPrice());
             map.put("buyerDesc", order.getBuyerDesc());
             map.put("buyerRealName", order.getBuyerRealName());

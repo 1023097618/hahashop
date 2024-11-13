@@ -48,5 +48,5 @@ public class HistroyServiceImpl implements HistoryService {
     }
 
     @Override
-    public Boolean findHistoryById(Integer historyId) { return histroyDao.findHistoryByhistoryId(historyId) > 0;}
+    public Boolean findHistoryById(Integer historyId) { return histroyDao.findHistoryByHistoryId(historyId) > 0;}
 }

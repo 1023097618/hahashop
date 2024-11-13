@@ -31,8 +31,47 @@
 
     <!--register-->
     <insert id="register" parameterType="com.mall.entity.User">
-        INSERT INTO User(username, password, privilege, userPhone, userAddress, userRealName)
-        VALUES (#{username}, #{password}, #{privilege}, #{userPhone}, #{userAddress}, #{userRealName})
+        INSERT INTO User
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="username != null">
+                `username`,
+            </if>
+            <if test="password != null">
+                `password`,
+            </if>
+            <if test="priviledge != null">
+                `privilege`,
+            </if>
+            <if test="userPhone != null">
+                `userPhone`,
+            </if>
+            <if test="userAddress != null">
+                `userAddress`,
+            </if>
+            <if test="userRealName">
+                `userRealName`
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="username != null">
+                #{username, jdbcType=TEXT},
+            </if>
+            <if test="password">
+                #{password, jdbcType=TEXT},
+            </if>
+            <if test="privilege">
+                #{privilege, jdbcType=INTEGER},
+            </if>
+            <if test="userPhone != null">
+                #{userPhone, jdbcType=TEXT},
+            </if>
+            <if test="userAddress != null">
+                #{userAddress, jdbcType=TEXT},
+            </if>
+            <if test="userRealName != null">
+                #{userRealName, jdbcType=TEXT}
+            </if>
+        </trim>
     </insert>
 
 </mapper>
