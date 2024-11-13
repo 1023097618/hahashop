@@ -22,7 +22,7 @@ import java.util.Map;
 import static com.mall.common.ResultEnum.*;
 
 @RestController
-@RequestMapping("/good")
+@RequestMapping("/api/good")
 public class GoodController {
 
     @Resource

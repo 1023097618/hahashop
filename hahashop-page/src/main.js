@@ -1,3 +1,4 @@
+console.log(process.env)
 import Vue from 'vue'
 import App from './App.vue'
 //路由
@@ -8,7 +9,10 @@ import store from './store'
 import './permission'
 //element-ui
 import ElementUI from 'element-ui'
-import 'element-ui/lib/theme-chalk/index.css'
+// 仅在非生产环境中引入 Element UI 的 CSS
+if (process.env.NODE_ENV !== 'production') {
+  import('element-ui/lib/theme-chalk/index.css');
+}
 //伪造后端请求(调试用)
 // import './mock'
 

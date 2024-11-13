@@ -22,7 +22,7 @@ import static com.mall.common.StateEnum.*;
 
 
 @RestController
-@RequestMapping("/order")
+@RequestMapping("/api/order")
 public class OrderController {
     @Resource
     private AuthService authService;

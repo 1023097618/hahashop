@@ -1,3 +1,5 @@
+start natapp\natapp.exe
+
 start hahashop-page\dist\index.html
 
 cd hahashop-serve

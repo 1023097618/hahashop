@@ -17,7 +17,7 @@ import java.util.Map;
 import static com.mall.common.ResultEnum.*;
 
 @RestController
-@RequestMapping("/history")
+@RequestMapping("/api/history")
 public class HistoryController {
 
     @Resource
