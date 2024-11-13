@@ -12,5 +12,5 @@ public interface HistoryDao {
     Integer deleteHistory(Integer historyId);
     List<History> getHistory(Integer pageSize, Integer pageNum);
     Integer countHistory();
-    Integer findHistoryByhistoryId(Integer historyId);
+    Integer findHistoryByHistoryId(Integer historyId);
 }

@@ -25,4 +25,10 @@
     <select id="countHistory" resultType="Integer">
         SELECT COUNT(*) FROM History
     </select>
+
+    <!--历史存在性检查-->
+    <select id="findHistoryByhistoryId">
+        SELECT historyId FROM  History
+        WHERE historyId = #{historyIds}
+    </select>
 </mapper>
