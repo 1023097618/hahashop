@@ -6,6 +6,7 @@ com\mall\service\impl\UserServiceImpl.class
 com\mall\service\UserService.class
 com\mall\dao\CategoryDao.class
 com\mall\MallApplication.class
+com\mall\service\impl\ImageStorageServiceImpl.class
 com\mall\controller\OrderController.class
 com\mall\common\WebConfig.class
 com\mall\entity\Category.class
@@ -19,18 +20,16 @@ com\mall\common\StringArrayTypeHandler.class
 com\mall\dao\UserDao.class
 com\mall\service\impl\GoodServiceImpl.class
 com\mall\controller\StorageController.class
-com\mall\service\StorageService.class
 com\mall\common\ResultEnum.class
 com\mall\common\TransformUtil.class
-com\mall\entity\Storage.class
 com\mall\service\impl\HistroyServiceImpl.class
 com\mall\controller\AuthController.class
 com\mall\entity\Order.class
+com\mall\entity\ImageStorage.class
 com\mall\entity\Good.class
-com\mall\service\impl\StorageServiceImpl.class
 com\mall\controller\UserController.class
 com\mall\entity\History.class
-com\mall\common\UserHolder.class
+com\mall\service\ImageStorageService.class
 com\mall\common\Result.class
 com\mall\service\OrderService.class
 com\mall\common\StateChangeUtil.class
@@ -42,6 +41,7 @@ com\mall\controller\HistoryController.class
 com\mall\common\PasswordResetTool.class
 com\mall\controller\CategoryController.class
 com\mall\service\GoodService.class
+com\mall\dao\ImageStorageDao.class
 com\mall\dao\HistoryDao.class
 com\mall\service\impl\AuthServiceImpl.class
 com\mall\common\CheckUtil.class

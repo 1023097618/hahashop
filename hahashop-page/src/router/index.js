@@ -28,6 +28,7 @@ const buyerRoutes=[
   {
     path: '/dashboard', name: 'DashboardView', component: () => import('@/views/dashboard/DashboardView.vue'), hidden: false, meta:{title: '主页'}, children: [
       {path:'/dashboard/order',hidden:false,meta:{title:'订单查询'},component:()=>import('@/views/buyer/buyerOrderView.vue'),name:'buyerOrderView'},
+      { path: '/dashboard/changePassword', name: 'ChangePasswordView', component: () => import('@/views/login/ChangePasswordView.vue'), hidden: false, meta:{title: '修改密码'} },
       { path: '/dashboard*', redirect: '/dashboard/order', hidden: true }
     ]
   }
@@ -41,7 +42,7 @@ function createRoute() {
 const router = createRoute()
 export function resetRouter() {
   const newrouter = createRoute()
-  router.match = newrouter.match
+  router.matcher = newrouter.matcher
 }
 
 export function addSellerRoute(){

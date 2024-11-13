@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 export function getGoods(query){
     return request({
-        url:'/good/list',
+        url:'/api/good/list',
         params:query,
         method:'get'
     })
@@ -10,7 +10,7 @@ export function getGoods(query){
 
 export function getGoodsDetail(id){
     return request({
-        url:'/good/detail',
+        url:'/api/good/detail',
         method:'get',
         params:{id:id}
     })
@@ -18,7 +18,7 @@ export function getGoodsDetail(id){
 
 export function updateGoods(data){
     return request({
-        url:'/good/update',
+        url:'/api/good/update',
         data:data,
         method:'update'
     })
@@ -26,7 +26,7 @@ export function updateGoods(data){
 
 export function deleteGood(goodId){
     return request({
-        url:'/good/delete',
+        url:'/api/good/delete',
         data:{
             goodId
         },
@@ -36,7 +36,7 @@ export function deleteGood(goodId){
 
 export function addGoods(data){
     return request({
-        url:'/good/add',
+        url:'/api/good/add',
         data:data,
         method:'post'
     })
@@ -44,7 +44,7 @@ export function addGoods(data){
 
 export function getCategory(){
     return request({
-        url:'/good/category',
+        url:'/api/good/category',
         method:'get'
     })
 }

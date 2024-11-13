@@ -1,4 +1,38 @@
+const isProd = process.env.NODE_ENV === 'production'; // 是否生产环境
+
+// 配置 externals，告诉 Webpack 不要打包这些库
+let externals = {
+  vue: 'Vue',
+  'vue-router': 'VueRouter',
+  axios: 'axios',
+  'element-ui': 'ELEMENT',
+};
+
+// 配置 CDN 链接 (去bootcdn上查)
+let cdn = {
+  css: [
+    // Element UI 的 CSS CDN
+    'https://cdn.bootcdn.net/ajax/libs/element-ui/2.15.14/theme-chalk/index.min.css',
+  ],
+  js: [
+    // Vue 的 CDN
+    'https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.min.js',
+    // Vue Router 的 CDN
+    'https://cdn.jsdelivr.net/npm/vue-router@3.5.1/dist/vue-router.min.js',
+    // Axios 的 CDN
+    'https://cdn.jsdelivr.net/npm/axios@1.7.7/dist/axios.min.js',
+    // Element UI 的 JS CDN
+    'https://cdn.bootcdn.net/ajax/libs/element-ui/2.15.14/index.min.js',
+  ],
+};
+
+// 如果不是生产环境，清空 externals 和 cdn
+cdn = isProd ? cdn : { css: [], js: [] };
+externals = isProd ? externals : {};
+
+
 module.exports = {
+  productionSourceMap: false, //优化打包后的体积大小
   publicPath: './', // 部署应用包时的基本 URL
   outputDir: 'dist', // 打包输出目录
   assetsDir: '', // 静态资源目录
@@ -13,7 +47,18 @@ module.exports = {
         changeOrigin: true,//是否允许跨越
       }
     },
-    webSocketServer: false
+    webSocketServer: false,
+    historyApiFallback: true, //内网穿透
+    allowedHosts: "all", //内网穿透
   },
-
+  configureWebpack: {
+    externals: externals, // 配置 externals
+  },
+  chainWebpack: (config) => {
+    // 配置 HTML 插件，注入 CDN
+    config.plugin('html').tap((args) => {
+      args[0].cdn = cdn;
+      return args;
+    });
+  },
 }

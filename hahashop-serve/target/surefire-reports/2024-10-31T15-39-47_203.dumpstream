@@ -1,5 +1,0 @@
-# Created at 2024-10-31T15:39:47.563
-Boot Manifest-JAR contains absolute paths in classpath 'E:\hahashop\hahashop-serve\target\test-classes'
-Hint: <argLine>-Djdk.net.URLClassPath.disableClassPathURLCheck=true</argLine>
-'other' has different root
-

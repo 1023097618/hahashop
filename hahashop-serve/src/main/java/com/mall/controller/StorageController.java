@@ -33,7 +33,7 @@ import java.util.UUID;
 import static com.mall.common.ResultEnum.*;
 
 @RestController
-@RequestMapping("/storage")
+@RequestMapping("/api/storage")
 public class StorageController {
     @jakarta.annotation.Resource
     private ImageStorageService imageStorageService;

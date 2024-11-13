@@ -8,7 +8,14 @@
             <h1>hahashop</h1>
           </el-col>
           <el-col :span="8" style="text-align: right;">
-            <el-button type="primary" @click="login()">登录</el-button>
+            <el-button type="primary" @click="login()">
+              <div v-if="isLogin()">
+                进入主页
+              </div>
+              <div v-else>
+                登录
+              </div>
+            </el-button>
           </el-col>
         </el-row>
       </el-header>
@@ -148,7 +155,14 @@
           this.options = res.data.data.categoryList
         })
       },
-
+      isLogin(){
+        const token = GetCookie()
+        if(token){
+          return true
+        }else{
+          return false
+        }
+      }
     },
     computed: {
       productRows() {

@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 export function Login(data){
     return request({
-        url:'/auth/login',
+        url:'/api/auth/login',
         data,
         method:'post'
     })
@@ -10,7 +10,7 @@ export function Login(data){
 
 export function GetUserInfo(token){
     return request({
-        url:'/auth/info',
+        url:'/api/auth/info',
         params:{
             token:token
         },
@@ -20,7 +20,7 @@ export function GetUserInfo(token){
 
 export function changePassword(data){
     return request({
-        url:'/auth/changePassword',
+        url:'/api/auth/changePassword',
         data,
         method:'post'
     })
@@ -28,7 +28,7 @@ export function changePassword(data){
 
 export function registerUser(data){
     return request({
-        url:'/auth/register',
+        url:'/api/auth/register',
         data,
         method:'post'
     })
