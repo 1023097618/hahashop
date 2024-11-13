@@ -42,7 +42,7 @@ public class StorageController {
 
     @Value("${file.image-dir}") String imageDir;
 
-    private final String baseurl = "http://localhost:8081/storage/fetch/";
+    private final String baseurl = "http://localhost:8081/api/storage/fetch/";
 
     @RequestMapping ("/upload")
     public Result<Object> upload(@RequestParam("file") MultipartFile file) throws IOException {

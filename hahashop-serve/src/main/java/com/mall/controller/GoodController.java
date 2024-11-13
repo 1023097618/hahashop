@@ -54,7 +54,9 @@ public class GoodController {
 
             try{
                 List<Good> goodList = goodService.goodList(pageSize, pageNum, goodName, categoryId, user.getPrivilege());
+
                 Integer totalGoods = goodService.countGoods(user.getPrivilege(), goodName, categoryId);
+
                 if(token == null || user.getPrivilege() == 2){
                     for (Good good : goodList) {
                         good.setBuyerNum(0);
@@ -108,7 +110,9 @@ public class GoodController {
     public Result<Object> goodAdd(@RequestBody Good good) {
         User user = checkUtil.tookenCheck(); System.out.println(good.getGoodNum());
         if(user!=null && user.getPrivilege() != 1){ return ResultUtil.error(ILLEGAL_TOKEN); }
-        if(good.getGoodImage() == null){ return ResultUtil.error(EXAMPLE_NOT_EXIST); }
+        if(good.getGoodImage().length == 0){ return ResultUtil.error(EXAMPLE_NOT_EXIST); }
+
+
         if (goodService.addGood(good)) {
             return ResultUtil.success(SUCCESS, null);
         } else {

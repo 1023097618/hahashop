@@ -39,7 +39,7 @@
             <if test="password != null">
                 `password`,
             </if>
-            <if test="priviledge != null">
+            <if test="privilege != null">
                 `privilege`,
             </if>
             <if test="userPhone != null">
