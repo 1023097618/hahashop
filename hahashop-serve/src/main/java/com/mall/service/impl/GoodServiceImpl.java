@@ -48,8 +48,8 @@ public class GoodServiceImpl implements GoodService {
     }
 
     @Override
-    public Integer countGoods(Integer privilege) {
-        return goodDao.countGoods( privilege );
+    public Integer countGoods(Integer privilege, String goodName, Integer categoryId) {
+        return goodDao.countGoods( privilege, goodName, categoryId);
     }
 
     @Override

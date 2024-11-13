@@ -208,7 +208,7 @@
 
 <h4 id="tft">2.4.2订单状态图</h4>
 
-![订单状态图](https://gitee.com/zhishidiannaoka/hahashop/raw/master/2235020429-%E9%A2%9D%E5%A4%96%E6%88%90%E6%9E%9C%E7%89%A9/3-image/%E8%AE%A2%E5%8D%95%E7%8A%B6%E6%80%81%E5%9B%BE.png)
+![订单状态图](https://gitee.com/zhishidiannaoka/hahashop/raw/master/2235020429-%E9%A2%9D%E5%A4%96%E6%88%90%E6%9E%9C%E7%89%A9/3-image/%E8%AE%A2%E5%8D%95%E7%8A%B6%E6%80%81%E5%9B%BE%20.png)
 
 <h4 id="tfth">2.4.3购物顺序图</h4>
 

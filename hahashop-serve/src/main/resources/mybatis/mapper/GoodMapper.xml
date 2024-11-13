@@ -6,22 +6,33 @@
 <mapper namespace="com.mall.dao.GoodDao">
     <!--获取商品信息-->
     <select id="goodList" resultType="com.mall.entity.Good">
+        SELECT goodId, goodName, goodPrice, goodImage, goodState, buyerNum, categoryId, goodNum FROM Good
         <choose>
             <when test="privilege == 1">
-                SELECT goodId, goodName, goodPrice, goodImage, goodState, buyerNum, categoryId, goodNum FROM Good
+                <where>
+                    <if test="goodName != null">
+                        goodName LIKE CONCAT('%', #{goodName}, '%')
+                    </if>
+                    <if test="categoryId != null">
+                        <if test="goodName != null">
+                            AND
+                        </if>
+                        categoryId = #{categoryId}
+                    </if>
+                </where>
             </when>
             <otherwise>
-                SELECT goodId, goodName, goodPrice, goodImage, goodState, buyerNum, categoryId, goodNum FROM Good
-                WHERE goodState = 0
+                <where>
+                    goodState = 0
+                    <if test="goodName != null">
+                        AND goodName LIKE CONCAT('%', #{goodName}, '%')
+                    </if>
+                    <if test="categoryId != null">
+                        AND categoryId = #{categoryId}
+                    </if>
+                </where>
             </otherwise>
         </choose>
-
-        <if test="goodName != null">
-            AND goodName LIKE CONCAT('%', #{goodName}, '%')
-        </if>
-        <if test="categoryId != null">
-            AND categoryId = #{categoryId}
-        </if>
         LIMIT #{pageSize} OFFSET #{pageSize} * (#{pageNum} - 1)
     </select>
 
@@ -46,7 +57,7 @@
     </update>
 
     <!-- 增加商品 -->
-    <insert id="addGood" parameterType="com.mall.entity.Good">
+    <insert id="addGood" parameterType="com.mall.entity.Good" useGeneratedKeys="true" keyProperty="good.goodId">
         INSERT INTO Good (goodName, goodPrice, goodDesc, goodImage, buyerNum, goodState, categoryId, goodNum)
         VALUES (#{good.goodName}, #{good.goodPrice}, #{good.goodDesc}, #{good.goodImage}, #{good.buyerNum}, #{good.goodState}, #{good.categoryId}, #{good.goodNum})
     </insert>
@@ -90,15 +101,33 @@
 
     <!-- 统计商品种数 -->
     <select id="countGoods" resultType="Integer">
-        <choose>
-            <when test="privilege == 1">
-                SELECT COUNT(*) FROM Good
-            </when>
-            <otherwise>
-                SELECT COUNT(*) FROM Good
-                WHERE goodState = 0
-            </otherwise>
-        </choose>
+        SELECT COUNT(*) FROM Good
+        <where>
+            <choose>
+                <when test="privilege == 1">
+                    <!-- 有权限的用户：可以访问所有商品 -->
+                    <if test="goodName != null">
+                        goodName LIKE CONCAT('%', #{goodName}, '%')
+                    </if>
+                    <if test="categoryId != null">
+                        <if test="goodName != null">
+                            AND
+                        </if>
+                        categoryId = #{categoryId}
+                    </if>
+                </when>
+                <otherwise>
+                    <!-- 普通用户：只能访问 goodState 为 0 的商品 -->
+                    goodState = 0
+                    <if test="goodName != null">
+                        AND goodName LIKE CONCAT('%', #{goodName}, '%')
+                    </if>
+                    <if test="categoryId != null">
+                        AND categoryId = #{categoryId}
+                    </if>
+                </otherwise>
+            </choose>
+        </where>
     </select>
 
     <!-- 更改商品状态 -->

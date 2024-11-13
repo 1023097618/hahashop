@@ -9,6 +9,7 @@ import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -39,7 +40,9 @@ public class HistroyServiceImpl implements HistoryService {
 
     @Override
     public List<History> getHistory(Integer pageSize, Integer pageNum) {
-        return histroyDao.getHistory(pageSize, pageNum);
+        List<History> historyList = histroyDao.getHistory(pageSize, pageNum);
+        historyList.sort(Comparator.comparing(History::getOperationTime).reversed());
+        return historyList;
     }
 
     @Override

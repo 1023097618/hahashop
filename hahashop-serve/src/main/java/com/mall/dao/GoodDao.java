@@ -25,7 +25,7 @@ public interface GoodDao {
     Integer addGood(@Param("good") Good good, @Param("goodImage") String goodImage);//往表里加，id数据库自增
     Integer updateGood(@Param("good") Good good, @Param("goodImage") String goodImage);//往表里加，good里面会带id，提出来匹配
     Integer deleteGood(Integer goodId);//根据goodid删商品
-    Integer countGoods(@Param("privilege") Integer privilege);//统计商品种数
+    Integer countGoods(@Param("privilege") Integer privilege, @Param("goodName") String goodName, @Param("categoryId")Integer categoryId);//统计商品种数
     //商品状态更改
     Integer stateChange(@Param("goodId") Integer goodId, @Param("goodState") Integer goodState);//根据商品Id改成对应的state
     Integer goodNumChange(@Param("goodId") Integer goodId,@Param("changeNum") Integer changeNum);
