@@ -27,7 +27,7 @@
     </select>
 
     <!--历史存在性检查-->
-    <select id="findHistoryByhistoryId">
+    <select id="findHistoryByHistoryId">
         SELECT historyId FROM  History
         WHERE historyId = #{historyIds}
     </select>
