@@ -10,24 +10,20 @@ import './permission'
 //element-ui
 import ElementUI from 'element-ui'
 // 仅在非生产环境中引入 Element UI 的 CSS
-if (process.env.NODE_ENV !== 'production') {
-  import('element-ui/lib/theme-chalk/index.css');
-}
+import('element-ui/lib/theme-chalk/index.css');
+// if (process.env.NODE_ENV !== 'production') {
+//   import('element-ui/lib/theme-chalk/index.css');
+// }
 //伪造后端请求(调试用)
 // import './mock'
 
 
-//富文本编辑器
-import VueQuillEditor from 'vue-quill-editor'
-import 'quill/dist/quill.core.css'
-import 'quill/dist/quill.snow.css'
-import 'quill/dist/quill.bubble.css'
 
 //防止xss攻击
 import VueDOMPurifyHTML from 'vue-dompurify-html'
 Vue.use(VueDOMPurifyHTML)
 
-Vue.use(VueQuillEditor, /* { default global options } */)
+
 
 Vue.use(ElementUI)
 

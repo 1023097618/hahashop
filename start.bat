@@ -1,7 +1,7 @@
 start natapp\natapp.exe
 
-start hahashop-page\dist\index.html
+start http://hahashop.natapp1.cc
 
 cd hahashop-serve
 
-java -Dfile.encoding=GBK -jar target\hahashop-server-0.0.1-SNAPSHOT.jar
+start java -Dfile.encoding=GBK -jar target\hahashop-server-0.0.1-SNAPSHOT.jar

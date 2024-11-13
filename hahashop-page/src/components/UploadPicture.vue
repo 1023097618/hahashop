@@ -68,13 +68,16 @@
             },
             beforeUpload(file){
                 console.log(file)
-            }
-        },
-        created(){
-            this.fileList = this.urls.map(url => ({
+            },
+            clearFileList() {
+                this.fileList = [];
+            },
+            initFileList(){
+                this.fileList = this.urls.map(url => ({
                     name: url.split('/').pop(), // 从 URL 中提取文件名
                     url: url
             }));
+            }
         }
     }
 </script>

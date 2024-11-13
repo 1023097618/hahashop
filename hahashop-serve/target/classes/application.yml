@@ -25,3 +25,4 @@ mybatis:
 
 file:
   image-dir: src/main/resources/static/images
+  baseurl: http://hahashop.natapp1.cc

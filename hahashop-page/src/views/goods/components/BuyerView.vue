@@ -1,5 +1,5 @@
 <template>
-  <el-dialog title="订单查看" :visible="this.visible" width="50%" :before-close="closeDialog">
+  <el-dialog title="订单查看" :visible="this.visible" width="50%" :before-close="closeDialog" :close-on-click-modal="false">
     <h3 style="text-align: center;">{{good.goodName}}</h3>
     <el-table :data="orders" style="width: 100%" max-height="250" :row-class-name="confirmedHeightlight">
       <el-table-column prop="buyerPhone" label="买家手机" width="150">

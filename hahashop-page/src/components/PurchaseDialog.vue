@@ -4,7 +4,8 @@
   title="买家信息填写"
   :visible="this.visible"
   width="30%"
-  :before-close="closeDialog">
+  :before-close="closeDialog"
+  :close-on-click-modal="false">
   <div style="text-align: center;">商品名:{{product.goodName}}</div>
   <div style="text-align: center;">商品价格:{{product.goodPrice}}</div>
   <!-- <div style="text-align: center;">商品描述：<div class="rich-text-content" v-html="product.goodDesc"></div></div> -->

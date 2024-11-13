@@ -283,4 +283,8 @@
   line-height: normal;
   padding: 40px 0;
 }
+
+#layoutview .el-pagination{
+    z-index: 100;
+  }
 </style>
