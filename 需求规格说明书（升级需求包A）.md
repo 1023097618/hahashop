@@ -212,7 +212,7 @@
 
 <h4 id="tfth">2.4.3购物顺序图</h4>
 
-![购物顺序图](https://gitee.com/zhishidiannaoka/hahashop/raw/master/2235020429-%E9%A2%9D%E5%A4%96%E6%88%90%E6%9E%9C%E7%89%A9/3-image/%E8%B4%AD%E7%89%A9%E9%A1%BA%E5%BA%8F%E5%9B%BE.png)
+![购物顺序图](https://gitee.com/zhishidiannaoka/hahashop/raw/master/2235020429-%E9%A2%9D%E5%A4%96%E6%88%90%E6%9E%9C%E7%89%A9/3-image/%E8%B4%AD%E7%89%A9%E9%A1%BA%E5%BA%8F%E5%9B%BE.jpg)
 
 <h2 id="th">三、与基线版需求的差异汇总</h2>
 
