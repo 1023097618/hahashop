@@ -3,3 +3,5 @@
 rebuild-test-nuxt
 natapp.exe - 快捷方式.lnk
 nginx.exe - 快捷方式.lnk
+natapp
+natappStart.bat

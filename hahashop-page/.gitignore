@@ -1,6 +1,7 @@
 .DS_Store
 node_modules
-
+localhost.bat
+natapp.bat
 
 # local env files
 .env.local

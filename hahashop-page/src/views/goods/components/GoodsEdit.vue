@@ -1,5 +1,5 @@
 <template>
-  <el-dialog title="修改商品" :visible="this.visible" width="30%" :before-close="closeDialog" center
+  <el-dialog title="修改商品" :visible="this.visible" width="90%" :before-close="closeDialog" center
     style="overflow: hidden" top="3vh" :close-on-click-modal="false">
     <div style="overflow-y: auto; height: 70vh">
       <el-form :model="good" label-position="right" label-width="80px">
