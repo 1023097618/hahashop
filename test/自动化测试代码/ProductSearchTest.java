@@ -15,10 +15,10 @@ public class ProductSearchTest extends BaseTest {
 
     @Test
     public void testSearchByName() {
-        driver.get("http://localhost:8082/#/");
+        driver.get("http://localhost:8081/#/");
 
         // 输入有效的商品名称
-        driver.findElement(By.xpath("//*[@id=\"searchBox\"]/div/input")).sendKeys("床");
+        driver.findElement(By.xpath("//*[@id=\"searchBox\"]/div/input")).sendKeys("沙发");
         driver.findElement(By.xpath("//*[@id=\"searchBox\"]/div/div[2]/button")).click();
 
         // 定位元素
@@ -35,7 +35,7 @@ public class ProductSearchTest extends BaseTest {
 
     @Test
     public void testSearchByCategory() {
-        driver.get("http://localhost:8082/#/");
+        driver.get("http://localhost:8081/#/");
 
         // 选择商品分类
         driver.findElement(By.xpath("//*[@id=\"searchBox\"]/div/div[1]/div/div[1]/input")).sendKeys("居家 / 沙发");
@@ -54,7 +54,7 @@ public class ProductSearchTest extends BaseTest {
 
     @Test
     public void testSearchNoResults() {
-        driver.get("http://localhost:8082/#/");
+        driver.get("http://localhost:8081/#/");
 
         // 输入不存在的商品名称
         driver.findElement(By.xpath("//*[@id=\"searchBox\"]/div/input")).sendKeys("Galaxy Z Fold 100");
@@ -69,7 +69,7 @@ public class ProductSearchTest extends BaseTest {
 
     @Test
     public void testSearchEmptyQuery() {
-        driver.get("http://localhost:8082/#/");
+        driver.get("http://localhost:8081/#/");
 
         // 输入空的搜索词
         driver.findElement(By.xpath("//*[@id=\"searchBox\"]/div/input")).sendKeys("");
