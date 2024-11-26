@@ -1,6 +1,0 @@
-productName,productPrice,productStock,productDescription
-MacBook Pro,12000,10,苹果笔记本电脑
-,12000,10,苹果笔记本电脑   // 名称为空
-MacBook Pro,-12000,10,苹果笔记本电脑  // 价格为负
-MacBook Pro,12000,-1,苹果笔记本电脑   // 库存为负
-,,,   // 所有字段为空

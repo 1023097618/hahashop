@@ -1,6 +1,0 @@
-username,password,expectSuccess
-buyer,buyer,true
-wronguser,buyer,false
-buyer,wrongpassword,false
-,buyer,false
-buyer,,false

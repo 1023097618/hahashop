@@ -1,7 +1,0 @@
-username,password,expectedUrl,expectedError
-seller,seller,http://localhost:8081/#/dashboard/good/manager,false  // 正确用户名和密码
-wronguser,seller,,true  // 错误的用户名
-seller,2,,true  // 错误的密码
-,seller,,true  // 用户名为空
-seller,,,true  // 密码为空
-,,,true  // 用户名和密码都为空

@@ -12,7 +12,7 @@ public class BuyerChangePasswordTest extends BaseTest {
 	@Test
     public void testChangePassword1() {
         loginAsBuyer();
-        driver.get("http://localhost:8081/#/dashboard/changePassword");
+        driver.get("http://localhost:8082/#/dashboard/changePassword");
 
         // 输入错误的当前密码
         driver.findElement(By.xpath("//*[@id=\"app\"]/div/section/section/main/div/div/div[1]/form/div[1]/div/div/input")).sendKeys("wrongpassword");
@@ -26,10 +26,10 @@ public class BuyerChangePasswordTest extends BaseTest {
     @Test
     public void testChangePassword2() {
         loginAsBuyer();
-        driver.get("http://localhost:8081/#/dashboard/changePassword");
+        driver.get("http://localhost:8082/#/dashboard/changePassword");
 
-        driver.findElement(By.xpath("//*[@id=\"app\"]/div/section/section/main/div/div/div[1]/form/div[1]/div/div/input")).sendKeys("buyer");
-        driver.findElement(By.xpath("//*[@id=\"app\"]/div/section/section/main/div/div/div[1]/form/div[2]/div/div/input")).sendKeys("buyer");
+        driver.findElement(By.xpath("//*[@id=\"app\"]/div/section/section/main/div/div/div[1]/form/div[1]/div/div/input")).sendKeys("123456");
+        driver.findElement(By.xpath("//*[@id=\"app\"]/div/section/section/main/div/div/div[1]/form/div[2]/div/div/input")).sendKeys("123456");
         driver.findElement(By.xpath("//*[@id=\"app\"]/div/section/section/main/div/div/div[2]/button")).click();
 
         // 等待页面跳转到登录页面
@@ -38,19 +38,19 @@ public class BuyerChangePasswordTest extends BaseTest {
         
         // 验证页面是否跳转到登录页面
         String currentUrl = driver.getCurrentUrl();
-        assertTrue("页面没有跳转到登录页面", currentUrl.equals("http://localhost:8081/#/login"));
+        assertTrue("页面没有跳转到登录页面", currentUrl.equals("http://localhost:8082/#/login"));
     }
     
     // 辅助方法，用于登录买家
     private void loginAsBuyer() {
-        driver.get("http://localhost:8081/#/login");
+        driver.get("http://localhost:8082/#/login");
 
-        driver.findElement(By.xpath("//*[@id=\"app\"]/section/main/div/div[1]/form/div[1]/div/div/input")).sendKeys("buyer");
-        driver.findElement(By.xpath("//*[@id=\"app\"]/section/main/div/div[1]/form/div[2]/div/div/input")).sendKeys("buyer");
+        driver.findElement(By.xpath("//*[@id=\"app\"]/section/main/div/div[1]/form/div[1]/div/div/input")).sendKeys("zhangsan");
+        driver.findElement(By.xpath("//*[@id=\"app\"]/section/main/div/div[1]/form/div[2]/div/div/input")).sendKeys("123456");
         driver.findElement(By.xpath("//*[@id=\"app\"]/section/main/div/div[2]/button")).click();
         
-        // 登录成功后页面应自动跳转
-        String expectedUrl = "http://localhost:8081/#/dashboard/order";
+        // 登录成功后页面应自动跳转到 http://localhost:8082/#/dashboard/order
+        String expectedUrl = "http://localhost:8082/#/dashboard/order";
         
         WebDriverWait wait = new WebDriverWait(driver, 10);
         wait.until(ExpectedConditions.urlToBe(expectedUrl));

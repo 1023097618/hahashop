@@ -1,3 +1,0 @@
-changePageButtonXpath,transactionButtonXpath,customerButtonXpath,confirmButtonXpath
-//*[@id="goods"]/div[4]/ul/li[2],//*[@id="goods"]/div[3]/div[3]/table/tbody/tr[2]/td[7]/div/button,//*[@id="goods"]/div[7]/div/div[2]/div/div[4]/div[2]/table/tbody/tr[1]/td[8]/div/div/button[1],//*[@id="goods"]/div[7]/div/div[3]/span/button[2]
-//*[@id="goods"]/div[4]/ul/li[2],//*[@id="goods"]/div[3]/div[3]/table/tbody/tr[2]/td[7]/div/button,//*[@id="goods"]/div[7]/div/div[2]/div/div[4]/div[2]/table/tbody/tr[2]/td[8]/div/div/button[2],//*[@id="goods"]/div[7]/div/div[3]/span/button[2]

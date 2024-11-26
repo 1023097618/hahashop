@@ -12,15 +12,15 @@ public class SellerLoginTest extends BaseTest {
 
     @Test
     public void testValidLogin() {
-        driver.get("http://localhost:8081/#/login");
+        driver.get("http://localhost:8082/#/login");
 
         // 输入有效的用户名和密码
-        driver.findElement(By.xpath("//*[@id=\"app\"]/section/main/div/div[1]/form/div[1]/div/div/input")).sendKeys("seller");
-        driver.findElement(By.xpath("//*[@id=\"app\"]/section/main/div/div[1]/form/div[2]/div/div/input")).sendKeys("seller");
+        driver.findElement(By.xpath("//*[@id=\"app\"]/section/main/div/div[1]/form/div[1]/div/div/input")).sendKeys("admin");
+        driver.findElement(By.xpath("//*[@id=\"app\"]/section/main/div/div[1]/form/div[2]/div/div/input")).sendKeys("1");
         driver.findElement(By.xpath("//*[@id=\"app\"]/section/main/div/div[2]/button")).click();
         
-        // 登录成功后页面应自动跳转
-        String expectedUrl = "http://localhost:8081/#/dashboard/good/manager";
+        // 登录成功后页面应自动跳转到 http://localhost:8082/#/dashboard/good/manager
+        String expectedUrl = "http://localhost:8082/#/dashboard/good/manager";
         
         WebDriverWait wait = new WebDriverWait(driver, 10);
         wait.until(ExpectedConditions.urlToBe(expectedUrl));
@@ -32,11 +32,11 @@ public class SellerLoginTest extends BaseTest {
 
     @Test
     public void testInvalidLogin1() {
-        driver.get("http://localhost:8081/#/login");
+        driver.get("http://localhost:8082/#/login");
 
         // 输入无效的用户名
         driver.findElement(By.xpath("//*[@id=\"app\"]/section/main/div/div[1]/form/div[1]/div/div/input")).sendKeys("wronguser");
-        driver.findElement(By.xpath("//*[@id=\"app\"]/section/main/div/div[1]/form/div[2]/div/div/input")).sendKeys("seller");
+        driver.findElement(By.xpath("//*[@id=\"app\"]/section/main/div/div[1]/form/div[2]/div/div/input")).sendKeys("1");
         driver.findElement(By.xpath("//*[@id=\"app\"]/section/main/div/div[2]/button")).click();
 
         // 验证错误信息是否显示
@@ -45,10 +45,10 @@ public class SellerLoginTest extends BaseTest {
 
     @Test
     public void testInvalidLogin2() {
-        driver.get("http://localhost:8081/#/login");
+        driver.get("http://localhost:8082/#/login");
 
         // 输入正确的用户名，但密码错误
-        driver.findElement(By.xpath("//*[@id=\"app\"]/section/main/div/div[1]/form/div[1]/div/div/input")).sendKeys("seller");
+        driver.findElement(By.xpath("//*[@id=\"app\"]/section/main/div/div[1]/form/div[1]/div/div/input")).sendKeys("admin");
         driver.findElement(By.xpath("//*[@id=\"app\"]/section/main/div/div[1]/form/div[2]/div/div/input")).sendKeys("2");
         driver.findElement(By.xpath("//*[@id=\"app\"]/section/main/div/div[2]/button")).click();
 
@@ -58,11 +58,11 @@ public class SellerLoginTest extends BaseTest {
 
     @Test
     public void testInvalidLogin3_emptyUsername() {
-        driver.get("http://localhost:8081/#/login");
+        driver.get("http://localhost:8082/#/login");
 
         // 输入空的用户名和密码
         driver.findElement(By.xpath("//*[@id=\"app\"]/section/main/div/div[1]/form/div[1]/div/div/input")).sendKeys("");
-        driver.findElement(By.xpath("//*[@id=\"app\"]/section/main/div/div[1]/form/div[2]/div/div/input")).sendKeys("seller");
+        driver.findElement(By.xpath("//*[@id=\"app\"]/section/main/div/div[1]/form/div[2]/div/div/input")).sendKeys("1");
         driver.findElement(By.xpath("//*[@id=\"app\"]/section/main/div/div[2]/button")).click();
 
         // 验证错误提示信息是否显示
@@ -71,10 +71,10 @@ public class SellerLoginTest extends BaseTest {
 
     @Test
     public void testInvalidLogin4_emptyPassword() {
-        driver.get("http://localhost:8081/#/login");
+        driver.get("http://localhost:8082/#/login");
 
         // 输入有效的用户名，但密码为空
-        driver.findElement(By.xpath("//*[@id=\"app\"]/section/main/div/div[1]/form/div[1]/div/div/input")).sendKeys("seller");
+        driver.findElement(By.xpath("//*[@id=\"app\"]/section/main/div/div[1]/form/div[1]/div/div/input")).sendKeys("admin");
         driver.findElement(By.xpath("//*[@id=\"app\"]/section/main/div/div[1]/form/div[2]/div/div/input")).sendKeys("");
         driver.findElement(By.xpath("//*[@id=\"app\"]/section/main/div/div[2]/button")).click();
 
@@ -84,7 +84,7 @@ public class SellerLoginTest extends BaseTest {
 
     @Test
     public void testInvalidLogin5_blankFields() {
-        driver.get("http://localhost:8081/#/login");
+        driver.get("http://localhost:8082/#/login");
 
         // 输入空的用户名和密码
         driver.findElement(By.xpath("//*[@id=\"app\"]/section/main/div/div[1]/form/div[1]/div/div/input")).sendKeys("");

@@ -1,6 +1,0 @@
-username,password,realName,phoneNumber,verificationCode,address,expectedResult
-lisi,321,张三,13800138000,,上海市浦东新区花木路388号,true
-,lisi,张三,13800138000,,上海市浦东新区花木路388号,false   // 用户名为空
-lisi,,张三,13800138000,,上海市浦东新区花木路388号,false   // 密码为空
-lisi,321,张三,13800138abc,,上海市浦东新区,false   // 电话格式错误
-lisi,321,张三,13800138000,,,false   // 地址为空

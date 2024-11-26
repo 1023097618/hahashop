@@ -12,7 +12,7 @@ public class RegistrationTest extends BaseTest {
 
 	@Test
     public void testValidRegistration() {
-        driver.get("http://localhost:8081/#/register");
+        driver.get("http://localhost:8082/#/register");
 
         // 输入有效的注册信息：账号、密码、真实姓名、手机号、手机验证码（留空）、默认地址
         driver.findElement(By.xpath("//*[@id=\"app\"]/section/main/div/div[1]/form/div[1]/div/div/input")).sendKeys("lisi"); // 账号
@@ -24,6 +24,7 @@ public class RegistrationTest extends BaseTest {
         driver.findElement(By.xpath("//*[@id=\"app\"]/section/main/div/div[2]/button")).click();
 
 
+        // 验证页面是否跳转至根目录
         String currentUrl = driver.getCurrentUrl();
         assertTrue("用户名为空时未显示错误提示", driver.findElement(By.xpath("/html/body/div[1]")).isDisplayed());
 
@@ -31,7 +32,7 @@ public class RegistrationTest extends BaseTest {
 
     @Test
     public void testInvalidUsernameEmpty() {
-        driver.get("http://localhost:8081/#/register");
+        driver.get("http://localhost:8082/#/register");
 
         // 输入空的用户名
         driver.findElement(By.xpath("//*[@id=\"app\"]/section/main/div/div[1]/form/div[1]/div/div/input")).sendKeys("");
@@ -48,7 +49,7 @@ public class RegistrationTest extends BaseTest {
 
     @Test
     public void testInvalidPasswordEmpty() {
-        driver.get("http://localhost:8081/#/register");
+        driver.get("http://localhost:8082/#/register");
 
         // 输入空的密码
         driver.findElement(By.xpath("//*[@id=\"app\"]/section/main/div/div[1]/form/div[1]/div/div/input")).sendKeys("lisi");
@@ -65,7 +66,7 @@ public class RegistrationTest extends BaseTest {
 
     @Test
     public void testInvalidPhoneFormat() {
-        driver.get("http://localhost:8081/#/register");
+        driver.get("http://localhost:8082/#/register");
 
         // 输入错误的电话格式
         driver.findElement(By.xpath("//*[@id=\"app\"]/section/main/div/div[1]/form/div[1]/div/div/input")).sendKeys("lisi");
@@ -82,7 +83,7 @@ public class RegistrationTest extends BaseTest {
 
     @Test
     public void testInvalidLocationEmpty() {
-        driver.get("http://localhost:8081/#/register");
+        driver.get("http://localhost:8082/#/register");
 
         // 输入空的交易地点
         driver.findElement(By.xpath("//*[@id=\"app\"]/section/main/div/div[1]/form/div[1]/div/div/input")).sendKeys("lisi");
