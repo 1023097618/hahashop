@@ -42,9 +42,9 @@ public class StorageController {
 
     @Value("${file.image-dir}") String imageDir;
 
-    @Value("${file.baseurl}")
-    private String baseurl;
+    @Value("${file.baseurl}") private String baseurl;
 
+    private String apiPath = "/api/storage/fetch/";
     @RequestMapping ("/upload")
     public Result<Object> upload(@RequestParam("file") MultipartFile file) throws IOException {
 
@@ -60,11 +60,13 @@ public class StorageController {
         imageStorage.setKey(encodedKey);
         imageStorage.setSize(file.getSize());
         //如果改变了api地址，这一行也需要跟着变
-        imageStorage.setUrl(baseurl+"/api/storage/fetch/" + encodedKey);
+        imageStorage.setUrl( apiPath + encodedKey);
 //        imageStorage.setType(originalFilename.substring(originalFilename.lastIndexOf(".")));
         imageStorage.setType(Files.probeContentType(Paths.get(imageDir+key)));
         //数据库存入
         Map<String, Object> data = imageStorageService.store(imageStorage);
+        String originUrl = data.get("url").toString();
+        data.put("url", baseurl + originUrl);
 
         if(data.get("id") != null){
             Files.copy(file.getInputStream(), Paths.get(imageDir).toAbsolutePath().normalize().resolve(encodedKey));

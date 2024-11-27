@@ -11,8 +11,10 @@ import com.mall.entity.History;
 import com.mall.service.GoodService;
 import com.mall.service.HistoryService;
 import jakarta.annotation.Resource;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -32,6 +34,8 @@ public class GoodServiceImpl implements GoodService {
     private HistoryService historyService;
     @Resource
     private TransformUtil transformUtil;
+
+    @Value("${file.baseurl}") private String baseUrl;
 
     @Override
     public List<Good> goodList(Integer pageSize, Integer pageNum, String goodName, Integer categoryId, Integer privilege) {
@@ -62,13 +66,17 @@ public class GoodServiceImpl implements GoodService {
     @Override
     public Boolean addGood(Good good) {
 
-        //处理一下数据
-        String goodImage = transformUtil.stringArrayToString(good.getGoodImage());
+        String[] images = Arrays.stream(good.getGoodImage())  // 将String[]转为Stream
+                .map(image -> image.replace(baseUrl, ""))     // 对每个String元素进行replace操作
+                .toArray(String[]::new);
+        good.setGoodImage(images);
+        String goodImages = transformUtil.stringArrayToString(images);
+
         good.setBuyerNum(0);
         if(good.getGoodNum() > 0) { good.setGoodState(stateChangeUtil.StateChange(ACTIVE)); }
         else{ good.setGoodState(stateChangeUtil.StateChange(SOLD_OUT)); }
 
-        Integer rowsAffected = goodDao.addGood(good, goodImage);
+        Integer rowsAffected = goodDao.addGood(good, goodImages);
         if(rowsAffected > 0){//插入成功就加记录
             historyService.addHistory(good, good.getGoodImage()[0]);
         }
