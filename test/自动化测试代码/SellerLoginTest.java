@@ -1,97 +1,85 @@
 package TT;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
 
+@RunWith(Parameterized.class)
 public class SellerLoginTest extends BaseTest {
 
+    private final String username;
+    private final String password;
+    private final String expectedUrl;
+    private final boolean expectedError;
+
+    public SellerLoginTest(String username, String password, String expectedUrl, boolean expectedError) {
+        this.username = username;
+        this.password = password;
+        this.expectedUrl = expectedUrl;
+        this.expectedError = expectedError;
+    }
+
+    @Parameterized.Parameters
+    public static Collection<Object[]> testData() {
+        String csvFilePath = "test99/TT/SellerLoginTest.csv"; // CSV 文件路径
+        List<Object[]> data = new ArrayList<>();
+
+        try (BufferedReader br = new BufferedReader(new FileReader(csvFilePath))) {
+            String line;
+            boolean isFirstLine = true; // 跳过标题行
+            while ((line = br.readLine()) != null) {
+                if (isFirstLine) {
+                    isFirstLine = false;
+                    continue;
+                }
+                String[] split = line.split(",");
+                String username = split[0].trim();
+                String password = split[1].trim();
+                String expectedUrl = split.length > 2 ? split[2].trim() : "";
+                boolean expectedError = Boolean.parseBoolean(split[3].trim());
+                data.add(new Object[]{username, password, expectedUrl, expectedError});
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return data;
+    }
+
     @Test
-    public void testValidLogin() {
+    public void testLogin() {
         driver.get("http://localhost:8081/#/login");
 
-        // 输入有效的用户名和密码
-        driver.findElement(By.xpath("//*[@id=\"app\"]/section/main/div/div[1]/form/div[1]/div/div/input")).sendKeys("seller");
-        driver.findElement(By.xpath("//*[@id=\"app\"]/section/main/div/div[1]/form/div[2]/div/div/input")).sendKeys("seller");
+        // 输入用户名和密码
+        driver.findElement(By.xpath("//*[@id=\"app\"]/section/main/div/div[1]/form/div[1]/div/div/input")).sendKeys(username);
+        driver.findElement(By.xpath("//*[@id=\"app\"]/section/main/div/div[1]/form/div[2]/div/div/input")).sendKeys(password);
         driver.findElement(By.xpath("//*[@id=\"app\"]/section/main/div/div[2]/button")).click();
-        
-        // 登录成功后页面应自动跳转
-        String expectedUrl = "http://localhost:8081/#/dashboard/good/manager";
-        
+
         WebDriverWait wait = new WebDriverWait(driver, 10);
-        wait.until(ExpectedConditions.urlToBe(expectedUrl));
-        
-        // 验证是否跳转到正确的URL
-        String currentUrl = driver.getCurrentUrl();
-        assertTrue("URL不匹配，登录未成功", currentUrl.equals(expectedUrl));
-    }
 
-    @Test
-    public void testInvalidLogin1() {
-        driver.get("http://localhost:8081/#/login");
-
-        // 输入无效的用户名
-        driver.findElement(By.xpath("//*[@id=\"app\"]/section/main/div/div[1]/form/div[1]/div/div/input")).sendKeys("wronguser");
-        driver.findElement(By.xpath("//*[@id=\"app\"]/section/main/div/div[1]/form/div[2]/div/div/input")).sendKeys("seller");
-        driver.findElement(By.xpath("//*[@id=\"app\"]/section/main/div/div[2]/button")).click();
-
-        // 验证错误信息是否显示
-        assertTrue("错误提示未显示", driver.findElement(By.xpath("/html/body/div[1]")).isDisplayed());
-    }
-
-    @Test
-    public void testInvalidLogin2() {
-        driver.get("http://localhost:8081/#/login");
-
-        // 输入正确的用户名，但密码错误
-        driver.findElement(By.xpath("//*[@id=\"app\"]/section/main/div/div[1]/form/div[1]/div/div/input")).sendKeys("seller");
-        driver.findElement(By.xpath("//*[@id=\"app\"]/section/main/div/div[1]/form/div[2]/div/div/input")).sendKeys("2");
-        driver.findElement(By.xpath("//*[@id=\"app\"]/section/main/div/div[2]/button")).click();
-
-        // 验证错误信息是否显示
-        assertTrue("错误提示未显示", driver.findElement(By.xpath("/html/body/div[1]")).isDisplayed());
-    }
-
-    @Test
-    public void testInvalidLogin3_emptyUsername() {
-        driver.get("http://localhost:8081/#/login");
-
-        // 输入空的用户名和密码
-        driver.findElement(By.xpath("//*[@id=\"app\"]/section/main/div/div[1]/form/div[1]/div/div/input")).sendKeys("");
-        driver.findElement(By.xpath("//*[@id=\"app\"]/section/main/div/div[1]/form/div[2]/div/div/input")).sendKeys("seller");
-        driver.findElement(By.xpath("//*[@id=\"app\"]/section/main/div/div[2]/button")).click();
-
-        // 验证错误提示信息是否显示
-        assertTrue("错误提示未显示", driver.findElement(By.xpath("/html/body/div[1]")).isDisplayed());
-    }
-
-    @Test
-    public void testInvalidLogin4_emptyPassword() {
-        driver.get("http://localhost:8081/#/login");
-
-        // 输入有效的用户名，但密码为空
-        driver.findElement(By.xpath("//*[@id=\"app\"]/section/main/div/div[1]/form/div[1]/div/div/input")).sendKeys("seller");
-        driver.findElement(By.xpath("//*[@id=\"app\"]/section/main/div/div[1]/form/div[2]/div/div/input")).sendKeys("");
-        driver.findElement(By.xpath("//*[@id=\"app\"]/section/main/div/div[2]/button")).click();
-
-        // 验证错误提示信息是否显示
-        assertTrue("错误提示未显示", driver.findElement(By.xpath("/html/body/div[1]")).isDisplayed());
-    }
-
-    @Test
-    public void testInvalidLogin5_blankFields() {
-        driver.get("http://localhost:8081/#/login");
-
-        // 输入空的用户名和密码
-        driver.findElement(By.xpath("//*[@id=\"app\"]/section/main/div/div[1]/form/div[1]/div/div/input")).sendKeys("");
-        driver.findElement(By.xpath("//*[@id=\"app\"]/section/main/div/div[1]/form/div[2]/div/div/input")).sendKeys("");
-        driver.findElement(By.xpath("//*[@id=\"app\"]/section/main/div/div[2]/button")).click();
-
-        // 验证错误提示信息是否显示
-        assertTrue("错误提示未显示", driver.findElement(By.xpath("/html/body/div[1]")).isDisplayed());
+        if (expectedError) {
+            // 验证错误提示是否显示
+            WebElement errorMessage = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("/html/body/div[1]")));
+            assertTrue("错误提示未显示", errorMessage.isDisplayed());
+        } else {
+            // 验证页面是否跳转到期望的 URL
+            wait.until(ExpectedConditions.urlToBe(expectedUrl));
+            String currentUrl = driver.getCurrentUrl();
+            assertTrue("URL不匹配，登录未成功", currentUrl.equals(expectedUrl));
+        }
     }
 }
