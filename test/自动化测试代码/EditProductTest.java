@@ -1,13 +1,61 @@
 package TT;
+
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+@RunWith(Parameterized.class)
 public class EditProductTest extends BaseTest {
+
+    private final String productName;
+    private final String productPrice;
+    private final String productStock;
+
+    public EditProductTest(String productName, String productPrice, String productStock) {
+        this.productName = productName;
+        this.productPrice = productPrice;
+        this.productStock = productStock;
+    }
+
+    @Parameterized.Parameters
+    public static Collection<Object[]> testData() {
+        String csvFilePath = "test99/TT/EditProductTest.csv"; // CSV 文件路径
+        List<Object[]> data = new ArrayList<>();
+
+        try (BufferedReader br = new BufferedReader(new FileReader(csvFilePath))) {
+            String line;
+            boolean isFirstLine = true; // 跳过标题行
+            while ((line = br.readLine()) != null) {
+                if (isFirstLine) {
+                    isFirstLine = false;
+                    continue;
+                }
+                String[] split = line.split(",");
+                String productName = split[0].trim();
+                String productPrice = split[1].trim();
+                String productStock = split[2].trim();
+                data.add(new Object[]{productName, productPrice, productStock});
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return data;
+    }
 
     @Test
     public void testEditProductSuccess() {
@@ -25,37 +73,37 @@ public class EditProductTest extends BaseTest {
         // 修改商品名称
         WebElement productNameInput = driver.findElement(By.xpath("//*[@id=\"goods\"]/div[5]/div/div[2]/div/form/div[1]/div/div/input"));
         productNameInput.clear();
-        productNameInput.sendKeys("李宁联名鞋");
+        productNameInput.sendKeys(productName);
 
         // 修改商品价格
         WebElement productPriceInput = driver.findElement(By.xpath("//*[@id=\"goods\"]/div[5]/div/div[2]/div/form/div[2]/div/div/input"));
         productPriceInput.clear();
-        productPriceInput.sendKeys("1500");
+        productPriceInput.sendKeys(productPrice);
 
         // 修改库存
         WebElement productStockInput = driver.findElement(By.xpath("//*[@id=\"goods\"]/div[5]/div/div[2]/div/form/div[4]/div/div/input"));
         productStockInput.clear();
-        productStockInput.sendKeys("20");
+        productStockInput.sendKeys(productStock);
 
         // 提交修改
         WebElement confirmButton = driver.findElement(By.xpath("//*[@id=\"goods\"]/div[5]/div/div[3]/span/button[2]"));
         confirmButton.click();
 
         // 等待元素消失
-	    WebDriverWait waitDisappear = new WebDriverWait(driver, 10);
-	    boolean isGone = waitDisappear.until(ExpectedConditions.invisibilityOfElementLocated(By.xpath("//*[@id=\"goods\"]/div[5]/div")));
+        WebDriverWait waitDisappear = new WebDriverWait(driver, 10);
+        boolean isGone = waitDisappear.until(ExpectedConditions.invisibilityOfElementLocated(By.xpath("//*[@id=\"goods\"]/div[5]/div")));
 
-	    // 验证是否消失
-	    assertTrue("商品修改后，修改界面未消失", isGone);
+        // 验证是否消失
+        assertTrue("商品修改后，修改界面未消失", isGone);
 
         // 验证修改后的商品信息
         WebElement updatedProductName = driver.findElement(By.xpath("//*[@id=\"goods\"]/div[3]/div[3]/table/tbody/tr[1]/td[2]/div"));
         WebElement updatedProductPrice = driver.findElement(By.xpath("//*[@id=\"goods\"]/div[3]/div[3]/table/tbody/tr[1]/td[3]/div"));
         WebElement updatedProductStock = driver.findElement(By.xpath("//*[@id=\"goods\"]/div[3]/div[3]/table/tbody/tr[1]/td[4]/div"));
 
-        assertEquals("商品名称未正确更新", "李宁联名鞋", updatedProductName.getText());
-        assertEquals("商品价格未正确更新", "1500", updatedProductPrice.getText());
-        assertEquals("商品库存未正确更新", "20", updatedProductStock.getText());
+        assertEquals("商品名称未正确更新", productName, updatedProductName.getText());
+        assertEquals("商品价格未正确更新", productPrice, updatedProductPrice.getText());
+        assertEquals("商品库存未正确更新", productStock, updatedProductStock.getText());
     }
 
     // 辅助方法：登录为卖家

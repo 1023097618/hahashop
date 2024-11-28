@@ -1,0 +1,6 @@
+buyerName,phone,address,expectedUrl,errorMessageXpath
+张三,13812345678,北京市朝阳区某某街道,/orderSuccess,
+,13812345678,北京市朝阳区某某街道,,/html/body/div[1]
+张三,,北京市朝阳区某某街道,,/html/body/div[1]
+张三,13812345678,,,/html/body/div[1]
+,,,,
