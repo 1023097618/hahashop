@@ -15,7 +15,7 @@
     </div>
     <div style="padding: 14px; line-height: 13px;" @click="handleClick">
       <span>{{product.goodName}}</span>
-      <div style="display: flex; justify-content: space-between;">
+      <div style="display: flex; justify-content: space-between; margin-top: 20px;">
         <time class="time">{{ product.goodPrice }}</time>
         <time class="time">剩余库存:{{ product.goodNum }}</time>
       </div>
@@ -107,7 +107,7 @@
 
   .image-container {
     width: 100%;
-    height: 200px;
+    height: 180px;
     /* 固定高度，根据需要调整 */
     overflow: hidden;
   }
