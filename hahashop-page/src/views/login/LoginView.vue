@@ -52,7 +52,7 @@
     methods: {
       SendLogin() {
         this.$store.dispatch('LoginByUserName', this.form).then(() => {
-          this.$router.push('/dashboard/good/manager').catch(err => {
+          this.$router.push('/dashboard').catch(err => {
             console.log(err)
           })
           console.log('success')

@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 export function buyGoods(data){
     return request({
-        url:'/api/order/buy',
+        url:'/order/buy',
         method:'post',
         data:data
     })
@@ -10,15 +10,15 @@ export function buyGoods(data){
 
 export function getOrders(params){
     return request({
-        url:'/api/order/sellerlist',
+        url:'/order/sellerlist',
         method:'get',
         params
     })
 }
 
-export function confirmSellGood(data){
+export function changeState(data){
     return request({
-        url:'/api/order/confirmsell',
+        url:'/order/changestate',
         method:'post',
         data:data
     })
@@ -26,7 +26,7 @@ export function confirmSellGood(data){
 
 export function cancelSellGood(data){
     return request({
-        url:'/api/order/cancelsell',
+        url:'/order/cancelsell',
         method:'post',
         data:data
     })
@@ -34,7 +34,7 @@ export function cancelSellGood(data){
 
 export function getBuyerOrders(params){
     return request({
-        url:'/api/order/buyerlist',
+        url:'/order/buyerlist',
         method:'get',
         params
     })

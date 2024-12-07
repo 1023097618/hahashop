@@ -1,7 +1,9 @@
 {
-    "code": 400,
-    "msg": "查询商品成功",
-    "data": {
-      "goodDesc": "<p onclick=\"alert('xss')\">this is a text</p>"
-    }
+  "code": 400,
+  "msg": "查询商品成功",
+  "data": {
+    "goodDesc": "这个商品物美价廉",
+    "isCollect": 0,
+    "isCart": 0
   }
+}

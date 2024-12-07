@@ -2,6 +2,7 @@
 node_modules
 localhost.bat
 natapp.bat
+dist
 
 # local env files
 .env.local

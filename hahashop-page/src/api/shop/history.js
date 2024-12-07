@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 export function getHistories(query){
     return request({
-        url:'/api/history/list',
+        url:'/history/list',
         params:query,
         method:'get'
     })
@@ -10,7 +10,7 @@ export function getHistories(query){
 
 export function deleteHistory(historyId){
     return request({
-        url:'/api/history/delete',
+        url:'/history/delete',
         data:{
             historyId
         },

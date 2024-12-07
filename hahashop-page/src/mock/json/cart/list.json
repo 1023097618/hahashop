@@ -1,0 +1,18 @@
+{
+    "code": 400,
+    "data": {
+      "goods": [
+        {
+          "goodName": "比亚迪跑车",
+          "goodPrice": "100 ￥",
+          "goodId": 10086,
+          "goodImage": [
+            "http://localhost:8080/storage/fetch/sjhcc8pkpxu0ofoymwdu.png"
+          ],
+          "goodNum": 2
+        }
+      ],
+      "totalGoods": 100
+    },
+    "msg": "查询商品成功"
+  }

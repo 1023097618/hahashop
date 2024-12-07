@@ -1,8 +1,6 @@
 const Mock=require('mockjs')
 const baseurl = process.env.VUE_APP_baseurl
 
-
-
 Mock.mock(baseurl+"/good/list?pageNum=1&pageSize=8", 'get', require('./json/shop/goodlist.json'));
 Mock.mock(baseurl+"/good/list", 'get', require('./json/shop/goodlist.json'));
 // Mock.mock(baseurl+"/order/buy", 'post', require('./json/shop/buyers.json'));
@@ -19,3 +17,9 @@ Mock.mock(baseurl+"/good/category", 'get', require('./json/shop/category.json'))
 Mock.mock(baseurl+"/storage/upload", 'post', require('./json/storage/upload.json'));
 Mock.mock(baseurl+"/user/list?pageNum=1&pageSize=8", 'get', require('./json/users/getusers.json'));
 Mock.mock(baseurl+"/user/orderlist?userId=0&pageNum=1&pageSize=8", 'get', require('./json/users/getuserorders.json'));
+Mock.mock(baseurl+"/cart/list?pageNum=1&pageSize=8", 'get', require('./json/cart/list.json'));
+Mock.mock(baseurl+"/collect/list?pageNum=1&pageSize=8", 'get', require('./json/collect/list.json'));
+// Mock.mock(baseurl+"/collect/add", 'post', require('./json/success.json'));
+// Mock.mock(baseurl+"/collect/delete", 'post', require('./json/success.json'));
+// Mock.mock(baseurl+"/cart/add", 'post', require('./json/success.json'));
+// Mock.mock(baseurl+"/cart/delete", 'post', require('./json/success.json'));

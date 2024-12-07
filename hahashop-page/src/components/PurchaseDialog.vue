@@ -25,12 +25,20 @@
           <el-input-number v-model="form.buyerGoodsNum" @change="handleChange" :min="1" :max="10"
             label="描述文字"></el-input-number>
         </el-form-item>
-
       </el-form>
     </div>
-    <span slot="footer" class="dialog-footer">
-      <el-button @click="closeDialog()">取 消</el-button>
-      <el-button type="primary" @click="sureDialog()">确 定</el-button>
+    <span slot="footer" class="dialog-footer" style="display: flex; justify-content: space-between;">
+      <div>
+        <div style="height: 10px; display: flex; justify-content:flex-end;">
+          <i class="sm_btn" :class="{'el-icon-star-on':product.isCollect===1,'el-icon-star-off':product.isCollect===0}" @click.stop="handleCollect" ></i>
+          <i class="sm_btn" :class="{'el-icon-shopping-cart-2':product.isCart===0,'el-icon-shopping-cart-full':product.isCart===1}"  @click.stop="handleCart" style="margin-left: 30px;"></i>
+        </div>
+      </div>
+      <div>
+        <el-button @click="closeDialog()">取 消</el-button>
+        <el-button type="primary" @click="sureDialog()">确 定</el-button>
+      </div>
+
     </span>
   </el-dialog>
 </template>
@@ -38,6 +46,8 @@
 <script>
   import { getGoodsDetail } from '@/api/shop/goods.js'
   import { buyGoods } from '@/api/order/order.js'
+  import { addCartGood,deleteCartGood } from '@/api/cart/cart.js'
+  import {addCollectGood,deleteCollectGood} from '@/api/collect/collect.js'
   export default {
     data() {
       return {
@@ -52,7 +62,9 @@
           goodDesc: '',
           goodPrice: '',
           goodName: '',
-          goodImage: ''
+          goodImage: '',
+          isCollect:0,
+          isCart:0
         }
       };
     },
@@ -74,9 +86,9 @@
         this.$emit('update:visible', true)
         getGoodsDetail(this.product.goodId)
           .then(res => {
-
             this.product.goodDesc = res.data.data.goodDesc
-            console.log(this.product.goodDesc)
+            this.product.isCollect=res.data.data.isCollect
+            this.product.isCart=res.data.data.isCart
           }).catch(err => {
             console.log(err)
           })
@@ -94,6 +106,44 @@
       },
       handleChange(value) {
         this.form.buyerGoodsNum = value
+      },
+      handleCart(){
+        if(this.product.isCart===1){
+          deleteCartGood({goodId:this.product.goodId}).then(result=>{
+            if(result.data.code===400){
+              this.product.isCart = 0
+            }
+          }).catch(err=>{
+            console.log(err)
+          })
+        }else if(this.product.isCart===0){
+          addCartGood({goodId:this.product.goodId}).then(result=>{
+            if(result.data.code===400){
+              this.product.isCart = 1
+            }
+          }).catch(err=>{
+            console.log(err)
+          })
+        }
+      },
+      handleCollect(){
+        if(this.product.isCollect===1){
+          deleteCollectGood({goodId:this.product.goodId}).then(result=>{
+            if(result.data.code===400){
+              this.product.isCollect = 0
+            }
+          }).catch(err=>{
+            console.log(err)
+          })
+        }else if(this.product.isCollect===0){
+          addCollectGood({goodId:this.product.goodId}).then(result=>{
+            if(result.data.code===400){
+              this.product.isCollect = 1
+            }
+          }).catch(err=>{
+            console.log(err)
+          })
+        }
       }
     }
   };
@@ -109,4 +159,11 @@
   display: block; /* 防止图片底部出现空白间隙 */
   margin: 0 auto; /* 如果需要居中图片，可以加上这行 */
 }
+
+.sm_btn{
+    width: 7px;
+    height: 7px;
+    cursor: pointer;
+    margin-left: 40px;
+  }
 </style>

@@ -2,7 +2,6 @@
 <template>
   <el-card :body-style="{ padding: '0px' }"
     :class="{'frozen':(product.goodNum<=0),'active':(product.goodNum>0),'clicked': clicked}">
-
     <div class="image-container" @click="handleClick">
       <el-carousel trigger="click" height="150px" :autoplay="false" indicator-position="none" arrow="never"
         ref="carousel">
@@ -15,11 +14,13 @@
     </div>
     <div style="padding: 14px; line-height: 13px;" @click="handleClick">
       <span>{{product.goodName}}</span>
-      <div style="display: flex; justify-content: space-between; margin-top: 20px;">
+      <div style="display: flex; justify-content: space-between; margin-top: 10px;">
         <time class="time">{{ product.goodPrice }}</time>
         <time class="time">剩余库存:{{ product.goodNum }}</time>
       </div>
+
     </div>
+
   </el-card>
 </template>
 
@@ -208,8 +209,5 @@
     vertical-align: baseline;
     display: inline-block;
     -webkit-font-smoothing: antialiased;
-  }
-  .btn{
-
   }
 </style>

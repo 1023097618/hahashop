@@ -5,7 +5,7 @@ Vue.use(Router)
 
 
 const constantRoutes = [
-  { path: '', name: 'goodlist', component: () => import('@/views/layout/LayoutView.vue'), hidden: true },
+  { path: '', name: 'indexView', component: () => import('@/views/index/indexView.vue'), hidden: true },
   { path: '/login', name: 'loginView', component: () => import('@/views/login/LoginView.vue'), hidden: true },
   { path: '/register', name: 'RegisterView', component: () => import('@/views/login/RegisterView.vue'), hidden: true }
 ]
@@ -13,23 +13,25 @@ const constantRoutes = [
 const sellerRoutes = [
   {
     path: '/dashboard', name: 'DashboardView', component: () => import('@/views/dashboard/DashboardView.vue'), hidden: false, meta:{title: '主页'}, children: [{
-      path: '/dashboard/good',  hidden: false, meta:{title: '商品管理'},component: { render: (h) => h('router-view') },children:[
-        {path:'/dashboard/good/manager',name:'GoodView',component: () => import('@/views/goods/GoodsView.vue'),hidden:false,meta:{title:'商品操作'}},
-        {path:'/dashboard/good/history',name:'HistoryView',component:()=>import('@/views/history/HistoriesViews.vue'),hidden:false,meta:{title:'商品历史'}}
+      path: '/dashboard/seller/good',  hidden: false, meta:{title: '商品管理'},component: { render: (h) => h('router-view') },children:[
+        {path:'/dashboard/seller/good/manager',name:'GoodView',component: () => import('@/views/dashboard/seller/good/GoodsView.vue'),hidden:false,meta:{title:'商品操作'}},
+        {path:'/dashboard/seller/good/history',name:'HistoryView',component:()=>import('@/views/dashboard/seller/history/HistoriesViews.vue'),hidden:false,meta:{title:'商品历史'}}
       ]
     },
+    {path:'/dashboard/seller/user',name:'UserView',component:()=>import('@/views/dashboard/seller/user/UserView.vue'),hiiden:false,meta:{title:'用户信息管理'}},
     { path: '/dashboard/changePassword', name: 'ChangePasswordView', component: () => import('@/views/login/ChangePasswordView.vue'), hidden: false, meta:{title: '修改密码'} },
-    {path:'/dashboard/user',name:'UserView',component:()=>import('@/views/user/UserView.vue'),hiiden:false,meta:{title:'用户信息管理'}},
-    { path: '/dashboard*', redirect: '/dashboard/good/manager', hidden: true }]
+    { path: '/dashboard*', redirect: '/dashboard/seller/good/manager', hidden: true }]
   }
 ]
 
 const buyerRoutes=[
   {
     path: '/dashboard', name: 'DashboardView', component: () => import('@/views/dashboard/DashboardView.vue'), hidden: false, meta:{title: '主页'}, children: [
-      {path:'/dashboard/order',hidden:false,meta:{title:'订单查询'},component:()=>import('@/views/buyer/buyerOrderView.vue'),name:'buyerOrderView'},
+      {path:'/dashboard/buyer/buyerOrder',hidden:false,meta:{title:'订单查询'},component:()=>import('@/views/dashboard/buyer/buyerOrder/buyerOrderView.vue'),name:'buyerOrderView'},
+      { path: '/dashboard/buyer/cart', name: 'CartView', component: () => import('@/views/dashboard/buyer/cart/cartView.vue'), hidden: false, meta:{title: '购物车'} },
+      { path: '/dashboard/buyer/collect', name: 'CollectView', component: () => import('@/views/dashboard/buyer/collect/collectView.vue'), hidden: false, meta:{title: '我的收藏'} },
       { path: '/dashboard/changePassword', name: 'ChangePasswordView', component: () => import('@/views/login/ChangePasswordView.vue'), hidden: false, meta:{title: '修改密码'} },
-      { path: '/dashboard*', redirect: '/dashboard/order', hidden: true }
+      { path: '/dashboard*', redirect: '/dashboard/buyer/buyerOrder', hidden: true }
     ]
   }
 ]

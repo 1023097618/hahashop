@@ -5,12 +5,10 @@ import { GetCookie,RemoveCookie } from "./utils/auth"
 const whiteList=['/login','/','/register']
 router.beforeEach((to,from,next)=>{
     const token=GetCookie()
-    console.log(to.path)
     if(token){
         if(to.path === '/'){
             next()
         }else{
-            console.log(store.getters.permmited)
             if(store.getters.permmited===0){
                 store.dispatch("GetUserInfoAction", token).then(() => {
                     //授权为真
