@@ -54,9 +54,10 @@
 - 保证在订单交易完成前商家可取消订单，且系统要妥善处理订单取消带来的库存调整、客户通知等关联事物。
   
 ### 1.3.2 订单状态图
+![订单状态图](https://gitee.com/zhishidiannaoka/hahashop/raw/master/2235020429-%E9%A2%9D%E5%A4%96%E6%88%90%E6%9E%9C%E7%89%A9/5-images/%E8%AE%A2%E5%8D%95%E7%8A%B6%E6%80%81%E5%9B%BE.png)
 
 ## 1.4 业务流程图
-
+![业务流程图](https://gitee.com/zhishidiannaoka/hahashop/raw/master/2235020429-%E9%A2%9D%E5%A4%96%E6%88%90%E6%9E%9C%E7%89%A9/5-images/%E4%B8%9A%E5%8A%A1%E6%B5%81%E7%A8%8B%E5%9B%BE.png)
 # 二、用户需求
 ## 2.1 用户角色
 **唯一卖家：**
@@ -137,9 +138,11 @@
 - **接受标准：** 商品展示页收藏按钮显眼，收藏后商品即入有序收藏夹且可按多种方式查看；购物车入口醒目、加入无卡顿，车中信息准确且数量可调整，下单能快速生成准确订单并跳转确认页；购物车转收藏响应快、状态切换准、数据更新实时无延迟。
 
 ## 2.3 购物顺序图
+![购物顺序图](https://gitee.com/zhishidiannaoka/hahashop/raw/master/2235020429-%E9%A2%9D%E5%A4%96%E6%88%90%E6%9E%9C%E7%89%A9/5-images/%E8%B4%AD%E7%89%A9%E9%A1%BA%E5%BA%8F%E5%9B%BE.png)
 
 ## 2.4 用例详情
 ### 2.4.1 用例图
+![用例图](https://gitee.com/zhishidiannaoka/hahashop/raw/master/2235020429-%E9%A2%9D%E5%A4%96%E6%88%90%E6%9E%9C%E7%89%A9/5-images/%E7%94%A8%E4%BE%8B%E5%9B%BE.png)
 ### 2.4.2 用例表
 | 用例编号 | 用例名称 | 用例描述 | 前置条件 | 后置条件 | 主要步骤 | 
 |---|---|---|---|---|---|
