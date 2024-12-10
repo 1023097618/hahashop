@@ -130,7 +130,7 @@ public class OrderController {
     @RequestMapping("/changestate")
     public Result<Object> orderStateChange(@RequestBody Map<String, Object> map){
         User user = checkUtil.tookenCheck();
-        if(user == null || user.getPrivilege() != 1) {
+        if(user == null) {
             return ResultUtil.error(ILLEGAL_TOKEN);
         }
 
