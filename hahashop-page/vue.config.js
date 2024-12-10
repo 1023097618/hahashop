@@ -81,6 +81,9 @@ module.exports = {
       '/':{
         target: process.env.VUE_APP_baseurl,//后端接口地址
         changeOrigin: true,//是否允许跨越
+        pathRewrite: {
+          '^/api': '', // 去掉路径中的 /api
+        },
       }
     },
     webSocketServer: false,
