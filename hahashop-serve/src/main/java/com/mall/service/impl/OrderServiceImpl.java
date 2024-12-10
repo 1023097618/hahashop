@@ -1,19 +1,16 @@
 package com.mall.service.impl;
 
 import com.mall.common.StateChangeUtil;
-import com.mall.common.StateEnum;
 import com.mall.dao.GoodDao;
 import com.mall.dao.OrderDao;
 import com.mall.entity.Good;
 import com.mall.entity.Order;
 import com.mall.service.OrderService;
 import jakarta.annotation.Resource;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import static com.mall.common.ResultEnum.GOOD_IS_SELLOUT;
 import static com.mall.common.StateEnum.SOLD_OUT;
 
 @Service
@@ -29,7 +26,7 @@ public class OrderServiceImpl implements OrderService {
     public Boolean addOrder(Order order){//设计很差，需要修改
         try {
             // 调用 Dao 插入操作，返回受影响的行数
-            order.setOrderState(0);//订单状态,0进行中,1已完成,2已取消
+            order.setOrderState(0);//去entity看去，状态对应编码
             Good good = goodDao.getGoodById(order.getGoodId());
             if(good.getGoodNum() >= order.getBuyerGoodsNum()) {//库存检查，库存够就add订单
                 orderDao.addOrder(order);
@@ -63,5 +60,5 @@ public class OrderServiceImpl implements OrderService {
     public Boolean orderStateChange(Integer orderId, Integer orderState) { return orderDao.orderStateChange(orderId, orderState) > 0; }
 
     @Override
-    public Boolean findOrderByorderId(Integer orderId) { return orderDao.findOrderByorderId(orderId) > 0; }
+    public Order findOrderByorderId(Integer orderId) { return orderDao.findOrderByorderId(orderId); }
 }

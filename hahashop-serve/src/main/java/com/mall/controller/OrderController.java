@@ -127,27 +127,22 @@ public class OrderController {
         }
     }
 
-    @RequestMapping("/confirmsell")
-    public Result<Object> completeOrder(@RequestBody Map<String, Object> orderRequest) {
+    @RequestMapping("/changestate")
+    public Result<Object> orderStateChange(@RequestBody Map<String, Object> map){
         User user = checkUtil.tookenCheck();
-        if(user.getPrivilege() != 1){ return ResultUtil.error(ILLEGAL_TOKEN);}
-        if(!orderService.findOrderByorderId((Integer) orderRequest.get("orderId"))){ return ResultUtil.error(EXAMPLE_NOT_EXIST);}
-        if(orderService.orderStateChange((Integer) orderRequest.get("orderId"), stateChangeUtil.StateChange(COMPLETE))){
-            return ResultUtil.success(SUCCESS, null);
-        }else{
-            return ResultUtil.error(UNKNOWN_ERROR);
+        if(user == null || user.getPrivilege() != 1) {
+            return ResultUtil.error(ILLEGAL_TOKEN);
         }
+
+        Integer orderId = (Integer) map.get("orderId");
+        Integer orderState = (Integer) map.get("orderState");
+        Integer goodId = (Integer) map.get("goodId");
+        orderService.orderStateChange(orderId, orderState);
+        if(orderState == 1 || orderState == 3){
+            Order order = orderService.findOrderByorderId(orderId);
+            goodService.goodNumChange(goodId, -order.getBuyerGoodsNum());
+        }
+        return ResultUtil.success(SUCCESS, null);
     }
 
-    @RequestMapping("/cancelsell")
-    public Result<Object> cancelOrder(@RequestBody Map<String, Object> orderRequest) {
-        User user = checkUtil.tookenCheck();
-        if(user.getPrivilege() != 1){ return ResultUtil.error(ILLEGAL_TOKEN);}
-        if(!orderService.findOrderByorderId((Integer) orderRequest.get("orderId"))){ return ResultUtil.error(EXAMPLE_NOT_EXIST); }
-        if(orderService.orderStateChange((Integer) orderRequest.get("orderId"), stateChangeUtil.StateChange(CANCELED))){
-            return ResultUtil.success(SUCCESS, null);
-        }else{
-            return ResultUtil.error(UNKNOWN_ERROR);
-        }
-    }
 }

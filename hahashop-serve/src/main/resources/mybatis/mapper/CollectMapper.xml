@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.mall.dao.CollectDao">
+
+    <insert id="addCollect" parameterType="Collect">
+        INSERT INTO Collect(collectId, userId, goodId)
+        VALUES (#{collectId}, #{userId}, #{goodId})
+    </insert>
+
+    <select id="getCollectGoods">
+        SELECT goodId FROM Collect
+        WHERE userId = #{userId}
+        LIMIT #{pageSize} OFFSET #{pageSize} * (#{pageNum} - 1)
+    </select>
+
+    <select id="countCollect">
+        SELECT COUNT(*) FROM Collect
+        WHERE userId = #{userId}
+    </select>
+
+    <delete id="deleteCollect">
+        DELETE FROM Collect WHERE userId = #{userId} AND goodId = #{goodId}
+    </delete>
+
+    <select id="collectSelect">
+        SELECT COUNT(*) FROM Collect
+        WHERE userId = #{userId} AND goodId = #{goodId}
+    </select>
+</mapper>

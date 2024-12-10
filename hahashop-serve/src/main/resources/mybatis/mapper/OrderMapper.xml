@@ -44,9 +44,9 @@
 
     </update>
 
-    <!--根据订单号查订单存在性，不查信息-->
+    <!--根据订单号查订单存在性，查信息-->
     <select id="findOrderByorderId">
-        SELECT orderId FROM Orders WHERE orderId = #{orderId}
+        SELECT * FROM Orders WHERE orderId = #{orderId}
     </select>
 
 

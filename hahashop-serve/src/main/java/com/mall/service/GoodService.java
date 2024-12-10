@@ -19,4 +19,5 @@ public interface GoodService {
     //商品状态更改
     Boolean stateChange(Integer goodid,Integer state);
     Integer countGoods(Integer privilege, String goodName, Integer categoryId);
+    Boolean goodNumChange(Integer goodId,Integer changeGoodNum);
 }

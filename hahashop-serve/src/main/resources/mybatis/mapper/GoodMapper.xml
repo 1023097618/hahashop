@@ -134,6 +134,7 @@
     <update id="stateChange" parameterType="Integer">
         UPDATE Good SET goodState = #{goodState} WHERE goodId = #{goodId}
     </update>
+
     <update id="goodNumChange">
         UPDATE Good SET goodNum = goodNum - #{changeNum} WHERE goodId = #{goodId} AND goodNum >= #{changeNum}
     </update>

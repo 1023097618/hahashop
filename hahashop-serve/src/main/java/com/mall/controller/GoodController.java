@@ -5,9 +5,7 @@ import com.mall.entity.Category;
 import com.mall.entity.Good;
 import com.mall.entity.Order;
 import com.mall.entity.User;
-import com.mall.service.AuthService;
-import com.mall.service.CategoryService;
-import com.mall.service.GoodService;
+import com.mall.service.*;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import org.apache.ibatis.annotations.Param;
@@ -33,7 +31,11 @@ public class GoodController {
     private StateChangeUtil stateChangeUtil;
     @Resource
     private CategoryService categoryService;
-    @Autowired
+    @Resource
+    private CartService cartService;
+    @Resource
+    private CollectService collectService;
+    @Resource
     private CheckUtil checkUtil;
 
     @RequestMapping("/list")
@@ -81,7 +83,18 @@ public class GoodController {
         User user = checkUtil.tookenCheck();
         if(user!=null && (user.getPrivilege()!=1 && user.getPrivilege()!=2)){ return ResultUtil.error(ILLEGAL_TOKEN); }
         String goodDesc = goodService.getDetail(id);
+        Integer userId = user.getUserId();
         Map<String, Object> data = new HashMap<>();
+        if(collectService.collectSelect(userId, id)){
+            data.put("isCollect", 1);
+        }else {
+            data.put("isCollect", 0);
+        }
+        if(cartService.cartSelect(userId, id)){
+            data.put("isCart", 1);
+        }else{
+            data.put("isCart", 0);
+        }
         data.put("goodDesc", goodDesc);
 
         if (goodDesc != null) {

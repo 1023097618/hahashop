@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.mall.dao.CartDao">
+
+    <update id="changeCartGoodNum">
+        UPDATE Cart
+        SET cartGoodNum = #{cartGoodNum}
+        WHERE userId = #{userId} AND goodId = #{goodId}
+    </update>
+
+    <insert id="cartAdd" parameterType="com.mall.entity.Cart">
+        INSERT INTO Cart(userId, goodId, cartGoodNum)
+        VALUES (#{userId}, #{goodId}, #{cartGoodNum})
+    </insert>
+
+    <select id="getCartGoods" resultType="com.mall.entity.Cart">
+        SELECT cartId, userId, goodId, cartGoodNum FROM Cart
+        WHERE userId = #{userId}
+        LIMIT #{pageSize} OFFSET #{pageSize} * (#{pageNum} - 1)
+    </select>
+
+    <select id="countCart">
+        SELECT COUNT(*) FROM Cart
+        WHERE userId = #{userId}
+    </select>
+
+    <delete id="cartDelete">
+        DELETE FROM Cart
+        WHERE userId = #{userId} AND goodId = #{goodId}
+    </delete>
+
+    <select id="cartSelect" resultType="Integer">
+        SELECT COUNT(*) FROM Cart
+        WHERE userId = #{userId} AND goodId = #{goodId}
+    </select>
+
+</mapper>

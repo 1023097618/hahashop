@@ -117,4 +117,8 @@ public class GoodServiceImpl implements GoodService {
         return false;
     }
 
+    @Override
+    public Boolean goodNumChange(Integer goodId, Integer changeGoodNum) {
+        return goodDao.goodNumChange(goodId, changeGoodNum) >0;
+    }
 }
