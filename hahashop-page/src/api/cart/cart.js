@@ -15,7 +15,7 @@ export function deleteCartGood(data){
         data
     })
 }
-export function changeGoodNum(data){
+export function changeCartGoodNum(data){
     return request({
         url:'/cart/changenum',
         method:'post',

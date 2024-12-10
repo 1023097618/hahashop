@@ -15,10 +15,12 @@
             </el-table-column>
             <el-table-column prop="goodPrice" label="商品价格" width="120">
             </el-table-column>
+            <el-table-column prop="goodNum" label="商品剩余数量" width="120">
+            </el-table-column>
             <el-table-column fixed="right" width="210" label="购物数量">
                 <template slot-scope="scope">
                     <div style="display: flex; justify-content: center;">
-                        <el-input v-model.number="scope.row.goodNum" @change="ChangeGoodNum(scope.row)" type="number"></el-input>
+                        <el-input v-model.number="scope.row.cartGoodNum" @change="ChangeCartGoodNum(scope.row)" type="number"></el-input>
                     </div>
                 </template>
             </el-table-column>
@@ -39,7 +41,7 @@
 </template>
 
 <script>
-    import { getCartGoods,deleteCartGood,changeGoodNum } from '@/api/cart/cart.js'
+    import { getCartGoods,deleteCartGood,changeCartGoodNum } from '@/api/cart/cart.js'
     import webErrorResult from '@/components/webErrorResult.vue'
     import { Message } from "element-ui";
     export default {
@@ -82,10 +84,10 @@
             getHeight() {
                 this.tableConfig.height = window.innerHeight - 100
             },
-            ChangeGoodNum(e){
+            ChangeCartGoodNum(e){
                 const goodId=e.goodId
-                const goodNum=e.goodNum
-                changeGoodNum({goodId,goodNum}).then(result=>{
+                const cartGoodNum=e.cartGoodNum
+                changeCartGoodNum({goodId,cartGoodNum}).then(result=>{
                     if(result.data.code !== 400){
                         Message.error('更改数量失败')
                         this.GetCartGoods()
