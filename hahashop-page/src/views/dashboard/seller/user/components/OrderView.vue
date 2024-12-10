@@ -24,13 +24,7 @@
         </el-table-column>
         <el-table-column width="210" label="确认状态">
           <template slot-scope="scope">
-            <div v-if="scope.row.orderState===0">客户下单</div>
-            <div v-if="scope.row.orderState===1">订单被卖家取消</div>
-            <div v-if="scope.row.orderState===2">订单完成</div>
-            <div v-if="scope.row.orderState===3">订单被买家取消</div>
-            <div v-if="scope.row.orderState===4">商家确认</div>
-            <div v-if="scope.row.orderState===5">备货完成</div>
-            <div v-if="scope.row.orderState===6">开始发货</div>
+            <div>{{getStateTextFromMap(scope.row.orderState)}}</div>
           </template>
       </el-table-column>
       
@@ -53,7 +47,7 @@
   
   <script>
     import { getUserOrder } from '@/api/user/user.js'
-  
+    import {getOrderStateText} from '@/utils/common.js'
     export default {
       name: 'BuyerView',
       data() {
@@ -107,6 +101,9 @@
         handlePageChange(page) {
             this.currentPage = page
             this.GetUserOrder()
+        },
+        getStateTextFromMap(orderState) {
+          return getOrderStateText(orderState);
         }
       }
     };

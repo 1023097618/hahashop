@@ -16,13 +16,7 @@
       </el-table-column>
       <el-table-column width="210" label="确认状态">
         <template slot-scope="scope">
-            <div v-if="scope.row.orderState===0">客户下单</div>
-            <div v-if="scope.row.orderState===1">订单被卖家取消</div>
-            <div v-if="scope.row.orderState===2">订单完成</div>
-            <div v-if="scope.row.orderState===3">订单被买家取消</div>
-            <div v-if="scope.row.orderState===4">商家确认</div>
-            <div v-if="scope.row.orderState===5">备货完成</div>
-            <div v-if="scope.row.orderState===6">开始发货</div>
+          <div>{{ getStateTextFromMap(scope.row.orderState) }}</div>
         </template>
     </el-table-column>
       <el-table-column fixed="right" width="210">
@@ -56,7 +50,7 @@
 
 <script>
   import { getOrders, changeState, cancelSellGood } from '@/api/order/order.js'
-
+  import { ORDER_STATES,getOrderStateText } from '@/utils/common';
   export default {
     name: 'BuyerView',
     data() {
@@ -119,18 +113,21 @@
         const orderId=order.orderId
         const orderState=order.orderState
         if(okbtn){
-          if(orderState === 0){
-            stateToChange = 4
+          if(orderState === ORDER_STATES.CUSTOMER_ORDER){
+            stateToChange = ORDER_STATES.SELLER_CONFIRMED
           }
-          if(orderState === 4){
-            stateToChange = 5
+          if(orderState === ORDER_STATES.SELLER_CONFIRMED){
+            stateToChange = ORDER_STATES.STOCK_READY
           }
-          if(orderState === 5){
-            stateToChange = 6
+          if(orderState === ORDER_STATES.STOCK_READY){
+            stateToChange = ORDER_STATES.SHIPPING_STARTED
           }
         }else{
-          if(orderState===0 || orderState===4 || orderState===5 || orderState===6){
-            stateToChange = 1
+          if(orderState===ORDER_STATES.CUSTOMER_ORDER || 
+             orderState===ORDER_STATES.SELLER_CONFIRMED || 
+             orderState===ORDER_STATES.STOCK_READY || 
+             orderState===ORDER_STATES.SHIPPING_STARTED){
+            stateToChange = ORDER_STATES.SELLER_CANCELLED
           }
         }
         changeState({ orderId,orderState:stateToChange,goodId}).then(
@@ -156,7 +153,10 @@
       handlePageChange(page) {
             this.currentPage = page
             this.GetOrders()
-        }
+      },
+      getStateTextFromMap(orderState) {
+        return getOrderStateText(orderState);
+      }
     }
   };
 </script>

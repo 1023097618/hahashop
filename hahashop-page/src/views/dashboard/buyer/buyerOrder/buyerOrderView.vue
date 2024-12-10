@@ -10,13 +10,7 @@
             </el-table-column>
             <el-table-column width="210" label="确认状态">
                 <template slot-scope="scope">
-                    <div v-if="scope.row.orderState===0">客户下单</div>
-                    <div v-if="scope.row.orderState===1">订单被卖家取消</div>
-                    <div v-if="scope.row.orderState===2">订单完成</div>
-                    <div v-if="scope.row.orderState===3">订单被买家取消</div>
-                    <div v-if="scope.row.orderState===4">商家确认</div>
-                    <div v-if="scope.row.orderState===5">备货完成</div>
-                    <div v-if="scope.row.orderState===6">开始发货</div>
+                    <div>{{ getStateTextFromMap(scope.row.orderState) }}</div>
                 </template>
             </el-table-column>
             <el-table-column prop="goodName" label="商品名称" width="150">
@@ -34,18 +28,18 @@
             <el-table-column prop="buyerGoodsNum" label="买家购买商品数量" width="120">
             </el-table-column>
 
-            <!-- <el-table-column fixed="right" width="210">
-          <template slot-scope="scope">
-            <div style="display: flex; justify-content: center;">
-              <el-button @click.native.prevent="SellGood(scope.row.orderId)" type="primary" icon="el-icon-check" size="mini"
-                v-if="scope.row.isConfirmed==false && good.goodState==0">
-              </el-button>
-              <el-button @click.native.prevent="CancelSellGood(scope.row.orderId)" type="primary" icon="el-icon-close" size="mini"
-              v-if="scope.row.isConfirmed==true && good.goodState==1">
-            </el-button>
-            </div>
-          </template>
-        </el-table-column> -->
+            <el-table-column fixed="right" width="210">
+                <template slot-scope="scope">
+                  <div style="display: flex; justify-content: center;">
+                    <el-button @click.native.prevent="ChangeState(scope.row,true)" type="primary" icon="el-icon-check"
+                      size="mini" v-if="scope.row.orderState===6">
+                    </el-button>
+                    <el-button @click.native.prevent="ChangeState(scope.row,false)" type="primary" icon="el-icon-close"
+                      size="mini" v-if="scope.row.orderState===0 || scope.row.orderState===4 || scope.row.orderState===5">
+                    </el-button>
+                  </div>
+                </template>
+              </el-table-column>
         </el-table>
         <el-pagination :current-page="currentPage" :page-size="pageSize" layout="prev, pager, next" :total="totalOrders" background
             @current-change="handlePageChange" v-if="totalOrders > pageSize">
@@ -60,7 +54,8 @@
 </style>
 
 <script>
-    import { getBuyerOrders } from '@/api/order/order.js'
+    import { getBuyerOrders,changeState } from '@/api/order/order.js'
+    import { ORDER_STATES,getOrderStateText} from '@/utils/common.js'
 
     export default {
         name: 'buyerOrderView',
@@ -73,6 +68,7 @@
                 tableConfig: {
                     height: 200
                 },
+                ORDER_STATES
             };
         },
         methods: {
@@ -98,6 +94,34 @@
                     return 'warning-row'
                 }
                 return ''
+            },
+            ChangeState(order, okbtn) {
+                let stateToChange = -1
+                const goodId = this.orders.goodId
+                const orderId = order.orderId
+                const orderState = order.orderState
+                if (okbtn) {
+                    if (orderState === ORDER_STATES.SHIPPING_STARTED) {
+                        stateToChange = ORDER_STATES.ORDER_COMPLETED
+                    }
+                } else {
+                    if (orderState === ORDER_STATES.CUSTOMER_ORDER || 
+                        orderState === ORDER_STATES.SELLER_CONFIRMED || 
+                        orderState === ORDER_STATES.STOCK_READY) {
+                        stateToChange = ORDER_STATES.BUYER_CANCELLED
+                    }
+                }
+                changeState({ orderId, orderState: stateToChange, goodId }).then(
+                    res => {
+                        this.GetOrders()
+                        console.log(res)
+                    }
+                ).catch(err => {
+                    console.log(err)
+                })
+            },
+            getStateTextFromMap(orderState) {
+                return getOrderStateText(orderState);
             }
         },
         created() {
