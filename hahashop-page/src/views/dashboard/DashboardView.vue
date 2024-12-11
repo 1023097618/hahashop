@@ -64,7 +64,7 @@ export default {
       }
     },
     methods: {
-      //自适应表格高度  8+60
+      //自适应表格高度  8(body边距)+60(navheader边距)
       getHeight() {
         this.height = window.innerHeight - 68
       }

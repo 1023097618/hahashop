@@ -2,7 +2,10 @@
     <div id="cart">
         <el-skeleton :rows="3" animated :loading="isload" />
         <webErrorResult :error="weberror"></webErrorResult>
-        <el-table :data="goods" style="width: 100;" :height="tableConfig.height" v-if="!isload&&!weberror">
+        <el-table :data="goods" style="width: 100;" :height="tableConfig.height" v-if="!isload&&!weberror"
+            @selection-change="selection">
+            <el-table-column type="selection">
+            </el-table-column>
             <el-table-column prop="goodId" label="商品id" width="120" fixed>
             </el-table-column>
             <el-table-column label="商品图片" width="120">
@@ -20,11 +23,20 @@
             <el-table-column fixed="right" width="210" label="购物数量">
                 <template slot-scope="scope">
                     <div style="display: flex; justify-content: center;">
-                        <el-input v-model.number="scope.row.cartGoodNum" @change="ChangeCartGoodNum(scope.row)" type="number"></el-input>
+                        <el-input v-model.number="scope.row.cartGoodNum" @change="ChangeCartGoodNum(scope.row)"
+                            type="number"></el-input>
                     </div>
                 </template>
             </el-table-column>
             <el-table-column fixed="right" width="210">
+                <template slot="header">
+                    <div style="display: flex; justify-content: center;">
+                        <el-button size="mini" type="primary" icon="el-icon-shopping-cart-2"
+                            @click="BuyGoods()" :disabled="selectionGoods.length===0"></el-button>
+                        <el-button size="mini" type="primary" icon="el-icon-star-on"
+                            @click="CollectGoods()" :disabled="selectionGoods.length===0"></el-button>
+                    </div>
+                </template>
                 <template slot-scope="scope">
                     <div style="display: flex; justify-content: center;">
                         <el-button @click.native.prevent="DeleteCartGood(scope.row.goodId)" type="danger"
@@ -41,9 +53,11 @@
 </template>
 
 <script>
-    import { getCartGoods,deleteCartGood,changeCartGoodNum } from '@/api/cart/cart.js'
+    import { getCartGoods, deleteCartGood, changeCartGoodNum } from '@/api/cart/cart.js'
+    import { buyGoods } from '@/api/order/order.js'
     import webErrorResult from '@/components/webErrorResult.vue'
     import { Message } from "element-ui";
+    import {addCollectGood} from '@/api/collect/collect.js'
     export default {
         name: 'HistoriesView',
         methods: {
@@ -52,7 +66,7 @@
                 this.GetCartGoods()
             },
             DeleteCartGood(goodId) {
-                deleteCartGood({goodId}).then(
+                deleteCartGood({ goodId }).then(
                     res => {
                         this.GetCartGoods()
                         console.log(res)
@@ -63,7 +77,7 @@
             },
             GetCartGoods() {
                 this.isload = true
-                this.weberror=false
+                this.weberror = false
                 getCartGoods(
                     {
                         pageNum: this.currentPage,
@@ -71,7 +85,6 @@
                     }
                 ).then(res => {
                     this.goods = res.data.data.goods
-                    this.totalHistories = res.data.data.totalHistories
                     this.isload = false
                     this.weberror = false
                 }).catch(err => {
@@ -80,21 +93,61 @@
                     console.log(err)
                 })
             },
-            //自适应表格高度  8+60+32
+            //自适应表格高度  8(body边距)+60(navheader边距)+32(底部分页边距)
             getHeight() {
                 this.tableConfig.height = window.innerHeight - 100
             },
-            ChangeCartGoodNum(e){
-                const goodId=e.goodId
-                const cartGoodNum=e.cartGoodNum
-                changeCartGoodNum({goodId,cartGoodNum}).then(result=>{
-                    if(result.data.code !== 400){
+            ChangeCartGoodNum(e) {
+                const goodId = e.goodId
+                const cartGoodNum = e.cartGoodNum
+                changeCartGoodNum({ goodId, cartGoodNum }).then(result => {
+                    if (result.data.code !== 400) {
                         Message.error('更改数量失败')
                         this.GetCartGoods()
                     }
-                }).catch(err=>{
+                }).catch(err => {
                     console.log(err)
                 })
+            },
+            selection(e) {
+                this.selectionGoods = e
+            },
+            BuyGoods() {
+                const user = this.$store.getters.user
+                this.selectionGoods.forEach(item => {
+                    buyGoods({
+                        buyerRealName: user.userRealName,
+                        buyerPhone: user.userPhone,
+                        buyerAddress: user.userAddress,
+                        buyerDesc: '',
+                        goodId: item.goodId,
+                        buyerGoodsNum: item.cartGoodNum
+                    }).then(() => {
+                        deleteCartGood({ goodId:item.goodId }).then(
+                            () => {
+                                this.goods=this.goods.filter(ite=>ite.goodId!=item.goodId)
+                            }
+                        ).catch(err => {
+                            console.log(err)
+                        })
+                    }).catch(err => {
+                        console.log(err)
+                        Message.error(`您的商品${item.goodName}没有购买成功`)
+                    })
+                })
+                this.selectionGoods = []
+            },
+            CollectGoods(){
+                this.selectionGoods.forEach(item => {
+                    addCollectGood({goodId:item.goodId}).then(()=>{
+                        
+                    }).catch(err=>{
+                        console.log(err)
+                        Message.error(`您的商品${item.goodName}没有收藏成功`)
+                    })
+                    
+                })
+                this.selectionGoods = []
             }
         }
         ,
@@ -108,7 +161,8 @@
                     height: 200
                 },
                 isload: true,
-                weberror: false
+                weberror: false,
+                selectionGoods: []
             }
         },
         created() {
@@ -126,8 +180,7 @@
 </script>
 
 <style>
-
-  #history .el-table__body .cell{
-    height: 100px;
-  }
+    #history .el-table__body .cell {
+        height: 100px;
+    }
 </style>

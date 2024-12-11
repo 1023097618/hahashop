@@ -59,7 +59,7 @@
                     console.log(err)
                 })
             },
-            //自适应表格高度  8+60+32
+            //自适应表格高度  8(body边距)+60(navheader边距)+32(底部分页边距)
             getHeight() {
                 this.tableConfig.height = window.innerHeight - 100
             },
