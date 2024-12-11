@@ -123,6 +123,7 @@
                         goodId: item.goodId,
                         buyerGoodsNum: item.cartGoodNum
                     }).then(() => {
+                        Message.success(`您的商品${item.goodName}购买成功`)
                         deleteCartGood({ goodId:item.goodId }).then(
                             () => {
                                 this.goods=this.goods.filter(ite=>ite.goodId!=item.goodId)
@@ -140,7 +141,7 @@
             CollectGoods(){
                 this.selectionGoods.forEach(item => {
                     addCollectGood({goodId:item.goodId}).then(()=>{
-                        
+                        Message.success(`您的商品${item.goodName}收藏成功`)
                     }).catch(err=>{
                         console.log(err)
                         Message.error(`您的商品${item.goodName}没有收藏成功`)
