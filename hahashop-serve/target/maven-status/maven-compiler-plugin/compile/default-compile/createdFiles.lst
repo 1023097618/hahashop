@@ -1,4 +1,5 @@
 com\mall\dao\OrderDao.class
+com\mall\common\configration\SecurityConfig.class
 com\mall\service\impl\CategoryServiceImpl.class
 com\mall\common\JwtTokenUtil.class
 com\mall\service\CollectService.class
