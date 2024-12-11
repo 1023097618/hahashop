@@ -61,7 +61,7 @@ public class CollectionController {
             thisGood.put("goodName", good.getGoodName());
             thisGood.put("goodPrice", good.getGoodPrice());
             thisGood.put("goodId", goodId);
-            thisGood.put("goodImage", good.getGoodImage());
+            thisGood.put("goodImage", good.getGoodImage()[0]);
             goods.add(thisGood);
         }
         Integer totalGoods = collectService.countCollect(userId);

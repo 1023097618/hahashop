@@ -54,22 +54,22 @@
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="username != null">
-                #{username, jdbcType=TEXT},
+                #{username, jdbcType=VARCHAR},
             </if>
             <if test="password">
-                #{password, jdbcType=TEXT},
+                #{password, jdbcType=VARCHAR},
             </if>
             <if test="privilege">
                 #{privilege, jdbcType=INTEGER},
             </if>
             <if test="userPhone != null">
-                #{userPhone, jdbcType=TEXT},
+                #{userPhone, jdbcType=VARCHAR},
             </if>
             <if test="userAddress != null">
-                #{userAddress, jdbcType=TEXT},
+                #{userAddress, jdbcType=VARCHAR},
             </if>
             <if test="userRealName != null">
-                #{userRealName, jdbcType=TEXT}
+                #{userRealName, jdbcType=VARCHAR}
             </if>
         </trim>
     </insert>

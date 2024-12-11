@@ -2,6 +2,7 @@ package com.mall.controller;
 
 
 import com.mall.common.*;
+import com.mall.common.configration.SecurityConfig;
 import com.mall.dao.GoodDao;
 import com.mall.entity.User;
 import com.mall.service.AuthService;
@@ -9,6 +10,7 @@ import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.core.context.SecurityContextHolder;
 
@@ -25,6 +27,10 @@ public class AuthController {
     private CheckUtil checkUtil;
     @Autowired
     private GoodDao goodDao;
+    @Resource
+    private SecurityConfig securityConfig;
+
+
 
     @RequestMapping("/login")
     //登录功能
@@ -35,7 +41,7 @@ public class AuthController {
 
         if (userdb == null) {
             return ResultUtil.error(ResultEnum.USER_NOT_EXIST);
-        } else if (!password.equals(userdb.getPassword())) {
+        } else if (!securityConfig.passwordEncoder().matches(password, userdb.getPassword())) {
             return ResultUtil.error(ResultEnum.WRONG_PASSWORD);
         } else {
             userdb.setPassword(null);
@@ -76,8 +82,8 @@ public class AuthController {
             User u = (User) authentication.getPrincipal();  // 强制类型转换
             u = authService.login(u.getUsername());
 
-            if(map.get("oldPassword").equals(u.getPassword())){//老密码是否相同
-                authService.renewPassword(u.getUsername(), map.get("newPassword"));
+            if(securityConfig.passwordEncoder().matches(map.get("oldPassword"), u.getPassword())){//老密码是否相同
+                authService.renewPassword(u.getUsername(), securityConfig.passwordEncoder().encode(map.get("newPassword")));
                 return ResultUtil.success(ResultEnum.SUCCESS,null);
             }else{
                 return ResultUtil.error(ResultEnum.WRONG_PASSWORD);
@@ -91,10 +97,11 @@ public class AuthController {
 //        if(phoneCode != "1111"){
 //            ResultUtil.error(ResultEnum.UNKNOWN_ERROR);
 //        } else
-            if (authService.userIsExist(user.getUsername())) {//查验存在性
+        if (authService.userIsExist(user.getUsername())) {//查验存在性
             ResultUtil.error(ResultEnum.USER_HAS_EXIST);
         } else{
             user.setPrivilege(2);
+            user.setPassword(securityConfig.passwordEncoder().encode(user.getPassword()));
             authService.register(user);
             return ResultUtil.success(ResultEnum.SUCCESS,null);
         }

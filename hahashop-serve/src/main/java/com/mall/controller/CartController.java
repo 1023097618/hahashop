@@ -92,7 +92,7 @@ public class CartController {
             thisgood.put("goodPrice", good.getGoodPrice());
             thisgood.put("goodNum", good.getGoodNum());
             thisgood.put("goodId", cart.getGoodId());
-            thisgood.put("goodImage", good.getGoodImage());
+            thisgood.put("goodImage", good.getGoodImage()[0]);
             thisgood.put("cartGoodNum", cart.getCartGoodNum());
             goods.add(thisgood);
         }
