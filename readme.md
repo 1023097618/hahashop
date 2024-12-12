@@ -28,6 +28,20 @@ npm run serve
 1. 使用 IntelliJ IDEA 打开 `hahashop-serve` 项目。 
 2. 确保 `pom.xml` 文件中的依赖已更新。 
 3. 运行 `MallApplication.java` 文件以启动后端服务。 
+
+## 打包部署
+1. **确认 Maven 配置** 
+
+    在开始打包之前，请确保已正确配置 Maven（mvn），并且其依赖的 Java 版本为 17。您可以通过以下命令检查 Maven 所使用的 Java 版本：
+```bash 
+mvn -v
+``` 
+2. **配置 JAVA_HOME**
+   
+   如果检查结果显示 Java 版本不是 17，请将 `JAVA_HOME` 环境变量设置为 Java 17 的安装目录。
+3. **一键打包**  
+    进入 `hahashop-page` 目录后，双击运行 `localhost.bat` 文件，即可一键完成打包操作。
+
  ## 功能说明 
  ### 密码重置功能 如果您需要重置密码，请按照以下步骤操作：
 1. 打开命令提示符（CMD）。 
