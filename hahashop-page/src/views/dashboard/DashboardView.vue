@@ -2,7 +2,7 @@
   <div class="appwraper">
     <el-container>
       <el-header>
-        <NavbarView/>
+        <NavbarView />
       </el-header>
       <el-container>
         <el-aside width="200px" class="sidebar-container">
@@ -13,9 +13,9 @@
         </el-main>
       </el-container>
     </el-container>
-    
+
     <div class="main-container">
-      
+
 
     </div>
   </div>
@@ -27,19 +27,20 @@
     color: #333;
     line-height: 60px;
   }
-  
+
   .el-aside {
     color: #333;
+    background-color: #E9EEF3;
   }
 
-  .el-main{
+  .el-main {
     margin-left: 200px;
     padding: 0px;
     background-color: #E9EEF3;
   }
 
-  .sidebar-container{
-    position:fixed;
+  .sidebar-container {
+    position: fixed;
     /* 8px */
     left: 8px;
     /* 60px + 8px */
@@ -48,11 +49,11 @@
   }
 </style>
 <script>
-import SidebarView from './component/SidebarView.vue'
-import NavbarView from './component/NavbarView.vue'
-import AppMain from './component/AppMain.vue'
-export default {
-  components:{
+  import SidebarView from './component/SidebarView.vue'
+  import NavbarView from './component/NavbarView.vue'
+  import AppMain from './component/AppMain.vue'
+  export default {
+    components: {
       SidebarView,
       NavbarView,
       AppMain
