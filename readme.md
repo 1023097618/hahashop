@@ -1,4 +1,4 @@
-# 项目名称 (Project Name)
+# HAHASHOP
 
 [English](./README.en.md) | [简体中文](./README.zh-CN.md)
 
