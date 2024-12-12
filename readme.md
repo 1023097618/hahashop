@@ -1,10 +1,10 @@
 ```markdown
 # 项目名称 (Project Name)
 
-<a href="README.zh-CN.md">中文文档</a>
-<a href="README.en.md">English</a>
+<a href="./README.zh-CN.md">中文文档</a>
+<a href="./README.en.md">English</a>
 
-[English](./README.en.md) | [简体中文](README.zh-CN.md)
+[English](./README.en.md) | [简体中文](./README.zh-CN.md)
 
 ---
 
