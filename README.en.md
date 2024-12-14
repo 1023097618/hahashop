@@ -2,8 +2,8 @@ API Documentation:https://apifox.com/apidoc/shared-78461873-8311-486a-ae3c-9dab3
 
 # Project Description
 This is an open-source e-commerce project primarily built with Vue and Spring Boot for the frontend and backend! If you find this project helpful, please give us a free ⭐Star.
+
 The project files are relatively large (less than 1GB) and include pre-built files, allowing you to download and run it directly. The download may take some time, so please be patient.
----
 
 ## Prerequisites
 - Ensure that your computer has the Java environment variables configured (Java 17 is recommended).
