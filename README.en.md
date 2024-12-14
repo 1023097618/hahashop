@@ -34,8 +34,24 @@ If you want to modify and run the code yourself, follow these steps:
 2. Run the following commands to install dependencies and start the project:
 
 ``` bash
+npm install
+npm run serve
+```
+
+### Backend Project: `hahashop-serve`
+1. Open the `hahashop-serve` project in IntelliJ IDEA.
+2. Ensure that the dependencies in the `pom.xml` file are updated.
+3. Run the `MallApplication.java` file to start the backend service.
+
+---
+
+## Packaging and Deployment
+1. **Verify Maven Configuration**  
+Before packaging, ensure that Maven (mvn) is properly configured and that it uses Java 17. You can check the Java version used by Maven with the following command:
+``` bash
 mvn -v
 ```
+
 2. **Set JAVA_HOME**  
 If the Java version is not 17, set the `JAVA_HOME` environment variable to the installation directory of Java 17.
 
